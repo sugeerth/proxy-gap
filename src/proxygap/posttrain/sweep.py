@@ -1,4 +1,4 @@
-"""The proxy-gap sweep and the Bias-Budget Law -- ``docs/THEORY.md`` sections 4 and 6.
+"""The proxy-gap sweep and the Bias-Budget Law -- ``docs/notes/THEORY.md`` sections 4 and 6.
 
 Three things live here, in increasing order of ambition.
 
@@ -48,7 +48,7 @@ appeared to miss the simulation by 4x -- the theory was fine, the inversion was
 not. :func:`predict_kl` therefore inverts ``E[max]`` properly, via Blom's
 order-statistic approximation in :func:`n_of_expected_max`, and agrees with the
 Monte Carlo to within ~16% on every configuration whose optimum falls inside
-the sweep. ``docs/THEORY.md`` section 2 has been corrected to match.
+the sweep. ``docs/notes/THEORY.md`` section 2 has been corrected to match.
 """
 
 from __future__ import annotations
@@ -406,6 +406,13 @@ def run_sweep(
     true reward destroyed by optimising to the end of the sweep instead of
     stopping at the peak (THEORY section 6). ``predicted_kl`` comes from
     :func:`predict_kl` and never looks at the points.
+
+    ``argmax_n`` is **not** the grid point where ``peak_true`` was observed: it
+    is the sub-grid peak location from :func:`_refine_peak`, so it can fall
+    between two grid points and will not in general equal
+    ``max(points, key=true).n``. That is deliberate -- near a flat optimum the
+    grid argmax is chosen by Monte Carlo noise -- and it is why ``argmax_kl`` is
+    recomputed from ``argmax_n`` rather than copied off a point.
 
     The per-``n`` substream is derived from ``seed`` and ``n`` only -- **not**
     from ``label`` -- so two sweeps run with the same root seed share their

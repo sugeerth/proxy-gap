@@ -68,7 +68,7 @@ class _FixedJudge:
 
 @dataclass(frozen=True)
 class _NoisyJudge:
-    """q + beta*L + eps, thresholded -- the docs/THEORY.md proxy, in miniature.
+    """q + beta*L + eps, thresholded -- the docs/notes/THEORY.md proxy, in miniature.
 
     The noise stream is keyed on the *response features* as well as the seed,
     exactly as the real ``proxygap.score.judge.Judge`` does. That matters: if
@@ -311,7 +311,7 @@ def test_council_is_deterministic_in_the_seed() -> None:
 
 
 def test_council_members_draw_independent_noise() -> None:
-    """k averaged judges shrink noise like 1/sqrt(k) -- docs/THEORY.md section 5.
+    """k averaged judges shrink noise like 1/sqrt(k) -- docs/notes/THEORY.md section 5.
 
     Note the members share a ``judge_id``: this is the ensemble mitigation, k
     copies of one judge. If the council seeded every member off the bare

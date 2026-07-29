@@ -14,7 +14,7 @@ overconfident (AUROC 1.0, ECE large). Reporting one without the other is how
 eval dashboards mislead people, so both live here.
 
 Input hygiene, applied uniformly so the four functions never disagree with each
-other and never emit NaN (docs/API.md rules 6 and 7):
+other and never emit NaN (docs/notes/API.md rules 6 and 7):
 
 * Non-finite values are sanitised before anything else -- ``NaN`` becomes 0.0,
   ``+inf``/``-inf`` become the largest/smallest finite float. Without this the

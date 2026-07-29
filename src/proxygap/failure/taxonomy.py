@@ -18,7 +18,7 @@ that is present in :data:`TAXONOMY`.
 The classifier is a *priority cascade*, not a scoring model: the earlier rules
 key off direct textual evidence (an injected instruction, a refusal), the later
 ones off the interpretable feature axes (``length``, ``sycophancy``,
-``quality``, ``confidence`` -- see ``docs/THEORY.md``), and the fall-through is
+``quality``, ``confidence`` -- see ``docs/notes/THEORY.md``), and the fall-through is
 the modal failure mode of the item's domain. Ordering matters and is the
 substance of the function: a refusal on a math item is a refusal, not an
 arithmetic slip.
@@ -167,7 +167,7 @@ _RECENCY_CUES: tuple[str, ...] = (
 _YEAR = re.compile(r"\b(?:19|20)\d{2}\b")
 
 # Feature thresholds, in base-policy standard deviations (features are z-scored
-# by construction -- docs/THEORY.md section 1).
+# by construction -- docs/notes/THEORY.md section 1).
 _SHORT = -1.25  # length at/below this reads as a cut-off answer
 _LONG = 1.25  # length at/above this reads as padding
 _SYCOPHANTIC = 1.0

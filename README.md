@@ -36,7 +36,7 @@ KL*    =  ln n* − (n* − 1)/n*
 ```
 
 **The two regimes, as corrected.** Which bracket term dominates decides the exponent, and
-an earlier draft of `docs/THEORY.md` had the two conditions *backwards*:
+an earlier draft of `docs/notes/THEORY.md` had the two conditions *backwards*:
 
 | regime | condition | scaling |
 |---|---|---|
@@ -47,7 +47,7 @@ As `β → 0` the curvature term `1/(2aβ²)` grows faster than `L*/β`, so `β�
 small-β limit and `β⁻²` is the large-β one — not the other way round. With `L* = 0` the
 crossover sits at infinity and the whole axis is `β⁻⁴`.
 
-**Baseline sweep** (`site/data/sweep.json`, seed `20260729`; `β = 0.60`, `β_S = 0.25`,
+**Baseline sweep** (`docs/data/sweep.json`, seed `20260729`; `β = 0.60`, `β_S = 0.25`,
 `a = 1.2`, `L* = 1.0`, `c = 0.2`, `σ = 0.3`, so `v = 1.5125`):
 
 | quantity | value |
@@ -64,16 +64,16 @@ The proxy rises monotonically across the whole sweep and is still climbing at
 success, while true quality has fallen 0.175 below its peak.
 
 The `1.372` needs care, and it is not the Law's error bar. `predicted_kl` is the closed
-form **exactly as `docs/THEORY.md` §4 writes it**, and §4 reaches `n` through the textbook
+form **exactly as `docs/notes/THEORY.md` §4 writes it**, and §4 reaches `n` through the textbook
 substitution `m_n ≈ √(2 ln n)`. The repo also ships `predict_kl_exact` — same law, same
 inputs, no Monte Carlo, but `E[max]` inverted through `n_of_expected_max` instead — and
-that branch tracks these sweeps far more closely. It is not what `site/data` reports. So
+that branch tracks these sweeps far more closely. It is not what `docs/data` reports. So
 the ~37% gap *in KL*, which because `KL ≈ ln n − 1` is a factor of **5.9 in `n`**, is
 mostly the price of the extreme-value approximation rather than of the Law itself; see
 **Honest limitations** below, where this is the half-applied correction. Either way it is
 a log-scale prediction and should be quoted as one.
 
-**Law fit** (`site/data/law.json`, bootstrap CIs at 95%):
+**Law fit** (`docs/data/law.json`, bootstrap CIs at 95%):
 
 | grid | fitted β window | `n*` across it | fitted exponent | closed form's local slope | idealised exponent | R² |
 |---|---|---|---|---|---|---|
@@ -93,13 +93,13 @@ the coincident grid `L* = 0`, so `β⁻⁴` holds along the whole axis and −4 
 idealisation at every β. On the displaced grid the crossover sits at
 `(1 − c·β_S)/(2 a L*) = 0.396`, and the swept window 0.55 → 0.86 lies entirely *above* it
 — length-dominated. So −2 there is the **large**-β idealisation, not a β → 0 limit; run
-the same closed form down to β ≈ 0.05 and its own local slope is −3.80 (`docs/THEORY.md`
+the same closed form down to β ≈ 0.05 and its own local slope is −3.80 (`docs/notes/THEORY.md`
 §4), heading for −4.
 
 **Both intervals exclude both nulls.** The power law itself is clean (R² = 0.998 on
 `ln ln n*` vs `ln β`, and the sign and rough magnitude separate the two regimes
 correctly), but the measured exponents are *shallower* than the theory over these
-windows. `docs/THEORY.md` §4 documents the two reasons — the `v = 1 + β² + β_S² + σ²`
+windows. `docs/notes/THEORY.md` §4 documents the two reasons — the `v = 1 + β² + β_S² + σ²`
 prefactor is not constant in β, and `n*` estimated off a finite log-spaced grid is
 compressed toward the grid where `n*` is small (77 and 24 at the high-β ends). Neither
 excuse was verified to fully account for the gap. It is reported as a partial validation,
@@ -119,7 +119,7 @@ destroyed.
   the biased feature with true quality held fixed returns β with a confidence interval;
   `proxygap probe` does exactly that against the simulated judges and recovers the
   `verbose-hawk` judge's declared `β = 0.900` as `0.901` [0.886, 0.916]
-  (`site/data/judges.json`). In this model that number sets the budget before a single
+  (`docs/data/judges.json`). In this model that number sets the budget before a single
   GPU-hour is spent; against a production judge the same regression is what you would run,
   but nothing here shows what it would return.
 - **Budget in KL, not in steps.** Step count is not the controlled variable; distance from
@@ -128,7 +128,7 @@ destroyed.
 - **Debias, don't ensemble.** This is the counter-intuitive one and it is a prediction the
   repo tests: averaging *k* judges shrinks σ, but the peak is set by β, so a council of
   judges that share a verbosity prior inherits it in full. Measured
-  (`site/data/mitigations.json`): baseline `n* = 1939`, five-judge ensemble `n* = 1469` —
+  (`docs/data/mitigations.json`): baseline `n* = 1939`, five-judge ensemble `n* = 1469` —
   the same order, no rescue. The `debiased-50%` arm, which scales *both* bias coefficients
   by `1 − 0.5`, pushed the peak past the end of the sweep instead: its `n* = 16384` is the
   grid ceiling, so it is a censored lower bound, and the regret over the sweep is 0.000.
@@ -145,7 +145,7 @@ destroyed.
 ```bash
 git clone https://github.com/sugeerth/proxy-gap && cd proxy-gap
 make all          # install, run the test suite, regenerate every JSON artifact
-open site/index.html
+open docs/index.html
 ```
 
 Offline and deterministic. No API key, no network, no build step, no JS bundler —
@@ -153,7 +153,7 @@ Offline and deterministic. No API key, no network, no build step, no JS bundler 
 
 | command | what it does |
 |---|---|
-| `proxygap all --out site/data` | run every experiment and write the 10 JSON artifacts plus `manifest.json` |
+| `proxygap all --out docs/data` | run every experiment and write the 10 JSON artifacts plus `manifest.json` |
 | `proxygap run <artifact>` | rebuild one of `bench judges sweep law mitigations stats robust failure human gate` |
 | `proxygap sweep` | print the baseline proxy-gap sweep: proxy, true, gap and mean length at each `n` |
 | `proxygap law` | fit the Bias–Budget Law on both grids and print the exponent against the closed form's own local slope |
@@ -187,11 +187,11 @@ Offline and deterministic. No API key, no network, no build step, no JS bundler 
 | `report/` | Runs everything and writes the JSON the website reads, with a manifest recording seed, Python and NumPy versions, and per-artifact success. |
 
 The run behind the numbers above: seed `20260729`, Python 3.12.4, NumPy 1.26.4, all 10
-artifacts `ok` (`site/data/manifest.json`).
+artifacts `ok` (`docs/data/manifest.json`).
 
-Two documents carry the rest: [`docs/THEORY.md`](docs/THEORY.md) is the shared definition
+Two documents carry the rest: [`docs/notes/THEORY.md`](docs/notes/THEORY.md) is the shared definition
 of the generative model and the Law, including both corrections flagged inline, and
-[`docs/API.md`](docs/API.md) is the module-by-module reference.
+[`docs/notes/API.md`](docs/notes/API.md) is the module-by-module reference.
 
 ---
 
@@ -200,7 +200,7 @@ of the generative model and the Law, including both corrections flagged inline, 
 Read this before citing any number above.
 
 **These are simulations, not measurements of a real model.** The response population is
-generated from the feature model in `docs/THEORY.md` §1, not sampled from a language
+generated from the feature model in `docs/notes/THEORY.md` §1, not sampled from a language
 model. That buys exact ground truth — you cannot observe `q` for a real system, which is
 exactly why reward hacking is hard to study empirically — and it costs external validity.
 Every number on this page is a property of that generative model.
@@ -221,7 +221,7 @@ distribution shift within training, no entropy collapse. Treating an RLHF run's 
 interchangeable with a best-of-*n* KL is an assumption this repo makes and does not test.
 
 **Two derivation errors were caught by integration testing and are flagged inline in
-[`docs/THEORY.md`](docs/THEORY.md)** rather than quietly patched. One of them is only
+[`docs/notes/THEORY.md`](docs/notes/THEORY.md)** rather than quietly patched. One of them is only
 half-fixed in the code, and that matters for the headline number:
 
 1. The substitution `E[max of n normals] ≈ √(2 ln n)` was sanctioned inside the analytic
@@ -232,10 +232,10 @@ half-fixed in the code, and that matters for the headline number:
    integration (`expected_max_normal`) and the peak estimator inverts it with Blom's
    approximation `Φ⁻¹((n − 3/8)/(n + 1/4))` (`n_of_expected_max`).
 
-   **The *prediction* was not, and `docs/THEORY.md` §2 overstates the fix.** It claims
+   **The *prediction* was not, and `docs/notes/THEORY.md` §2 overstates the fix.** It claims
    `√(2 ln n)` "appears nowhere in the computational path". It still appears in the one
    place this page quotes: `predict_kl`, the function behind every `predicted_kl` field in
-   `site/data` including the `KL* = 4.790` above, evaluates `ln n* = (v/2)·u*²`, which is
+   `docs/data` including the `KL* = 4.790` above, evaluates `ln n* = (v/2)·u*²`, which is
    §4's formula verbatim and therefore carries the substitution. The properly inverted
    branch is a separate function, `predict_kl_exact`; it is not what the artifacts report,
    and it is the reason the `1.372` ratio above should be read as the cost of the

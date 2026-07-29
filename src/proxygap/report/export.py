@@ -3,7 +3,7 @@
 One function per artifact. Each returns a plain JSON-safe dict and is
 independently runnable, so a broken experiment costs you that one file rather
 than the whole report. ``build_all`` collects them, records which ones failed,
-and writes ``site/data/*.json``.
+and writes ``docs/data/*.json``.
 
 Nothing here does science. If a number appears on the website, it was computed
 in a module under ``proxygap/`` and this file only moved it.
@@ -223,7 +223,7 @@ def artifact_law(bank: SeedBank) -> dict:
     from proxygap.posttrain.sweep import beta_sweep, fit_law, predict_kl, predict_kl_exact
 
     # Grids are chosen per regime so every optimum sits inside the sweep; see
-    # docs/THEORY.md section 4. The regime names follow the corrected table
+    # docs/notes/THEORY.md section 4. The regime names follow the corrected table
     # there -- beta^-2 is the LARGE-beta (length-dominated) regime.
     out: dict[str, Any] = {}
     for name, base, betas, expected in (
@@ -527,7 +527,7 @@ def build_all(out_dir: str | Path, seed: int = RUN_SEED, only: str | None = None
 
     # Browsers refuse fetch() on file:// URLs, so also emit the same payloads as a
     # plain script assignment. The site prefers this bundle when present, which
-    # makes `open site/index.html` work locally and on a web server alike.
+    # makes `open docs/index.html` work locally and on a web server alike.
     if only is None:
         payloads["manifest"] = manifest
         bundle = "window.__PROXYGAP__ = " + json.dumps(payloads, allow_nan=False) + ";\n"

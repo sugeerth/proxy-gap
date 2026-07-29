@@ -1,4 +1,4 @@
-"""Four interventions on the proxy gap -- ``docs/THEORY.md`` section 5.
+"""Four interventions on the proxy gap -- ``docs/notes/THEORY.md`` section 5.
 
 Each mitigation acts on exactly one term of the Law, so the Law predicts its
 effect *before* the sweep runs:
@@ -103,6 +103,22 @@ def _resolve(cfg_arg: Any, fallback: RewardConfig) -> RewardConfig:
     return cfg_arg if isinstance(cfg_arg, RewardConfig) else fallback
 
 
+def _as_float(x: Any, default: float) -> float:
+    """A finite float, or ``default`` -- constructors must not raise."""
+    try:
+        value = float(x)
+    except (TypeError, ValueError):
+        return default
+    return value if math.isfinite(value) else default
+
+
+def _as_int(x: Any, default: int) -> int:
+    try:
+        return int(x)
+    except (TypeError, ValueError, OverflowError):
+        return default
+
+
 def _child(call_seed: Any, root: int, tag: str) -> np.random.Generator:
     """Generator for a selector's own noise, stable in both seeds."""
     try:
@@ -134,8 +150,8 @@ def ensemble_selector(k: int, cfg: RewardConfig, seed: int) -> Selector:
 
     ``k <= 1`` degrades to a single ordinary judge.
     """
-    members = max(1, int(k))
-    root = int(seed)
+    members = max(1, _as_int(k, 1))
+    root = _as_int(seed, 0)
 
     def select(
         features: Mapping[str, np.ndarray], cfg_arg: Any = None, call_seed: Any = None
@@ -184,15 +200,14 @@ def uncertainty_penalised_selector(lam: float, cfg: RewardConfig, seed: int) -> 
     Note the sd is taken across judges, not across candidates, so it is a
     per-candidate epistemic spread and the comparison inside a row is fair.
     """
-    lam_f = float(lam) if math.isfinite(float(lam)) else 0.0
-    root = int(seed)
-    betas_l, betas_s = _panel(cfg, PANEL_SIZE)
+    lam_f = _as_float(lam, 0.0)
+    root = _as_int(seed, 0)
 
     def select(
         features: Mapping[str, np.ndarray], cfg_arg: Any = None, call_seed: Any = None
     ) -> np.ndarray:
         conf = _resolve(cfg_arg, cfg)
-        bl, bs = _panel(conf, PANEL_SIZE) if conf is not cfg else (betas_l, betas_s)
+        bl, bs = _panel(conf, PANEL_SIZE)
         q, length, syc = _axes(features)
         sigma = abs(float(conf.noise))
         rng = _child(call_seed, root, f"upen/lam={lam_f:.6g}")
@@ -208,6 +223,10 @@ def uncertainty_penalised_selector(lam: float, cfg: RewardConfig, seed: int) -> 
         mean = total / k
         if k < 2 or lam_f == 0.0:
             return np.argmax(mean, axis=-1)
+        # Sum-of-squares form: scores here are O(10) and k is 5, so the
+        # cancellation is ~13 significant digits clear. Clamped at 0 anyway,
+        # because a negative variance under sqrt would be a RuntimeWarning and
+        # RuntimeWarnings are errors in this package.
         var = np.maximum(total_sq / k - mean * mean, 0.0) * (k / (k - 1.0))
         return np.argmax(mean - lam_f * np.sqrt(var), axis=-1)
 
@@ -249,14 +268,13 @@ def early_stop_n(result: SweepResult, probe_noise: float, seed: int) -> int:
     points = tuple(result.points)
     if not points:
         return 1
-    sigma = abs(float(probe_noise))
-    if not math.isfinite(sigma):
-        sigma = 0.0
+    sigma = abs(_as_float(probe_noise, 0.0))
     trues = np.array([p.true for p in points], dtype=float)
     if sigma > 0.0:
-        probe = trues + sigma * gen(substream(int(seed), "early_stop/probe")).standard_normal(
-            trues.shape
-        )
+        noise = gen(
+            substream(_as_int(seed, 0), "early_stop/probe")
+        ).standard_normal(trues.shape)
+        probe = trues + sigma * noise
     else:
         probe = trues
 

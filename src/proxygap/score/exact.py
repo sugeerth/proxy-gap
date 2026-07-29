@@ -47,7 +47,7 @@ This is the honest part, and it is the reason this project exists.
   is a right answer marked wrong. The failure is *systematic*, not noisy -- it
   hits the models that phrase things differently from the reference author.
 * **The bias runs against length.** NEM has no length coefficient in the sense of
-  ``docs/THEORY.md`` -- it cannot see the ``length`` feature at all -- but it is
+  ``docs/notes/THEORY.md`` -- it cannot see the ``length`` feature at all -- but it is
   nonetheless *anti*-verbose: the longer a correct answer, the more chances it
   has to differ from the reference by one token and score zero. It is a
   low-variance, high-bias measurement, and the direction of its bias is the
@@ -139,7 +139,7 @@ def normalized_exact_match(pred: str, ref: str) -> float:
 # Accepted names for the ``scorer`` argument of :func:`score_all`, mapped to
 # (canonical id written into ``Score.scorer``, function, label for the
 # ``normalization`` field of ``Score.meta``). The canonical ids are exactly the
-# two strings docs/API.md names -- "nem" is the documented default -- so a
+# two strings docs/notes/API.md names -- "nem" is the documented default -- so a
 # downstream filter can key off ``Score.scorer == "nem"`` no matter which alias
 # or capitalisation the caller happened to use.
 _SCORERS: dict[str, tuple[str, Callable[[str, str], float], str]] = {

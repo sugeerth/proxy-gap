@@ -34,12 +34,12 @@ jobs:
       - name: Closed form vs Monte Carlo
         run: python -m proxygap.cli verify
       - name: Regenerate every figure
-        run: python -m proxygap.cli all --out site/data
+        run: python -m proxygap.cli all --out docs/data
       - name: Fail if any artifact did not build
         run: |
           python - <<'PY'
           import json, sys
-          m = json.load(open("site/data/manifest.json"))
+          m = json.load(open("docs/data/manifest.json"))
           bad = [k for k, v in m["artifacts"].items() if not v["ok"]]
           if bad:
               for k in bad:

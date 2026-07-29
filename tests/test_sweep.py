@@ -2,7 +2,7 @@
 
 Read this file as the experiment log, not just as a regression net. Three of the
 assertions below encode results that **disagree with the headline claim in
-docs/THEORY.md**, and they are written to fail if someone quietly "fixes" the
+docs/notes/THEORY.md**, and they are written to fail if someone quietly "fixes" the
 simulation to agree:
 
 1. :func:`test_law_exponent_in_the_displaced_regime` recovers about **-1.28**,
@@ -33,7 +33,7 @@ simulation to agree:
    survive on the ``n`` scale.
 
 3. :func:`test_default_curvature_differs_from_the_published_default` records
-   that ``RewardConfig.curvature_a`` ships at 1.2 while ``docs/API.md`` documents
+   that ``RewardConfig.curvature_a`` ships at 1.2 while ``docs/notes/API.md`` documents
    0.35, and that at 0.35 there is no turnover inside any feasible sweep.
 
 Everything else is ordinary behaviour: determinism, guarded edge cases, and the
@@ -379,7 +379,7 @@ def test_predicted_kl_is_the_right_order_as_the_measured_optimum(mitigations):
 
 
 def test_default_curvature_differs_from_the_published_default():
-    """docs/API.md says ``curvature_a = 0.35``; the package ships 1.2.
+    """docs/notes/API.md says ``curvature_a = 0.35``; the package ships 1.2.
 
     At the documented 0.35 the optimum sits at ``ln n* = 22`` -- ``n*`` of order
     ``5e9`` -- so no feasible best-of-n sweep turns over at all and ``regret``

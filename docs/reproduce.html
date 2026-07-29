@@ -29,7 +29,7 @@
   <h1>Run every number yourself.</h1>
   <p class="lede">
     Every figure on this site is written by <code>proxygap all</code> into
-    <code>site/data/*.json</code>, and the site reads nothing else. There is no
+    <code>docs/data/*.json</code>, and the site reads nothing else. There is no
     hand-entered number anywhere in the HTML. This page is the operating manual:
     the commands, the seeding discipline that makes them repeatable, the CI job
     that keeps the claim true, and an explicit list of what the results do not
@@ -42,19 +42,19 @@
   <p>
     Three commands from a clean checkout. <code>make all</code> installs the
     package, runs the test suite, executes every experiment, and rewrites
-    <code>site/data</code>.
+    <code>docs/data</code>.
   </p>
 
 <pre><code>git clone https://github.com/sugeerth/proxy-gap
 cd proxy-gap
-make all          # install, test, run every experiment, write site/data
-open site/index.html</code></pre>
+make all          # install, test, run every experiment, write docs/data
+open docs/index.html</code></pre>
 
   <div class="notice notice-good">
     <strong>No API key, no network, no GPU.</strong> The experiments are Monte
     Carlo over a small feature model; the dependencies are NumPy, SciPy and
     scikit-learn. It runs on a laptop in minutes. The site itself is static and
-    opens from <code>file://</code> — <code>site/data/bundle.js</code> inlines the
+    opens from <code>file://</code> — <code>docs/data/bundle.js</code> inlines the
     JSON so no local web server is needed either.
   </div>
 
@@ -101,7 +101,7 @@ open site/index.html</code></pre>
               non-zero if the worst comparable row deviates too far.</td>
         </tr>
         <tr>
-          <td><code>proxygap all --out site/data</code></td>
+          <td><code>proxygap all --out docs/data</code></td>
           <td>Runs every experiment, writes one JSON per artifact plus
               <code>manifest.json</code>, and exits non-zero if any artifact
               failed. <code>proxygap run &lt;artifact&gt;</code> does a single one.</td>
@@ -145,7 +145,7 @@ SeedBank(root).rng(nm)  -&gt;  gen(substream(root, nm))</div>
   <h3>The fixture a fresh run has to reproduce</h3>
   <p>
     These are the baseline sweep's recorded values, read live from
-    <code>site/data/sweep.json</code>. Re-run <code>make all</code> on the same
+    <code>docs/data/sweep.json</code>. Re-run <code>make all</code> on the same
     NumPy and every one of them should come back unchanged.
   </p>
   <div id="sweep-fixture"></div>
@@ -169,7 +169,7 @@ SeedBank(root).rng(nm)  -&gt;  gen(substream(root, nm))</div>
   <p>
     The <strong><code>reproduce</code></strong> job is the one that defends the
     claim this page makes. It runs <code>proxygap verify</code>, then
-    <code>proxygap all --out site/data</code>, then reads back
+    <code>proxygap all --out docs/data</code>, then reads back
     <code>manifest.json</code> and fails if any artifact's <code>ok</code> flag is
     false, printing that artifact's recorded traceback as a GitHub error
     annotation.
@@ -296,7 +296,7 @@ PY</code></pre>
     <p>
       <strong>These are simulations, not measurements of a real model.</strong>
       The response population is generated from the feature model in
-      <code>docs/THEORY.md</code> §1, not sampled from a language model. That buys
+      <code>docs/notes/THEORY.md</code> §1, not sampled from a language model. That buys
       exact ground truth and costs external validity. The law is derived and
       validated <em>within</em> this model. Whether real judges and real policies
       obey it is an open empirical question; the honest framing is that this
@@ -331,7 +331,7 @@ PY</code></pre>
   <div class="notice notice-warn">
     <strong>(a) The <code>√(2 ln n)</code> substitution for E[max] was wrong by
     about 19% at <em>n</em> = 300.</strong>
-    An earlier version of <code>docs/THEORY.md</code> sanctioned approximating the
+    An earlier version of <code>docs/notes/THEORY.md</code> sanctioned approximating the
     expected maximum of <em>n</em> standard normals by <code>√(2 ln n)</code>
     inside the analytic prediction. Because <code>ln n</code> scales like the
     square of that quantity, a 19% error in the expected maximum becomes roughly
@@ -343,8 +343,8 @@ PY</code></pre>
     Blom's order-statistic approximation,
     <code>m_n ≈ Φ⁻¹((n − 3/8)/(n + 1/4))</code>, accurate to well under 1% for
     <em>n</em> ≥ 10. <code>√(2 ln n)</code> now appears nowhere in the code.
-    <a href="https://github.com/sugeerth/proxy-gap/blob/main/docs/THEORY.md">See
-    <code>docs/THEORY.md</code> §2.</a>
+    <a href="https://github.com/sugeerth/proxy-gap/blob/main/docs/notes/THEORY.md">See
+    <code>docs/notes/THEORY.md</code> §2.</a>
   </div>
 
   <div class="notice notice-warn">
@@ -358,8 +358,8 @@ PY</code></pre>
     regime. The crossover sits near <code>β ≈ (1 − c·β_S)/(2 a L*)</code>, which is
     at infinity when <code>L* = 0</code> — a coincident optimum is
     <code>β⁻⁴</code> everywhere.
-    <a href="https://github.com/sugeerth/proxy-gap/blob/main/docs/THEORY.md">See
-    <code>docs/THEORY.md</code> §4.</a>
+    <a href="https://github.com/sugeerth/proxy-gap/blob/main/docs/notes/THEORY.md">See
+    <code>docs/notes/THEORY.md</code> §4.</a>
   </div>
 
   <p>
@@ -420,7 +420,7 @@ PY</code></pre>
                 real regression, and declines to on a noisy one.</td></tr>
         <tr><td><code>report/</code></td>
             <td>Runs every artifact, records which ones failed, and writes
-                <code>site/data/*.json</code>. No science.</td></tr>
+                <code>docs/data/*.json</code>. No science.</td></tr>
       </tbody>
     </table>
   </div>
@@ -428,8 +428,8 @@ PY</code></pre>
     Three modules sit outside the packages: <code>rng.py</code> (the only
     generator constructor), <code>types.py</code> (the schema canon every record
     conforms to), and <code>cli.py</code> (the entry point above).
-    <code>docs/THEORY.md</code> is the shared reference every module that touches
-    rewards must match; <code>docs/API.md</code> pins the public signatures.
+    <code>docs/notes/THEORY.md</code> is the shared reference every module that touches
+    rewards must match; <code>docs/notes/API.md</code> pins the public signatures.
   </p>
 </section>
 
@@ -438,7 +438,7 @@ PY</code></pre>
     PROXY GAP — built by <a href="https://sugeerth.github.io">Sugeerth Murugesan</a>.
     Source on <a href="https://github.com/sugeerth/proxy-gap">GitHub</a>.
     Every figure regenerates from <code>make all</code>; the run seed and library versions
-    are recorded in <code>site/data/manifest.json</code>.
+    are recorded in <code>docs/data/manifest.json</code>.
   </p>
 </footer>
 
@@ -540,7 +540,7 @@ async function render() {
       const status = v.ok
         ? '<span class="pill">built</span>'
         : '<span class="pill">FAILED</span>';
-      const detail = v.ok ? `site/data/${name}.json` : String(v.error || 'no traceback recorded');
+      const detail = v.ok ? `docs/data/${name}.json` : String(v.error || 'no traceback recorded');
       return `<tr><td><code>${name}</code></td><td>${status}</td><td><code>${detail}</code></td></tr>`;
     }).join('');
     host.innerHTML =

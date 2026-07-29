@@ -583,7 +583,7 @@ def test_probe_is_not_fooled_by_correlated_true_quality() -> None:
 
 
 def test_probe_recovers_beta_on_the_real_default_fleet() -> None:
-    """docs/API.md, verbatim: recovery within the CI *on the default fleet*.
+    """docs/notes/API.md, verbatim: recovery within the CI *on the default fleet*.
 
     Every other probe test builds its own base-policy responses, which is the
     one distribution where the probe cannot go wrong. This one runs the real

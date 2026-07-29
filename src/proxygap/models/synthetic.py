@@ -9,7 +9,7 @@ and item ``(difficulty b, discrimination a)``:
     P(correct)  = sigmoid(logit)
     quality     ~ N(logit, 1)          latent true quality, never observed by a judge
 
-The remaining axes follow the base policy of ``docs/THEORY.md`` -- unit normal,
+The remaining axes follow the base policy of ``docs/notes/THEORY.md`` -- unit normal,
 independent of quality -- with the model's own traits shifting their means:
 
     length      ~ N(verbosity, 1)
@@ -189,7 +189,7 @@ def default_fleet() -> tuple[SyntheticModel, ...]:
     omitted-variable bias worth ``beta_other * cov(L, S) / var(L)``: a
     systematic error in the point estimate, not extra spread, so it does not
     shrink with ``n`` and the interval converges on the wrong number.
-    ``docs/API.md`` requires a probe to recover ``judge.beta_length`` within its
+    ``docs/notes/API.md`` requires a probe to recover ``judge.beta_length`` within its
     CI *on this fleet*, so the premise it needs is guaranteed here in the
     design, rather than left to a correction in whichever estimator happens to
     consume the pool.

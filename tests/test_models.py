@@ -245,7 +245,7 @@ def test_default_fleet_style_design_is_exactly_orthogonal():
     policy, where ``q``, ``L`` and ``S`` are independent. A bias probe that
     estimates one style axis while holding only quality fixed absorbs the other
     as omitted-variable bias worth ``beta_other * cov(L, S) / var(L)`` -- a
-    systematic error that does not shrink with ``n`` -- and ``docs/API.md``
+    systematic error that does not shrink with ``n`` -- and ``docs/notes/API.md``
     requires recovery within the CI *on this fleet*.
 
     A loose bound would not catch that. The pre-fix fleet had corr(v, s) =
@@ -286,7 +286,7 @@ def test_pooled_fleet_features_are_mutually_uncorrelated():
     """The design orthogonality has to survive into the responses themselves.
 
     This is the property every bias probe consumes: quality, length and
-    sycophancy independent under the base policy (docs/THEORY.md section 1).
+    sycophancy independent under the base policy (docs/notes/THEORY.md section 1).
     """
     item = _item(difficulty=0.0, discrimination=1.0)
     pool = [r for m in default_fleet() for r in sample_population(item, m, 300, seed=31)]

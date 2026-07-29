@@ -11,7 +11,7 @@ generative difficulty is known, so the correlation between it and the difficulty
 recovered by :mod:`proxygap.bench.irt` is a direct audit of the calibration
 routine. It is reported whatever it says.
 
-Definitions (fixed by ``docs/API.md``):
+Definitions (fixed by ``docs/notes/API.md``):
 
 * low discrimination -- recovered ``a < 0.4``
 * ceiling / floor    -- solved by more than 95% / fewer than 5% of models

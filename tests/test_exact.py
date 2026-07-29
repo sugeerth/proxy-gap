@@ -208,7 +208,7 @@ def test_known_limitation_correct_paraphrases_score_zero():
     Every pair below is a *correct* response. Normalised exact match scores all
     of them 0.0 because it compares surface form, not meaning. This is the
     systematic (not noisy) failure that motivates LLM judges -- and the judges
-    then bring the length and sycophancy biases that docs/THEORY.md models.
+    then bring the length and sycophancy biases that docs/notes/THEORY.md models.
     """
     correct_paraphrases = [
         ("H2O", "water"),

@@ -1,6 +1,6 @@
 """Command line entry point.
 
-    proxygap all      --out site/data     run every experiment, write the JSON
+    proxygap all      --out docs/data     run every experiment, write the JSON
     proxygap run      <artifact>          run one artifact
     proxygap law                          print the Bias-Budget Law fit
     proxygap sweep                        print the baseline proxy-gap sweep
@@ -215,7 +215,7 @@ def cmd_verify(args: argparse.Namespace) -> int:
     print(f"\n  {n_used} comparable configurations, {n_censored} censored and excluded")
     print(f"  worst relative deviation among comparable rows: {worst:.2f}")
     print("  VERDICT: " + ("closed form tracks the simulation" if ok
-                           else "closed form and simulation DISAGREE -- see docs/THEORY.md"))
+                           else "closed form and simulation DISAGREE -- see docs/notes/THEORY.md"))
     print()
     return 0 if ok else 1
 
@@ -227,12 +227,12 @@ def main(argv: list[str] | None = None) -> int:
     sub = ap.add_subparsers(dest="cmd", required=True)
 
     p = sub.add_parser("all", help="run every experiment and write JSON")
-    p.add_argument("--out", default="site/data")
+    p.add_argument("--out", default="docs/data")
     p.set_defaults(fn=cmd_all)
 
     p = sub.add_parser("run", help="run one artifact")
     p.add_argument("artifact", choices=sorted(ARTIFACTS))
-    p.add_argument("--out", default="site/data")
+    p.add_argument("--out", default="docs/data")
     p.set_defaults(fn=cmd_run)
 
     p = sub.add_parser("sweep", help="print the baseline proxy-gap sweep")

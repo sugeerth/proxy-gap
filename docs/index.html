@@ -205,7 +205,7 @@ proxy   r̂   =  q + β·L        + β_S·S + ε</div>
     PROXY GAP — built by <a href="https://sugeerth.github.io">Sugeerth Murugesan</a>.
     Source on <a href="https://github.com/sugeerth/proxy-gap">GitHub</a>.
     Every figure regenerates from <code>make all</code>; the run seed and library versions
-    are recorded in <code>site/data/manifest.json</code>.
+    are recorded in <code>docs/data/manifest.json</code>.
   </p>
 </footer>
 
@@ -315,7 +315,7 @@ async function render() {
       Theory predicts <strong>${expected}</strong> —
       ${covers
         ? 'the interval covers the predicted exponent.'
-        : 'the interval does <strong>not</strong> cover it. Reported as-is; see the limitations above and <code>docs/THEORY.md</code>.'}
+        : 'the interval does <strong>not</strong> cover it. Reported as-is; see the limitations above and <code>docs/notes/THEORY.md</code>.'}
     </div>`;
   };
   $('law-verdict').innerHTML = verdict('displaced', -2) + verdict('coincident', -4);

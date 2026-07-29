@@ -252,7 +252,14 @@ def test_expected_max_normal_survives_absurdly_large_n():
     inside the exponent. Both used to break; neither may.
     """
     previous = expected_max_normal(10**16)
-    ns = sorted((10**17, 10**18, 2**63, 10**50, 10**200, 10**305, 10**308, 10**400))
+    # 1e303 and 1e304 are the interesting ones: that is exactly where the
+    # integrand's underflow guard bites while the quadrature still returns a
+    # finite (and wrong) number, so the asymptotic fallback does not cover for
+    # it. Drop them and "factor ln n back out of the exponent" passes.
+    ns = sorted(
+        (10**17, 10**18, 2**63, 10**50, 10**200, 10**303, 10**304, 10**305,
+         10**308, 10**400)
+    )
     for n in ns:
         value = expected_max_normal(n)
         assert math.isfinite(value)
@@ -272,9 +279,9 @@ def test_expected_max_normal_survives_absurdly_large_n():
 
 
 def test_reward_config_defaults_match_the_published_contract():
-    """Every default is pinned to docs/API.md; other modules are written against them.
+    """Every default is pinned to docs/notes/API.md; other modules are written against them.
 
-    ``curvature_a`` is the one that has moved: docs/API.md originally said 0.35
+    ``curvature_a`` is the one that has moved: docs/notes/API.md originally said 0.35
     and now says 1.2. It is pinned here so the two can never drift apart
     silently again -- and the value matters, see
     :func:`test_default_config_puts_the_turnover_inside_a_feasible_sweep`.
@@ -390,7 +397,7 @@ def test_reward_functions_never_emit_nan_on_degenerate_input():
 def test_a_non_finite_config_coefficient_never_leaks_nan(field, bad):
     """Features were sanitised but coefficients were not; a NaN ``a`` poisoned r*.
 
-    docs/API.md rule 6: never emit NaN from a public function. A non-finite
+    docs/notes/API.md rule 6: never emit NaN from a public function. A non-finite
     coefficient collapses to 0.0 -- the same treatment ``noise`` already got --
     so one bad config value cannot turn an entire sweep into NaN.
     """
@@ -570,7 +577,7 @@ def test_default_config_puts_the_turnover_inside_a_feasible_sweep():
 
     Cheap and Monte-Carlo-free: solve ``m_n = u* * sqrt(v)`` with the exact
     expected maximum. This is why ``curvature_a`` defaults to 1.2 (n* ~ 1771)
-    and docs/API.md was corrected from 0.35, which puts n* at ~5e10 -- seven
+    and docs/notes/API.md was corrected from 0.35, which puts n* at ~5e10 -- seven
     orders of magnitude past the top of ``posttrain.sweep.DEFAULT_NS``, so the
     peak would exist only on paper.
     """
@@ -740,6 +747,25 @@ def test_analytic_max_sampler_is_an_unbiased_draw_of_the_maximum():
         assert float(np.mean(x)) == pytest.approx(
             expected_max_normal(n), abs=4.5 * max(se, 1e-12)
         )
+
+
+def test_max_sampler_survives_a_uniform_at_the_top_of_the_grid(monkeypatch):
+    """``ln(U)/n`` underflows to -0.0 at huge ``n``, and ``ndtri(0.0)`` is -inf.
+
+    Unreachable by sampling -- it needs ``U`` within 1e-16 of 1 *and* ``n`` at
+    the top of the double range -- so the uniform is pinned instead of waited
+    for. Without the clamp on the upper-tail probability this returns +inf and
+    every reported mean becomes NaN.
+    """
+
+    class _TopOfGrid:
+        def random(self, size):
+            return np.full(size, 1.0 - 2.0**-53)
+
+    monkeypatch.setattr(bon, "gen", lambda seed: _TopOfGrid())
+    x = bon._max_of_n_standard_normal(1.7976931348623157e308, 16, seed=0)
+    assert np.all(np.isfinite(x)), "ndtri(0.0) leaked an infinity"
+    assert np.all(x > 0.0)
 
 
 def test_best_of_n_reports_an_integer_n_on_both_routes():

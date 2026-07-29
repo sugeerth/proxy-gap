@@ -36,7 +36,7 @@ judge_id)``, so members are independent noise draws rather than perfectly
 correlated ones. The *position* is in the key as well as the id so that ``k``
 copies of the *same* judge -- the ensemble mitigation -- still draw
 independently; that independence is what lets a ``k``-member ensemble shrink
-score noise like ``1/sqrt(k)`` (docs/THEORY.md section 5) while leaving shared
+score noise like ``1/sqrt(k)`` (docs/notes/THEORY.md section 5) while leaving shared
 bias untouched.
 """
 
@@ -65,7 +65,7 @@ def _num(x: Any) -> float:
 
     A council may be handed any object that quacks like a judge, so a member
     score is not trusted to be finite. Public functions here must never emit
-    NaN (docs/API.md rule 6).
+    NaN (docs/notes/API.md rule 6).
     """
     try:
         v = float(x)

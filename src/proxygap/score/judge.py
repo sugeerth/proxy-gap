@@ -1,7 +1,7 @@
 """The LLM-judge simulator and its bias probes.
 
 This module is the hinge of the package. :class:`Judge` implements the proxy
-reward of ``docs/THEORY.md`` section 1 verbatim::
+reward of ``docs/notes/THEORY.md`` section 1 verbatim::
 
     r_hat(q, L, S) = q + beta_L * L + beta_S * S + eps ,   eps ~ N(0, noise**2)
 
@@ -27,7 +27,7 @@ responses: at pool correlation 0.3 the omitting probe reports 0.51 and its 95%
 interval covers the truth 0 times out of 30, at 0.6 it reports 0.76; the probe
 that keeps ``S`` reports 0.250 and 0.248 with coverage 0.93 and 0.97. On an
 uncorrelated pool the two agree and keeping ``S`` simply narrows the interval,
-so the control costs nothing and is what makes docs/API.md's "MUST recover
+so the control costs nothing and is what makes docs/notes/API.md's "MUST recover
 ``judge.beta_length`` to within its CI" a property of the instrument rather
 than of whatever fleet happens to be handed to it.
 

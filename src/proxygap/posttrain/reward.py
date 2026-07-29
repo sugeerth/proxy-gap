@@ -1,4 +1,4 @@
-"""The reward model -- ``docs/THEORY.md`` section 1, verbatim.
+"""The reward model -- ``docs/notes/THEORY.md`` section 1, verbatim.
 
 A response is a point in a three-dimensional interpretable feature space. Under
 the base policy the coordinates are i.i.d. standard normal::
@@ -58,11 +58,11 @@ class RewardConfig:
 
     beta_length: float = 0.6
     beta_sycophancy: float = 0.25
-    # 1.2, not the 0.35 originally drafted in docs/API.md. At 0.35 the
+    # 1.2, not the 0.35 originally drafted in docs/notes/API.md. At 0.35 the
     # true-reward turnover sits at n* ~ 5e10 -- far outside any feasible sweep --
     # so a default sweep shows the true curve still rising and the headline
     # figure silently demonstrates nothing. A default whose own demonstration
-    # falls off the end of the grid is the wrong default; docs/API.md was
+    # falls off the end of the grid is the wrong default; docs/notes/API.md was
     # corrected to match rather than the other way round.
     curvature_a: float = 1.2
     optimum_length: float = 1.0  # L*
@@ -88,7 +88,7 @@ def _num(x: Any, default: float = 0.0) -> float:
     Every coefficient goes through here for the same reason every feature goes
     through :func:`_feat`: a NaN anywhere in a config would otherwise turn a
     whole sweep into NaN, and no public function in this package may return
-    one (docs/API.md rule 6).
+    one (docs/notes/API.md rule 6).
     """
     try:
         value = float(x)

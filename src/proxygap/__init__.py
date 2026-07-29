@@ -2,7 +2,7 @@
 
 The thesis in one paragraph: an LLM judge's measurable biases are not just a
 scoring nuisance, they are a *predictor*. Measure a judge's verbosity bias beta
-at evaluation time and the closed form in ``docs/THEORY.md`` tells you the KL
+at evaluation time and the closed form in ``docs/notes/THEORY.md`` tells you the KL
 budget at which optimising against that judge starts destroying true quality.
 Everything in this package exists either to measure beta honestly, to spend the
 budget, or to check that the prediction held.

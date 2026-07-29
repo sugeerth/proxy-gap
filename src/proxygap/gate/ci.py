@@ -70,7 +70,7 @@ __all__ = ["compare_models", "evaluate_gate"]
 
 # Read at call time (not as default arguments) so a Monte-Carlo test can dial
 # them down without touching the public signatures, which are frozen by
-# docs/API.md.
+# docs/notes/API.md.
 _N_BOOT = 10_000
 _N_PERM = 10_000
 _LEVEL = 0.95

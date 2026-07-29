@@ -1,4 +1,4 @@
-"""Best-of-n: the optimisation-pressure knob -- ``docs/THEORY.md`` section 2.
+"""Best-of-n: the optimisation-pressure knob -- ``docs/notes/THEORY.md`` section 2.
 
 Draw ``n`` responses from the base policy, keep the one the proxy likes best.
 Two exact quantities and one Monte Carlo:
@@ -554,7 +554,7 @@ def best_of_n(
     width = _width(n)
     if selector is None and not force_bruteforce:
         # `n` is coerced *before* routing, not inside the analytic path: this
-        # function's contract is `n: int` (docs/API.md) and `SweepPoint.n` is
+        # function's contract is `n: int` (docs/notes/API.md) and `SweepPoint.n` is
         # declared `int` in the schema canon, so both routes must report the
         # same integer. `best_of_n_analytic` keeps its real-valued `n` for
         # callers that want a sub-grid point.

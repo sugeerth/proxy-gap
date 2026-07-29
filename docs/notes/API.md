@@ -67,7 +67,7 @@ def score_all(responses, items, scorer: str = "nem") -> list[Score]: ...
 @dataclass(frozen=True)
 class Judge:
     judge_id: str
-    beta_length: float          # THE bias coefficient -- see docs/THEORY.md
+    beta_length: float          # THE bias coefficient -- see docs/notes/THEORY.md
     beta_sycophancy: float
     noise: float
     severity: float = 0.0       # additive offset -> pass/fail threshold

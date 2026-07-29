@@ -4,7 +4,7 @@ The pipeline is deliberately boring and inspectable:
 
 1. keep the failing responses of one model,
 2. embed each on *interpretable* axes -- its feature vector (``quality``,
-   ``length``, ``sycophancy``, ``confidence``; see ``docs/THEORY.md`` section 1)
+   ``length``, ``sycophancy``, ``confidence``; see ``docs/notes/THEORY.md`` section 1)
    plus the item's difficulty and a one-hot over the five domains,
 3. KMeans with ``k`` clusters,
 4. name each cluster by the modal :mod:`proxygap.failure.taxonomy` mode among
@@ -211,7 +211,7 @@ def mine_failures(
 
     # Denominator of the lift: the items this model actually attempted. In the
     # canonical one-response-per-item case this IS "total items" as written in
-    # docs/API.md; stating it as attempts is what keeps the number a real score
+    # docs/notes/API.md; stating it as attempts is what keeps the number a real score
     # delta when responses are pooled across models or drawn more than once per
     # item. It is >= n_failures by construction, so no lift can exceed 1.
     n_total = len(mine)

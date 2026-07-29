@@ -1,0 +1,2245 @@
+{
+ "health": {
+  "n_items": 240,
+  "n_models": 8,
+  "mean_discrimination": 1.2937487108,
+  "frac_low_discrimination": 0.2625,
+  "frac_ceiling": 0.0125,
+  "frac_floor": 0.0166666667,
+  "frac_contaminated": 0.0125,
+  "difficulty_spread": 1.327507609,
+  "recovered_vs_true_corr": 0.6034628955,
+  "usable_items": [
+   "itm-0000",
+   "itm-0002",
+   "itm-0003",
+   "itm-0004",
+   "itm-0007",
+   "itm-0008",
+   "itm-0009",
+   "itm-0010",
+   "itm-0011",
+   "itm-0013",
+   "itm-0016",
+   "itm-0017",
+   "itm-0018",
+   "itm-0025",
+   "itm-0030",
+   "itm-0031",
+   "itm-0032",
+   "itm-0033",
+   "itm-0034",
+   "itm-0035",
+   "itm-0041",
+   "itm-0042",
+   "itm-0044",
+   "itm-0049",
+   "itm-0050",
+   "itm-0054",
+   "itm-0055",
+   "itm-0056",
+   "itm-0058",
+   "itm-0060",
+   "itm-0061",
+   "itm-0062",
+   "itm-0063",
+   "itm-0064",
+   "itm-0065",
+   "itm-0069",
+   "itm-0070",
+   "itm-0072",
+   "itm-0079",
+   "itm-0082",
+   "itm-0083",
+   "itm-0086",
+   "itm-0087",
+   "itm-0088",
+   "itm-0089",
+   "itm-0090",
+   "itm-0092",
+   "itm-0097",
+   "itm-0098",
+   "itm-0099",
+   "itm-0101",
+   "itm-0103",
+   "itm-0104",
+   "itm-0105",
+   "itm-0106",
+   "itm-0107",
+   "itm-0109",
+   "itm-0110",
+   "itm-0112",
+   "itm-0117",
+   "itm-0119",
+   "itm-0120",
+   "itm-0121",
+   "itm-0122",
+   "itm-0123",
+   "itm-0124",
+   "itm-0127",
+   "itm-0134",
+   "itm-0135",
+   "itm-0136",
+   "itm-0138",
+   "itm-0139",
+   "itm-0140",
+   "itm-0141",
+   "itm-0142",
+   "itm-0143",
+   "itm-0144",
+   "itm-0149",
+   "itm-0150",
+   "itm-0151",
+   "itm-0152",
+   "itm-0159",
+   "itm-0164",
+   "itm-0166",
+   "itm-0168",
+   "itm-0174",
+   "itm-0176",
+   "itm-0178",
+   "itm-0179",
+   "itm-0180",
+   "itm-0181",
+   "itm-0182",
+   "itm-0183",
+   "itm-0185",
+   "itm-0186",
+   "itm-0188",
+   "itm-0190",
+   "itm-0192",
+   "itm-0194",
+   "itm-0195",
+   "itm-0200",
+   "itm-0201",
+   "itm-0202",
+   "itm-0203",
+   "itm-0206",
+   "itm-0208",
+   "itm-0209",
+   "itm-0212",
+   "itm-0213",
+   "itm-0214",
+   "itm-0217",
+   "itm-0218",
+   "itm-0222",
+   "itm-0224",
+   "itm-0225",
+   "itm-0227",
+   "itm-0229",
+   "itm-0230",
+   "itm-0233",
+   "itm-0234",
+   "itm-0237",
+   "itm-0239"
+  ],
+  "dropped_items": [
+   "itm-0001",
+   "itm-0005",
+   "itm-0006",
+   "itm-0012",
+   "itm-0014",
+   "itm-0015",
+   "itm-0019",
+   "itm-0020",
+   "itm-0021",
+   "itm-0022",
+   "itm-0023",
+   "itm-0024",
+   "itm-0026",
+   "itm-0027",
+   "itm-0028",
+   "itm-0029",
+   "itm-0036",
+   "itm-0037",
+   "itm-0038",
+   "itm-0039",
+   "itm-0040",
+   "itm-0043",
+   "itm-0045",
+   "itm-0046",
+   "itm-0047",
+   "itm-0048",
+   "itm-0051",
+   "itm-0052",
+   "itm-0053",
+   "itm-0057",
+   "itm-0059",
+   "itm-0066",
+   "itm-0067",
+   "itm-0068",
+   "itm-0071",
+   "itm-0073",
+   "itm-0074",
+   "itm-0075",
+   "itm-0076",
+   "itm-0077",
+   "itm-0078",
+   "itm-0080",
+   "itm-0081",
+   "itm-0084",
+   "itm-0085",
+   "itm-0091",
+   "itm-0093",
+   "itm-0094",
+   "itm-0095",
+   "itm-0096",
+   "itm-0100",
+   "itm-0102",
+   "itm-0108",
+   "itm-0111",
+   "itm-0113",
+   "itm-0114",
+   "itm-0115",
+   "itm-0116",
+   "itm-0118",
+   "itm-0125",
+   "itm-0126",
+   "itm-0128",
+   "itm-0129",
+   "itm-0130",
+   "itm-0131",
+   "itm-0132",
+   "itm-0133",
+   "itm-0137",
+   "itm-0145",
+   "itm-0146",
+   "itm-0147",
+   "itm-0148",
+   "itm-0153",
+   "itm-0154",
+   "itm-0155",
+   "itm-0156",
+   "itm-0157",
+   "itm-0158",
+   "itm-0160",
+   "itm-0161",
+   "itm-0162",
+   "itm-0163",
+   "itm-0165",
+   "itm-0167",
+   "itm-0169",
+   "itm-0170",
+   "itm-0171",
+   "itm-0172",
+   "itm-0173",
+   "itm-0175",
+   "itm-0177",
+   "itm-0184",
+   "itm-0187",
+   "itm-0189",
+   "itm-0191",
+   "itm-0193",
+   "itm-0196",
+   "itm-0197",
+   "itm-0198",
+   "itm-0199",
+   "itm-0204",
+   "itm-0205",
+   "itm-0207",
+   "itm-0210",
+   "itm-0211",
+   "itm-0215",
+   "itm-0216",
+   "itm-0219",
+   "itm-0220",
+   "itm-0221",
+   "itm-0223",
+   "itm-0226",
+   "itm-0228",
+   "itm-0231",
+   "itm-0232",
+   "itm-0235",
+   "itm-0236",
+   "itm-0238"
+  ]
+ },
+ "recovery": [
+  {
+   "item_id": "itm-0000",
+   "true_difficulty": 0.5503530931,
+   "recovered_difficulty": -0.0,
+   "se_difficulty": 1.0181306547,
+   "true_discrimination": 0.9680899807,
+   "recovered_discrimination": 0.733173552
+  },
+  {
+   "item_id": "itm-0001",
+   "true_difficulty": -1.6003535568,
+   "recovered_difficulty": -1.2191070919,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.3941012307,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0002",
+   "true_difficulty": -0.0232812224,
+   "recovered_difficulty": 0.0,
+   "se_difficulty": 1.367472683,
+   "true_discrimination": 1.4942823062,
+   "recovered_discrimination": 0.5326896823
+  },
+  {
+   "item_id": "itm-0003",
+   "true_difficulty": -0.8399174718,
+   "recovered_difficulty": -0.9037721266,
+   "se_difficulty": 0.5459139118,
+   "true_discrimination": 0.9775078961,
+   "recovered_discrimination": 2.0424123726
+  },
+  {
+   "item_id": "itm-0004",
+   "true_difficulty": 0.4678117901,
+   "recovered_difficulty": 0.5979591556,
+   "se_difficulty": 0.8510969897,
+   "true_discrimination": 1.5022412943,
+   "recovered_discrimination": 1.0419310855
+  },
+  {
+   "item_id": "itm-0005",
+   "true_difficulty": -0.2523256267,
+   "recovered_difficulty": -1.4147984958,
+   "se_difficulty": 3.5023190411,
+   "true_discrimination": 0.8813989845,
+   "recovered_discrimination": 0.3716818672
+  },
+  {
+   "item_id": "itm-0006",
+   "true_difficulty": -0.5080617659,
+   "recovered_difficulty": 0.4321535572,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.1798641654,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0007",
+   "true_difficulty": -1.4505804469,
+   "recovered_difficulty": -0.5979591541,
+   "se_difficulty": 0.851096991,
+   "true_discrimination": 0.898698396,
+   "recovered_discrimination": 1.041931081
+  },
+  {
+   "item_id": "itm-0008",
+   "true_difficulty": -0.1647432424,
+   "recovered_difficulty": -0.5141633387,
+   "se_difficulty": 0.6624034547,
+   "true_discrimination": 1.4010773432,
+   "recovered_discrimination": 1.345034368
+  },
+  {
+   "item_id": "itm-0009",
+   "true_difficulty": -1.8638221227,
+   "recovered_difficulty": -1.6500364091,
+   "se_difficulty": 2.1246720535,
+   "true_discrimination": 0.8834061042,
+   "recovered_discrimination": 0.7353680393
+  },
+  {
+   "item_id": "itm-0010",
+   "true_difficulty": -0.8470228823,
+   "recovered_difficulty": -2.4382667193,
+   "se_difficulty": 4.6911734682,
+   "true_discrimination": 1.2456237624,
+   "recovered_discrimination": 0.4701871361
+  },
+  {
+   "item_id": "itm-0011",
+   "true_difficulty": 1.0164183273,
+   "recovered_difficulty": -0.0,
+   "se_difficulty": 0.6613260776,
+   "true_discrimination": 0.2184772913,
+   "recovered_discrimination": 1.2203202425
+  },
+  {
+   "item_id": "itm-0012",
+   "true_difficulty": 1.8979745915,
+   "recovered_difficulty": 1.2191070939,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.0048368654,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0013",
+   "true_difficulty": -1.3336177219,
+   "recovered_difficulty": -0.4244688433,
+   "se_difficulty": 0.4313737128,
+   "true_discrimination": 0.9918281393,
+   "recovered_discrimination": 2.3328654205
+  },
+  {
+   "item_id": "itm-0014",
+   "true_difficulty": 1.5631988194,
+   "recovered_difficulty": 6.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.3102143978,
+   "recovered_discrimination": 0.1798666348
+  },
+  {
+   "item_id": "itm-0015",
+   "true_difficulty": 0.7138836149,
+   "recovered_difficulty": 1.2191070939,
+   "se_difficulty": 999.0,
+   "true_discrimination": 2.3429858504,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0016",
+   "true_difficulty": 1.1105510225,
+   "recovered_difficulty": 1.6500364118,
+   "se_difficulty": 2.1246720617,
+   "true_discrimination": 1.1521467968,
+   "recovered_discrimination": 0.7353680381
+  },
+  {
+   "item_id": "itm-0017",
+   "true_difficulty": -1.831481236,
+   "recovered_difficulty": -2.5188728714,
+   "se_difficulty": 3.3315743033,
+   "true_discrimination": 1.1483654774,
+   "recovered_discrimination": 0.8657146044
+  },
+  {
+   "item_id": "itm-0018",
+   "true_difficulty": 0.4358854198,
+   "recovered_difficulty": -0.0,
+   "se_difficulty": 1.0181306548,
+   "true_discrimination": 0.8603079678,
+   "recovered_discrimination": 0.733173552
+  },
+  {
+   "item_id": "itm-0019",
+   "true_difficulty": -0.012100051,
+   "recovered_difficulty": 1.4147984958,
+   "se_difficulty": 3.5023190411,
+   "true_discrimination": 1.7928541802,
+   "recovered_discrimination": 0.3716818672
+  },
+  {
+   "item_id": "itm-0020",
+   "true_difficulty": 0.7992211053,
+   "recovered_difficulty": 1.2191070939,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.0773482129,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0021",
+   "true_difficulty": -0.285705225,
+   "recovered_difficulty": 0.0,
+   "se_difficulty": 4.1330004932,
+   "true_discrimination": 1.1883346958,
+   "recovered_discrimination": 0.1716390098
+  },
+  {
+   "item_id": "itm-0022",
+   "true_difficulty": -1.3546180994,
+   "recovered_difficulty": -1.4147984958,
+   "se_difficulty": 3.5023190411,
+   "true_discrimination": 1.2144769662,
+   "recovered_discrimination": 0.3716818672
+  },
+  {
+   "item_id": "itm-0023",
+   "true_difficulty": -1.0058325683,
+   "recovered_difficulty": -0.4321535572,
+   "se_difficulty": 999.0,
+   "true_discrimination": 2.7911345239,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0024",
+   "true_difficulty": 0.212887609,
+   "recovered_difficulty": -6.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 0.1880194174,
+   "recovered_discrimination": 0.0745763039
+  },
+  {
+   "item_id": "itm-0025",
+   "true_difficulty": 0.7432805608,
+   "recovered_difficulty": 1.0425589254,
+   "se_difficulty": 0.7915074791,
+   "true_discrimination": 0.8408912705,
+   "recovered_discrimination": 1.4464964503
+  },
+  {
+   "item_id": "itm-0026",
+   "true_difficulty": 0.2040025588,
+   "recovered_difficulty": -6.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 0.2507872044,
+   "recovered_discrimination": 0.0702903652
+  },
+  {
+   "item_id": "itm-0027",
+   "true_difficulty": -0.0959348026,
+   "recovered_difficulty": -0.4321535572,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.1797846619,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0028",
+   "true_difficulty": -0.3122642467,
+   "recovered_difficulty": -0.4321535572,
+   "se_difficulty": 999.0,
+   "true_discrimination": 0.8851053173,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0029",
+   "true_difficulty": -0.8671360173,
+   "recovered_difficulty": 6.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 0.9340925296,
+   "recovered_discrimination": 0.0702903653
+  },
+  {
+   "item_id": "itm-0030",
+   "true_difficulty": 0.0374248126,
+   "recovered_difficulty": -1.7077294725,
+   "se_difficulty": 1.2826853307,
+   "true_discrimination": 1.1584109232,
+   "recovered_discrimination": 1.5354340973
+  },
+  {
+   "item_id": "itm-0031",
+   "true_difficulty": -1.0177290814,
+   "recovered_difficulty": -0.9037721266,
+   "se_difficulty": 0.5459139118,
+   "true_discrimination": 1.1409532574,
+   "recovered_discrimination": 2.0424123726
+  },
+  {
+   "item_id": "itm-0032",
+   "true_difficulty": -0.4957405476,
+   "recovered_difficulty": 0.0,
+   "se_difficulty": 0.5545034377,
+   "true_discrimination": 0.2047457966,
+   "recovered_discrimination": 1.5447253413
+  },
+  {
+   "item_id": "itm-0033",
+   "true_difficulty": 0.5523871389,
+   "recovered_difficulty": 0.0,
+   "se_difficulty": 1.367472683,
+   "true_discrimination": 0.9039753536,
+   "recovered_discrimination": 0.5326896823
+  },
+  {
+   "item_id": "itm-0034",
+   "true_difficulty": -1.2406371377,
+   "recovered_difficulty": -0.5141633387,
+   "se_difficulty": 0.6624034547,
+   "true_discrimination": 0.8701774232,
+   "recovered_discrimination": 1.345034368
+  },
+  {
+   "item_id": "itm-0035",
+   "true_difficulty": -0.8628434767,
+   "recovered_difficulty": 0.0,
+   "se_difficulty": 0.469896018,
+   "true_discrimination": 0.1936440554,
+   "recovered_discrimination": 1.9790869669
+  },
+  {
+   "item_id": "itm-0036",
+   "true_difficulty": -0.9084179414,
+   "recovered_difficulty": -0.76878973,
+   "se_difficulty": 999.0,
+   "true_discrimination": 2.2602934996,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0037",
+   "true_difficulty": 0.2031088923,
+   "recovered_difficulty": -0.76878973,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.1409841468,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0038",
+   "true_difficulty": -1.3917690587,
+   "recovered_difficulty": 6.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 0.1849350596,
+   "recovered_discrimination": 0.0575776092
+  },
+  {
+   "item_id": "itm-0039",
+   "true_difficulty": 1.6044526222,
+   "recovered_difficulty": -6.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 0.2700170657,
+   "recovered_discrimination": 0.0575776092
+  },
+  {
+   "item_id": "itm-0040",
+   "true_difficulty": 0.3373211914,
+   "recovered_difficulty": 1.2191070939,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.8864898042,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0041",
+   "true_difficulty": -0.5999548639,
+   "recovered_difficulty": 0.0,
+   "se_difficulty": 0.5545034377,
+   "true_discrimination": 1.0548959678,
+   "recovered_discrimination": 1.5447253413
+  },
+  {
+   "item_id": "itm-0042",
+   "true_difficulty": -0.8485696435,
+   "recovered_difficulty": -0.5141633387,
+   "se_difficulty": 0.6624034547,
+   "true_discrimination": 1.0360434782,
+   "recovered_discrimination": 1.345034368
+  },
+  {
+   "item_id": "itm-0043",
+   "true_difficulty": -2.2850885467,
+   "recovered_difficulty": -4.834056847,
+   "se_difficulty": 18.5200686275,
+   "true_discrimination": 1.1531536696,
+   "recovered_discrimination": 0.2296504053
+  },
+  {
+   "item_id": "itm-0044",
+   "true_difficulty": 1.2275526398,
+   "recovered_difficulty": -0.0,
+   "se_difficulty": 0.5545034436,
+   "true_discrimination": 1.0425736363,
+   "recovered_discrimination": 1.5447253183
+  },
+  {
+   "item_id": "itm-0045",
+   "true_difficulty": 0.7230938251,
+   "recovered_difficulty": 0.76878973,
+   "se_difficulty": 999.0,
+   "true_discrimination": 0.7677330848,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0046",
+   "true_difficulty": 1.1176168747,
+   "recovered_difficulty": 1.2191070939,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.7538245606,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0047",
+   "true_difficulty": 1.3328973806,
+   "recovered_difficulty": 1.2191070939,
+   "se_difficulty": 999.0,
+   "true_discrimination": 0.8632796201,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0048",
+   "true_difficulty": -1.5870785625,
+   "recovered_difficulty": -2.5,
+   "se_difficulty": 999.0,
+   "true_discrimination": 0.9647583046,
+   "recovered_discrimination": 0.0
+  },
+  {
+   "item_id": "itm-0049",
+   "true_difficulty": 0.1728707968,
+   "recovered_difficulty": 0.9037721231,
+   "se_difficulty": 0.5459139081,
+   "true_discrimination": 1.6291500414,
+   "recovered_discrimination": 2.042412381
+  },
+  {
+   "item_id": "itm-0050",
+   "true_difficulty": 0.2550968267,
+   "recovered_difficulty": 0.0,
+   "se_difficulty": 0.5545034377,
+   "true_discrimination": 1.3397579675,
+   "recovered_discrimination": 1.5447253413
+  },
+  {
+   "item_id": "itm-0051",
+   "true_difficulty": 0.015668496,
+   "recovered_difficulty": -0.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 2.4957589011,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0052",
+   "true_difficulty": -0.5484069811,
+   "recovered_difficulty": -0.76878973,
+   "se_difficulty": 999.0,
+   "true_discrimination": 2.0953623392,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0053",
+   "true_difficulty": -0.1641870305,
+   "recovered_difficulty": 0.4321535572,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.1106577592,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0054",
+   "true_difficulty": 0.7779260788,
+   "recovered_difficulty": 0.4589644688,
+   "se_difficulty": 0.5327732056,
+   "true_discrimination": 2.3169107951,
+   "recovered_discrimination": 1.7411185776
+  },
+  {
+   "item_id": "itm-0055",
+   "true_difficulty": -0.5990515369,
+   "recovered_difficulty": 0.0,
+   "se_difficulty": 0.469896018,
+   "true_discrimination": 0.9114445822,
+   "recovered_discrimination": 1.9790869669
+  },
+  {
+   "item_id": "itm-0056",
+   "true_difficulty": -1.1396725886,
+   "recovered_difficulty": -1e-10,
+   "se_difficulty": 0.3983043146,
+   "true_discrimination": 1.0297302544,
+   "recovered_discrimination": 2.641367754
+  },
+  {
+   "item_id": "itm-0057",
+   "true_difficulty": 0.3742836769,
+   "recovered_difficulty": 0.4321535572,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.0647536559,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0058",
+   "true_difficulty": 0.5394952575,
+   "recovered_difficulty": 0.9037721231,
+   "se_difficulty": 0.5459139081,
+   "true_discrimination": 0.7773190378,
+   "recovered_discrimination": 2.042412381
+  },
+  {
+   "item_id": "itm-0059",
+   "true_difficulty": -0.9233228597,
+   "recovered_difficulty": -2.8085041266,
+   "se_difficulty": 12.5210378387,
+   "true_discrimination": 0.8115282328,
+   "recovered_discrimination": 0.1831933663
+  },
+  {
+   "item_id": "itm-0060",
+   "true_difficulty": 0.6130412803,
+   "recovered_difficulty": 0.0,
+   "se_difficulty": 0.8058509099,
+   "true_discrimination": 0.2764745234,
+   "recovered_discrimination": 0.9578035616
+  },
+  {
+   "item_id": "itm-0061",
+   "true_difficulty": -0.8498365231,
+   "recovered_difficulty": -1.7077294725,
+   "se_difficulty": 1.2826853307,
+   "true_discrimination": 1.1437904651,
+   "recovered_discrimination": 1.5354340973
+  },
+  {
+   "item_id": "itm-0062",
+   "true_difficulty": -0.6148795566,
+   "recovered_difficulty": -0.9552178736,
+   "se_difficulty": 1.7939277629,
+   "true_discrimination": 0.7697712517,
+   "recovered_discrimination": 0.5715804124
+  },
+  {
+   "item_id": "itm-0063",
+   "true_difficulty": -0.2068103929,
+   "recovered_difficulty": -0.8139428607,
+   "se_difficulty": 0.3691791169,
+   "true_discrimination": 1.6538296093,
+   "recovered_discrimination": 3.2979151823
+  },
+  {
+   "item_id": "itm-0064",
+   "true_difficulty": 1.0612678604,
+   "recovered_difficulty": 0.7295484535,
+   "se_difficulty": 1.1652198383,
+   "true_discrimination": 1.3409802629,
+   "recovered_discrimination": 0.7909666423
+  },
+  {
+   "item_id": "itm-0065",
+   "true_difficulty": 0.9180227987,
+   "recovered_difficulty": 4.9940860873,
+   "se_difficulty": 14.2560856755,
+   "true_discrimination": 1.3886058372,
+   "recovered_discrimination": 0.4000720963
+  },
+  {
+   "item_id": "itm-0066",
+   "true_difficulty": -0.5802135213,
+   "recovered_difficulty": 6.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 0.2180630155,
+   "recovered_discrimination": 0.0832314616
+  },
+  {
+   "item_id": "itm-0067",
+   "true_difficulty": -1.2333919021,
+   "recovered_difficulty": -2.5,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.6535422333,
+   "recovered_discrimination": 0.0
+  },
+  {
+   "item_id": "itm-0068",
+   "true_difficulty": -0.0804844774,
+   "recovered_difficulty": -0.0,
+   "se_difficulty": 2.0609772406,
+   "true_discrimination": 1.2830673717,
+   "recovered_discrimination": 0.3475783061
+  },
+  {
+   "item_id": "itm-0069",
+   "true_difficulty": -0.0096695496,
+   "recovered_difficulty": 0.4132272849,
+   "se_difficulty": 0.3331580693,
+   "true_discrimination": 1.8543405019,
+   "recovered_discrimination": 3.5417291566
+  },
+  {
+   "item_id": "itm-0070",
+   "true_difficulty": 0.5567746517,
+   "recovered_difficulty": 2.5188728708,
+   "se_difficulty": 3.3315742636,
+   "true_discrimination": 1.3277630816,
+   "recovered_discrimination": 0.8657146029
+  },
+  {
+   "item_id": "itm-0071",
+   "true_difficulty": 0.4464293466,
+   "recovered_difficulty": 0.76878973,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.5871448782,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0072",
+   "true_difficulty": -0.1837817608,
+   "recovered_difficulty": -0.0,
+   "se_difficulty": 0.8058509099,
+   "true_discrimination": 1.2572158171,
+   "recovered_discrimination": 0.9578035616
+  },
+  {
+   "item_id": "itm-0073",
+   "true_difficulty": -0.1437890027,
+   "recovered_difficulty": 0.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 0.2121047457,
+   "recovered_discrimination": 0.05
+  },
+  {
+   "item_id": "itm-0074",
+   "true_difficulty": 2.2621404633,
+   "recovered_difficulty": 4.834056847,
+   "se_difficulty": 18.5200686275,
+   "true_discrimination": 1.2634416161,
+   "recovered_discrimination": 0.2296504053
+  },
+  {
+   "item_id": "itm-0075",
+   "true_difficulty": -0.5340285927,
+   "recovered_difficulty": -6.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.5320629547,
+   "recovered_discrimination": 0.1743938306
+  },
+  {
+   "item_id": "itm-0076",
+   "true_difficulty": -0.0184801394,
+   "recovered_difficulty": -0.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.7774754862,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0077",
+   "true_difficulty": 0.2989003961,
+   "recovered_difficulty": 6.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 0.9939419117,
+   "recovered_discrimination": 0.1798666348
+  },
+  {
+   "item_id": "itm-0078",
+   "true_difficulty": 0.7836254412,
+   "recovered_difficulty": -0.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.6504167673,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0079",
+   "true_difficulty": -0.9156663275,
+   "recovered_difficulty": -0.9037721266,
+   "se_difficulty": 0.5459139118,
+   "true_discrimination": 1.3479518255,
+   "recovered_discrimination": 2.0424123726
+  },
+  {
+   "item_id": "itm-0080",
+   "true_difficulty": 0.1449546491,
+   "recovered_difficulty": 0.76878973,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.6331054687,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0081",
+   "true_difficulty": 2.2783213396,
+   "recovered_difficulty": 2.5,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.1698655453,
+   "recovered_discrimination": 0.0
+  },
+  {
+   "item_id": "itm-0082",
+   "true_difficulty": -0.8028326513,
+   "recovered_difficulty": -0.7295484535,
+   "se_difficulty": 1.1652198383,
+   "true_discrimination": 0.6525151247,
+   "recovered_discrimination": 0.7909666423
+  },
+  {
+   "item_id": "itm-0083",
+   "true_difficulty": 0.9425732527,
+   "recovered_difficulty": 0.0,
+   "se_difficulty": 0.5545034377,
+   "true_discrimination": 1.362624522,
+   "recovered_discrimination": 1.5447253413
+  },
+  {
+   "item_id": "itm-0084",
+   "true_difficulty": -0.8064358566,
+   "recovered_difficulty": 1.414798509,
+   "se_difficulty": 3.5023190617,
+   "true_discrimination": 1.4322418286,
+   "recovered_discrimination": 0.37168186
+  },
+  {
+   "item_id": "itm-0085",
+   "true_difficulty": 0.1513751855,
+   "recovered_difficulty": -1.4147984958,
+   "se_difficulty": 3.5023190411,
+   "true_discrimination": 0.1732296837,
+   "recovered_discrimination": 0.3716818672
+  },
+  {
+   "item_id": "itm-0086",
+   "true_difficulty": 0.1702406066,
+   "recovered_difficulty": -1e-10,
+   "se_difficulty": 0.3983043146,
+   "true_discrimination": 1.135195621,
+   "recovered_discrimination": 2.641367754
+  },
+  {
+   "item_id": "itm-0087",
+   "true_difficulty": -0.8479985798,
+   "recovered_difficulty": -0.5979591556,
+   "se_difficulty": 0.8510969895,
+   "true_discrimination": 1.1195810357,
+   "recovered_discrimination": 1.041931086
+  },
+  {
+   "item_id": "itm-0088",
+   "true_difficulty": -0.592432306,
+   "recovered_difficulty": -1.6500364091,
+   "se_difficulty": 2.1246720535,
+   "true_discrimination": 1.0891536968,
+   "recovered_discrimination": 0.7353680393
+  },
+  {
+   "item_id": "itm-0089",
+   "true_difficulty": 1.4198136652,
+   "recovered_difficulty": -0.0,
+   "se_difficulty": 1.0181306548,
+   "true_discrimination": 0.8547155391,
+   "recovered_discrimination": 0.733173552
+  },
+  {
+   "item_id": "itm-0090",
+   "true_difficulty": 0.8872526176,
+   "recovered_difficulty": 0.4589644688,
+   "se_difficulty": 0.5327732056,
+   "true_discrimination": 1.2467326933,
+   "recovered_discrimination": 1.7411185776
+  },
+  {
+   "item_id": "itm-0091",
+   "true_difficulty": 0.2258481477,
+   "recovered_difficulty": -0.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.9600678301,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0092",
+   "true_difficulty": -0.6380762853,
+   "recovered_difficulty": -1.0425589254,
+   "se_difficulty": 0.7915074791,
+   "true_discrimination": 1.5354454098,
+   "recovered_discrimination": 1.4464964503
+  },
+  {
+   "item_id": "itm-0093",
+   "true_difficulty": -0.3375842936,
+   "recovered_difficulty": 0.9037721231,
+   "se_difficulty": 0.5459139081,
+   "true_discrimination": 1.4681014843,
+   "recovered_discrimination": 2.042412381
+  },
+  {
+   "item_id": "itm-0094",
+   "true_difficulty": 0.2891399006,
+   "recovered_difficulty": 0.76878973,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.6878754295,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0095",
+   "true_difficulty": 1.7416690055,
+   "recovered_difficulty": 6.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.4980220452,
+   "recovered_discrimination": 0.1798666348
+  },
+  {
+   "item_id": "itm-0096",
+   "true_difficulty": -1.5902028476,
+   "recovered_difficulty": -1.2191070919,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.7532245782,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0097",
+   "true_difficulty": 0.0611566565,
+   "recovered_difficulty": -0.9552178736,
+   "se_difficulty": 1.7939277629,
+   "true_discrimination": 0.1831069277,
+   "recovered_discrimination": 0.5715804124
+  },
+  {
+   "item_id": "itm-0098",
+   "true_difficulty": -0.9384057226,
+   "recovered_difficulty": -2.4382667193,
+   "se_difficulty": 4.6911734682,
+   "true_discrimination": 1.0212876265,
+   "recovered_discrimination": 0.4701871361
+  },
+  {
+   "item_id": "itm-0099",
+   "true_difficulty": -0.4265486367,
+   "recovered_difficulty": -0.4589644688,
+   "se_difficulty": 0.5327732056,
+   "true_discrimination": 1.6855448848,
+   "recovered_discrimination": 1.7411185776
+  },
+  {
+   "item_id": "itm-0100",
+   "true_difficulty": -1.0984115501,
+   "recovered_difficulty": -1.4147984958,
+   "se_difficulty": 3.5023190411,
+   "true_discrimination": 1.4802571405,
+   "recovered_discrimination": 0.3716818672
+  },
+  {
+   "item_id": "itm-0101",
+   "true_difficulty": -2.5469647121,
+   "recovered_difficulty": -0.9037721266,
+   "se_difficulty": 0.5459139118,
+   "true_discrimination": 1.1674354195,
+   "recovered_discrimination": 2.0424123726
+  },
+  {
+   "item_id": "itm-0102",
+   "true_difficulty": -1.7971687866,
+   "recovered_difficulty": -6.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 0.963314479,
+   "recovered_discrimination": 0.3034004256
+  },
+  {
+   "item_id": "itm-0103",
+   "true_difficulty": -1.9821478383,
+   "recovered_difficulty": -1.7077294725,
+   "se_difficulty": 1.2826853307,
+   "true_discrimination": 1.1040077776,
+   "recovered_discrimination": 1.5354340973
+  },
+  {
+   "item_id": "itm-0104",
+   "true_difficulty": 1.0493615015,
+   "recovered_difficulty": 0.8139428607,
+   "se_difficulty": 0.3691791169,
+   "true_discrimination": 1.2992239768,
+   "recovered_discrimination": 3.2979151823
+  },
+  {
+   "item_id": "itm-0105",
+   "true_difficulty": 0.5795065554,
+   "recovered_difficulty": 1.2648820155,
+   "se_difficulty": 1.2194030078,
+   "true_discrimination": 1.8662282785,
+   "recovered_discrimination": 1.046787764
+  },
+  {
+   "item_id": "itm-0106",
+   "true_difficulty": -1.3154168922,
+   "recovered_difficulty": -1.2648820125,
+   "se_difficulty": 1.2194030026,
+   "true_discrimination": 0.9628867454,
+   "recovered_discrimination": 1.0467877722
+  },
+  {
+   "item_id": "itm-0107",
+   "true_difficulty": -1.4687847341,
+   "recovered_difficulty": -1.0425589254,
+   "se_difficulty": 0.7915074791,
+   "true_discrimination": 1.8245811472,
+   "recovered_discrimination": 1.4464964503
+  },
+  {
+   "item_id": "itm-0108",
+   "true_difficulty": -1.4939563564,
+   "recovered_difficulty": -6.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 0.9609706896,
+   "recovered_discrimination": 0.3034004256
+  },
+  {
+   "item_id": "itm-0109",
+   "true_difficulty": -0.9825031007,
+   "recovered_difficulty": -0.8139428607,
+   "se_difficulty": 0.3691791169,
+   "true_discrimination": 1.495292374,
+   "recovered_discrimination": 3.2979151823
+  },
+  {
+   "item_id": "itm-0110",
+   "true_difficulty": 0.3372970339,
+   "recovered_difficulty": 0.0,
+   "se_difficulty": 0.5545034377,
+   "true_discrimination": 1.8424246684,
+   "recovered_discrimination": 1.5447253413
+  },
+  {
+   "item_id": "itm-0111",
+   "true_difficulty": 0.3880994572,
+   "recovered_difficulty": -1.4147984958,
+   "se_difficulty": 3.5023190411,
+   "true_discrimination": 1.4745954257,
+   "recovered_discrimination": 0.3716818672
+  },
+  {
+   "item_id": "itm-0112",
+   "true_difficulty": -0.9569520907,
+   "recovered_difficulty": -1.6500364118,
+   "se_difficulty": 2.1246720617,
+   "true_discrimination": 1.5341591176,
+   "recovered_discrimination": 0.7353680381
+  },
+  {
+   "item_id": "itm-0113",
+   "true_difficulty": -1.110122356,
+   "recovered_difficulty": -0.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 0.1770843488,
+   "recovered_discrimination": 0.05
+  },
+  {
+   "item_id": "itm-0114",
+   "true_difficulty": 0.1047370269,
+   "recovered_difficulty": -0.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.1997561621,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0115",
+   "true_difficulty": -0.7856430831,
+   "recovered_difficulty": 0.0,
+   "se_difficulty": 4.1330004932,
+   "true_discrimination": 0.2245740248,
+   "recovered_discrimination": 0.1716390098
+  },
+  {
+   "item_id": "itm-0116",
+   "true_difficulty": 1.2979172228,
+   "recovered_difficulty": -6.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 0.2098309955,
+   "recovered_discrimination": 0.0702903653
+  },
+  {
+   "item_id": "itm-0117",
+   "true_difficulty": -1.0031620973,
+   "recovered_difficulty": -0.9037721266,
+   "se_difficulty": 0.5459139118,
+   "true_discrimination": 1.2154765033,
+   "recovered_discrimination": 2.0424123726
+  },
+  {
+   "item_id": "itm-0118",
+   "true_difficulty": -0.4372575417,
+   "recovered_difficulty": -2.8085041266,
+   "se_difficulty": 12.5210378387,
+   "true_discrimination": 1.0469252148,
+   "recovered_discrimination": 0.1831933663
+  },
+  {
+   "item_id": "itm-0119",
+   "true_difficulty": -0.4010667942,
+   "recovered_difficulty": 0.7295484535,
+   "se_difficulty": 1.1652198383,
+   "true_discrimination": 1.0493150752,
+   "recovered_discrimination": 0.7909666423
+  },
+  {
+   "item_id": "itm-0120",
+   "true_difficulty": 0.0926401584,
+   "recovered_difficulty": -1e-10,
+   "se_difficulty": 0.3983043146,
+   "true_discrimination": 0.9188355544,
+   "recovered_discrimination": 2.641367754
+  },
+  {
+   "item_id": "itm-0121",
+   "true_difficulty": -0.8897259794,
+   "recovered_difficulty": -0.7295484535,
+   "se_difficulty": 1.1652198383,
+   "true_discrimination": 0.8393611188,
+   "recovered_discrimination": 0.7909666423
+  },
+  {
+   "item_id": "itm-0122",
+   "true_difficulty": 0.1654245806,
+   "recovered_difficulty": 0.7295484535,
+   "se_difficulty": 1.1652198383,
+   "true_discrimination": 2.0635792818,
+   "recovered_discrimination": 0.7909666423
+  },
+  {
+   "item_id": "itm-0123",
+   "true_difficulty": -0.5077302737,
+   "recovered_difficulty": 0.4589644688,
+   "se_difficulty": 0.5327732056,
+   "true_discrimination": 0.9711326712,
+   "recovered_discrimination": 1.7411185776
+  },
+  {
+   "item_id": "itm-0124",
+   "true_difficulty": 1.6257182622,
+   "recovered_difficulty": 1.7077294725,
+   "se_difficulty": 1.2826853306,
+   "true_discrimination": 1.0390617045,
+   "recovered_discrimination": 1.5354340974
+  },
+  {
+   "item_id": "itm-0125",
+   "true_difficulty": 0.6835568681,
+   "recovered_difficulty": 1.2191070939,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.2554454588,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0126",
+   "true_difficulty": 0.3226337442,
+   "recovered_difficulty": -0.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 0.9548560417,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0127",
+   "true_difficulty": -0.3263327564,
+   "recovered_difficulty": -1e-10,
+   "se_difficulty": 0.3983043146,
+   "true_discrimination": 1.3774355513,
+   "recovered_discrimination": 2.641367754
+  },
+  {
+   "item_id": "itm-0128",
+   "true_difficulty": 1.9548932491,
+   "recovered_difficulty": -6.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 0.1757572539,
+   "recovered_discrimination": 0.0832314616
+  },
+  {
+   "item_id": "itm-0129",
+   "true_difficulty": 0.8231376386,
+   "recovered_difficulty": 0.4321535572,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.6000299798,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0130",
+   "true_difficulty": 0.1308237295,
+   "recovered_difficulty": -0.76878973,
+   "se_difficulty": 999.0,
+   "true_discrimination": 0.9127625716,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0131",
+   "true_difficulty": 0.0611387484,
+   "recovered_difficulty": -0.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 0.1836645517,
+   "recovered_discrimination": 0.05
+  },
+  {
+   "item_id": "itm-0132",
+   "true_difficulty": 1.0777383078,
+   "recovered_difficulty": 1.2191070939,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.8395680689,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0133",
+   "true_difficulty": -0.7826541259,
+   "recovered_difficulty": -6.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 0.8164979521,
+   "recovered_discrimination": 0.1798666348
+  },
+  {
+   "item_id": "itm-0134",
+   "true_difficulty": -0.9921157516,
+   "recovered_difficulty": -0.5141633387,
+   "se_difficulty": 0.6624034547,
+   "true_discrimination": 1.1328637359,
+   "recovered_discrimination": 1.345034368
+  },
+  {
+   "item_id": "itm-0135",
+   "true_difficulty": 0.6427580709,
+   "recovered_difficulty": 0.4244688454,
+   "se_difficulty": 0.4313737136,
+   "true_discrimination": 1.9819001387,
+   "recovered_discrimination": 2.3328654161
+  },
+  {
+   "item_id": "itm-0136",
+   "true_difficulty": -0.2028257051,
+   "recovered_difficulty": 0.9552178736,
+   "se_difficulty": 1.7939277629,
+   "true_discrimination": 0.9806328077,
+   "recovered_discrimination": 0.5715804124
+  },
+  {
+   "item_id": "itm-0137",
+   "true_difficulty": -0.1425593019,
+   "recovered_difficulty": -0.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 0.2010164783,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0138",
+   "true_difficulty": 1.3732688963,
+   "recovered_difficulty": 0.9552178736,
+   "se_difficulty": 1.7939277629,
+   "true_discrimination": 1.5410345442,
+   "recovered_discrimination": 0.5715804124
+  },
+  {
+   "item_id": "itm-0139",
+   "true_difficulty": -0.2091747268,
+   "recovered_difficulty": -1e-10,
+   "se_difficulty": 0.3983043146,
+   "true_discrimination": 0.9947544434,
+   "recovered_discrimination": 2.641367754
+  },
+  {
+   "item_id": "itm-0140",
+   "true_difficulty": 0.816784754,
+   "recovered_difficulty": -0.0,
+   "se_difficulty": 1.0181306548,
+   "true_discrimination": 0.1676489381,
+   "recovered_discrimination": 0.733173552
+  },
+  {
+   "item_id": "itm-0141",
+   "true_difficulty": -0.3627094132,
+   "recovered_difficulty": 0.4244688454,
+   "se_difficulty": 0.4313737136,
+   "true_discrimination": 2.9647677973,
+   "recovered_discrimination": 2.3328654161
+  },
+  {
+   "item_id": "itm-0142",
+   "true_difficulty": -0.3007509372,
+   "recovered_difficulty": 0.0,
+   "se_difficulty": 1.367472683,
+   "true_discrimination": 0.1868554663,
+   "recovered_discrimination": 0.5326896823
+  },
+  {
+   "item_id": "itm-0143",
+   "true_difficulty": 0.0032715226,
+   "recovered_difficulty": -0.7295484535,
+   "se_difficulty": 1.1652198383,
+   "true_discrimination": 0.9151578172,
+   "recovered_discrimination": 0.7909666423
+  },
+  {
+   "item_id": "itm-0144",
+   "true_difficulty": 1.0848203158,
+   "recovered_difficulty": 2.4382667193,
+   "se_difficulty": 4.6911734682,
+   "true_discrimination": 1.3795408653,
+   "recovered_discrimination": 0.4701871361
+  },
+  {
+   "item_id": "itm-0145",
+   "true_difficulty": 0.3376677082,
+   "recovered_difficulty": -0.4321535572,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.5405398287,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0146",
+   "true_difficulty": 1.6419866715,
+   "recovered_difficulty": 1.2191070939,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.0784305686,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0147",
+   "true_difficulty": 0.4492226051,
+   "recovered_difficulty": 6.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 0.8411294375,
+   "recovered_discrimination": 0.0832314617
+  },
+  {
+   "item_id": "itm-0148",
+   "true_difficulty": 0.4710905826,
+   "recovered_difficulty": -0.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.7745305548,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0149",
+   "true_difficulty": 1.3517374536,
+   "recovered_difficulty": 4.9940860873,
+   "se_difficulty": 14.2560856755,
+   "true_discrimination": 1.6942066912,
+   "recovered_discrimination": 0.4000720963
+  },
+  {
+   "item_id": "itm-0150",
+   "true_difficulty": -0.7107123062,
+   "recovered_difficulty": -1.6500364091,
+   "se_difficulty": 2.1246720535,
+   "true_discrimination": 0.1992066944,
+   "recovered_discrimination": 0.7353680393
+  },
+  {
+   "item_id": "itm-0151",
+   "true_difficulty": 0.3993967358,
+   "recovered_difficulty": -0.0,
+   "se_difficulty": 0.6613260776,
+   "true_discrimination": 1.0243847575,
+   "recovered_discrimination": 1.2203202425
+  },
+  {
+   "item_id": "itm-0152",
+   "true_difficulty": -0.7006269002,
+   "recovered_difficulty": -1.0425589254,
+   "se_difficulty": 0.7915074791,
+   "true_discrimination": 1.0457902701,
+   "recovered_discrimination": 1.4464964503
+  },
+  {
+   "item_id": "itm-0153",
+   "true_difficulty": -0.8163028916,
+   "recovered_difficulty": 6.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 0.1861842774,
+   "recovered_discrimination": 0.0745763039
+  },
+  {
+   "item_id": "itm-0154",
+   "true_difficulty": -0.1093715755,
+   "recovered_difficulty": 2.8085041374,
+   "se_difficulty": 12.5210378557,
+   "true_discrimination": 0.9861602667,
+   "recovered_discrimination": 0.1831933654
+  },
+  {
+   "item_id": "itm-0155",
+   "true_difficulty": 1.0704200659,
+   "recovered_difficulty": 2.5,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.8542103577,
+   "recovered_discrimination": 0.0
+  },
+  {
+   "item_id": "itm-0156",
+   "true_difficulty": 1.1607575295,
+   "recovered_difficulty": 0.4321535572,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.067842394,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0157",
+   "true_difficulty": 1.1894781164,
+   "recovered_difficulty": 6.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 0.9852244591,
+   "recovered_discrimination": 0.1637182445
+  },
+  {
+   "item_id": "itm-0158",
+   "true_difficulty": -2.403193686,
+   "recovered_difficulty": -1.2191070919,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.807485645,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0159",
+   "true_difficulty": -0.6541074848,
+   "recovered_difficulty": -0.5979591556,
+   "se_difficulty": 0.8510969895,
+   "true_discrimination": 0.9381150156,
+   "recovered_discrimination": 1.041931086
+  },
+  {
+   "item_id": "itm-0160",
+   "true_difficulty": -1.4797123548,
+   "recovered_difficulty": -1.2191070919,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.4777102832,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0161",
+   "true_difficulty": -0.5988620046,
+   "recovered_difficulty": -0.4321535572,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.1690153457,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0162",
+   "true_difficulty": 1.2670008486,
+   "recovered_difficulty": 2.5,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.521558396,
+   "recovered_discrimination": 0.0
+  },
+  {
+   "item_id": "itm-0163",
+   "true_difficulty": -0.2339825085,
+   "recovered_difficulty": -6.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 0.1744415145,
+   "recovered_discrimination": 0.0702903652
+  },
+  {
+   "item_id": "itm-0164",
+   "true_difficulty": -0.0860331954,
+   "recovered_difficulty": 0.0,
+   "se_difficulty": 0.469896018,
+   "true_discrimination": 0.923461039,
+   "recovered_discrimination": 1.9790869669
+  },
+  {
+   "item_id": "itm-0165",
+   "true_difficulty": -0.045670332,
+   "recovered_difficulty": 4.834056847,
+   "se_difficulty": 18.5200686275,
+   "true_discrimination": 1.1148433567,
+   "recovered_discrimination": 0.2296504053
+  },
+  {
+   "item_id": "itm-0166",
+   "true_difficulty": 0.4884863633,
+   "recovered_difficulty": 0.4132272849,
+   "se_difficulty": 0.3331580693,
+   "true_discrimination": 2.0814361452,
+   "recovered_discrimination": 3.5417291566
+  },
+  {
+   "item_id": "itm-0167",
+   "true_difficulty": -0.0413176732,
+   "recovered_difficulty": 0.4321535572,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.279284526,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0168",
+   "true_difficulty": 0.2292992148,
+   "recovered_difficulty": -0.5141633387,
+   "se_difficulty": 0.6624034547,
+   "true_discrimination": 0.7840276898,
+   "recovered_discrimination": 1.345034368
+  },
+  {
+   "item_id": "itm-0169",
+   "true_difficulty": 0.0420644338,
+   "recovered_difficulty": -0.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 0.9926644121,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0170",
+   "true_difficulty": 0.9901899073,
+   "recovered_difficulty": 0.76878973,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.0165617609,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0171",
+   "true_difficulty": -2.2641307583,
+   "recovered_difficulty": -1.2191070919,
+   "se_difficulty": 999.0,
+   "true_discrimination": 0.9474095656,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0172",
+   "true_difficulty": -0.74109404,
+   "recovered_difficulty": -2.5,
+   "se_difficulty": 999.0,
+   "true_discrimination": 0.8218558536,
+   "recovered_discrimination": 0.0
+  },
+  {
+   "item_id": "itm-0173",
+   "true_difficulty": -0.6540250008,
+   "recovered_difficulty": 0.0,
+   "se_difficulty": 4.1330004932,
+   "true_discrimination": 0.8256068577,
+   "recovered_discrimination": 0.1716390098
+  },
+  {
+   "item_id": "itm-0174",
+   "true_difficulty": 0.125763703,
+   "recovered_difficulty": -0.0,
+   "se_difficulty": 0.6613260776,
+   "true_discrimination": 1.044374989,
+   "recovered_discrimination": 1.2203202425
+  },
+  {
+   "item_id": "itm-0175",
+   "true_difficulty": -0.7891868354,
+   "recovered_difficulty": -0.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 0.9438560626,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0176",
+   "true_difficulty": -1.0644088982,
+   "recovered_difficulty": -0.5141633387,
+   "se_difficulty": 0.6624034547,
+   "true_discrimination": 1.2069290955,
+   "recovered_discrimination": 1.345034368
+  },
+  {
+   "item_id": "itm-0177",
+   "true_difficulty": 1.1235392426,
+   "recovered_difficulty": 0.4321535572,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.707280072,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0178",
+   "true_difficulty": 1.1426679721,
+   "recovered_difficulty": 0.5979591556,
+   "se_difficulty": 0.8510969897,
+   "true_discrimination": 1.3419563729,
+   "recovered_discrimination": 1.0419310855
+  },
+  {
+   "item_id": "itm-0179",
+   "true_difficulty": -1.9379538385,
+   "recovered_difficulty": -1.2648820125,
+   "se_difficulty": 1.2194030026,
+   "true_discrimination": 1.0924399286,
+   "recovered_discrimination": 1.0467877722
+  },
+  {
+   "item_id": "itm-0180",
+   "true_difficulty": 2.311053072,
+   "recovered_difficulty": 0.4589644688,
+   "se_difficulty": 0.5327732056,
+   "true_discrimination": 0.2389825757,
+   "recovered_discrimination": 1.7411185776
+  },
+  {
+   "item_id": "itm-0181",
+   "true_difficulty": -0.714628121,
+   "recovered_difficulty": -0.5141633387,
+   "se_difficulty": 0.6624034547,
+   "true_discrimination": 1.0384278093,
+   "recovered_discrimination": 1.345034368
+  },
+  {
+   "item_id": "itm-0182",
+   "true_difficulty": -0.6607371657,
+   "recovered_difficulty": -0.0,
+   "se_difficulty": 0.6613260776,
+   "true_discrimination": 2.3660776433,
+   "recovered_discrimination": 1.2203202425
+  },
+  {
+   "item_id": "itm-0183",
+   "true_difficulty": -0.5076793052,
+   "recovered_difficulty": 0.0,
+   "se_difficulty": 0.8058509046,
+   "true_discrimination": 0.206552197,
+   "recovered_discrimination": 0.9578035691
+  },
+  {
+   "item_id": "itm-0184",
+   "true_difficulty": 1.121155617,
+   "recovered_difficulty": 2.5,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.150414282,
+   "recovered_discrimination": 0.0
+  },
+  {
+   "item_id": "itm-0185",
+   "true_difficulty": 0.8589185915,
+   "recovered_difficulty": 0.4132272849,
+   "se_difficulty": 0.3331580693,
+   "true_discrimination": 1.2418698213,
+   "recovered_discrimination": 3.5417291566
+  },
+  {
+   "item_id": "itm-0186",
+   "true_difficulty": 0.2567941077,
+   "recovered_difficulty": 0.4244688454,
+   "se_difficulty": 0.4313737136,
+   "true_discrimination": 1.146677397,
+   "recovered_discrimination": 2.3328654161
+  },
+  {
+   "item_id": "itm-0187",
+   "true_difficulty": -0.5221289183,
+   "recovered_difficulty": 6.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 0.1839929578,
+   "recovered_discrimination": 0.0745763039
+  },
+  {
+   "item_id": "itm-0188",
+   "true_difficulty": 0.156387757,
+   "recovered_difficulty": -0.0,
+   "se_difficulty": 0.6613260776,
+   "true_discrimination": 0.2639874445,
+   "recovered_discrimination": 1.2203202425
+  },
+  {
+   "item_id": "itm-0189",
+   "true_difficulty": 0.862873874,
+   "recovered_difficulty": 4.834056847,
+   "se_difficulty": 18.5200686275,
+   "true_discrimination": 1.107244246,
+   "recovered_discrimination": 0.2296504053
+  },
+  {
+   "item_id": "itm-0190",
+   "true_difficulty": 0.1656716558,
+   "recovered_difficulty": 0.9037721231,
+   "se_difficulty": 0.5459139081,
+   "true_discrimination": 1.3722893289,
+   "recovered_discrimination": 2.042412381
+  },
+  {
+   "item_id": "itm-0191",
+   "true_difficulty": -0.0642806983,
+   "recovered_difficulty": -1.4147984958,
+   "se_difficulty": 3.5023190411,
+   "true_discrimination": 1.0469735899,
+   "recovered_discrimination": 0.3716818672
+  },
+  {
+   "item_id": "itm-0192",
+   "true_difficulty": -0.6700362219,
+   "recovered_difficulty": -1e-10,
+   "se_difficulty": 0.3983043146,
+   "true_discrimination": 0.9225937775,
+   "recovered_discrimination": 2.641367754
+  },
+  {
+   "item_id": "itm-0193",
+   "true_difficulty": 0.1908169647,
+   "recovered_difficulty": 1.4147984958,
+   "se_difficulty": 3.5023190411,
+   "true_discrimination": 1.3712320519,
+   "recovered_discrimination": 0.3716818672
+  },
+  {
+   "item_id": "itm-0194",
+   "true_difficulty": 0.7815502783,
+   "recovered_difficulty": -0.4589644688,
+   "se_difficulty": 0.5327732056,
+   "true_discrimination": 0.9429869141,
+   "recovered_discrimination": 1.7411185776
+  },
+  {
+   "item_id": "itm-0195",
+   "true_difficulty": 0.6046119148,
+   "recovered_difficulty": 1.0425589254,
+   "se_difficulty": 0.7915074791,
+   "true_discrimination": 1.2093228685,
+   "recovered_discrimination": 1.4464964503
+  },
+  {
+   "item_id": "itm-0196",
+   "true_difficulty": 0.2892005898,
+   "recovered_difficulty": 0.4321535572,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.5734541083,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0197",
+   "true_difficulty": 2.1321938535,
+   "recovered_difficulty": 1.2191070939,
+   "se_difficulty": 999.0,
+   "true_discrimination": 0.7442288894,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0198",
+   "true_difficulty": 0.7926136118,
+   "recovered_difficulty": 0.4321535572,
+   "se_difficulty": 999.0,
+   "true_discrimination": 0.8805137476,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0199",
+   "true_difficulty": -0.4527859588,
+   "recovered_difficulty": -0.0,
+   "se_difficulty": 2.0609772406,
+   "true_discrimination": 1.1018828734,
+   "recovered_discrimination": 0.3475783061
+  },
+  {
+   "item_id": "itm-0200",
+   "true_difficulty": 0.7984643083,
+   "recovered_difficulty": 0.8139428607,
+   "se_difficulty": 0.3691791169,
+   "true_discrimination": 0.9989165657,
+   "recovered_discrimination": 3.2979151823
+  },
+  {
+   "item_id": "itm-0201",
+   "true_difficulty": -0.1527423233,
+   "recovered_difficulty": -0.7295484535,
+   "se_difficulty": 1.1652198383,
+   "true_discrimination": 0.7886323318,
+   "recovered_discrimination": 0.7909666423
+  },
+  {
+   "item_id": "itm-0202",
+   "true_difficulty": 0.2845863269,
+   "recovered_difficulty": -1e-10,
+   "se_difficulty": 0.3983043146,
+   "true_discrimination": 1.4669814209,
+   "recovered_discrimination": 2.641367754
+  },
+  {
+   "item_id": "itm-0203",
+   "true_difficulty": -0.3830157647,
+   "recovered_difficulty": 0.9552178736,
+   "se_difficulty": 1.7939277629,
+   "true_discrimination": 0.869390668,
+   "recovered_discrimination": 0.5715804124
+  },
+  {
+   "item_id": "itm-0204",
+   "true_difficulty": 1.9786899394,
+   "recovered_difficulty": -0.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 0.1696713413,
+   "recovered_discrimination": 0.05
+  },
+  {
+   "item_id": "itm-0205",
+   "true_difficulty": 0.8273367598,
+   "recovered_difficulty": -1.414798509,
+   "se_difficulty": 3.5023190617,
+   "true_discrimination": 1.7509428629,
+   "recovered_discrimination": 0.37168186
+  },
+  {
+   "item_id": "itm-0206",
+   "true_difficulty": -0.4204769853,
+   "recovered_difficulty": -0.0,
+   "se_difficulty": 0.6613260776,
+   "true_discrimination": 1.7753007162,
+   "recovered_discrimination": 1.2203202425
+  },
+  {
+   "item_id": "itm-0207",
+   "true_difficulty": -0.3115743247,
+   "recovered_difficulty": -0.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.4122557943,
+   "recovered_discrimination": 0.05
+  },
+  {
+   "item_id": "itm-0208",
+   "true_difficulty": 1.2512795992,
+   "recovered_difficulty": 1.6500364118,
+   "se_difficulty": 2.1246720617,
+   "true_discrimination": 1.5896242536,
+   "recovered_discrimination": 0.7353680381
+  },
+  {
+   "item_id": "itm-0209",
+   "true_difficulty": 0.9606956619,
+   "recovered_difficulty": 0.8139428607,
+   "se_difficulty": 0.3691791169,
+   "true_discrimination": 1.3797311287,
+   "recovered_discrimination": 3.2979151823
+  },
+  {
+   "item_id": "itm-0210",
+   "true_difficulty": -0.0797847593,
+   "recovered_difficulty": 0.76878973,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.3857595466,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0211",
+   "true_difficulty": -1.1463227313,
+   "recovered_difficulty": 0.4321535572,
+   "se_difficulty": 999.0,
+   "true_discrimination": 0.8004974556,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0212",
+   "true_difficulty": 0.4116758541,
+   "recovered_difficulty": 0.0,
+   "se_difficulty": 0.469896018,
+   "true_discrimination": 1.0535633851,
+   "recovered_discrimination": 1.9790869669
+  },
+  {
+   "item_id": "itm-0213",
+   "true_difficulty": 0.8848628792,
+   "recovered_difficulty": 1.0425589254,
+   "se_difficulty": 0.7915074791,
+   "true_discrimination": 1.076973983,
+   "recovered_discrimination": 1.4464964503
+  },
+  {
+   "item_id": "itm-0214",
+   "true_difficulty": -1.227809149,
+   "recovered_difficulty": -1.2648820153,
+   "se_difficulty": 1.2194030073,
+   "true_discrimination": 1.7032688687,
+   "recovered_discrimination": 1.0467877643
+  },
+  {
+   "item_id": "itm-0215",
+   "true_difficulty": -0.6715072763,
+   "recovered_difficulty": 0.0,
+   "se_difficulty": 4.1330004932,
+   "true_discrimination": 1.1951053872,
+   "recovered_discrimination": 0.1716390098
+  },
+  {
+   "item_id": "itm-0216",
+   "true_difficulty": 0.6053620999,
+   "recovered_difficulty": 0.4321535572,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.495516695,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0217",
+   "true_difficulty": 0.4367382309,
+   "recovered_difficulty": 0.0,
+   "se_difficulty": 0.469896018,
+   "true_discrimination": 1.3450025386,
+   "recovered_discrimination": 1.9790869669
+  },
+  {
+   "item_id": "itm-0218",
+   "true_difficulty": 0.1162951711,
+   "recovered_difficulty": -0.0,
+   "se_difficulty": 0.4698960209,
+   "true_discrimination": 1.2182279912,
+   "recovered_discrimination": 1.9790869474
+  },
+  {
+   "item_id": "itm-0219",
+   "true_difficulty": 1.7186826767,
+   "recovered_difficulty": 1.414798509,
+   "se_difficulty": 3.5023190617,
+   "true_discrimination": 0.8893564477,
+   "recovered_discrimination": 0.37168186
+  },
+  {
+   "item_id": "itm-0220",
+   "true_difficulty": -0.1498907065,
+   "recovered_difficulty": -6.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.235447694,
+   "recovered_discrimination": 0.1798666348
+  },
+  {
+   "item_id": "itm-0221",
+   "true_difficulty": 0.7245494299,
+   "recovered_difficulty": 6.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 0.9315806232,
+   "recovered_discrimination": 0.2780775423
+  },
+  {
+   "item_id": "itm-0222",
+   "true_difficulty": -0.4816701001,
+   "recovered_difficulty": 0.5141633387,
+   "se_difficulty": 0.6624034547,
+   "true_discrimination": 0.8031483457,
+   "recovered_discrimination": 1.345034368
+  },
+  {
+   "item_id": "itm-0223",
+   "true_difficulty": 0.728833052,
+   "recovered_difficulty": 1.4147984958,
+   "se_difficulty": 3.5023190411,
+   "true_discrimination": 0.201592211,
+   "recovered_discrimination": 0.3716818672
+  },
+  {
+   "item_id": "itm-0224",
+   "true_difficulty": 0.7097608648,
+   "recovered_difficulty": 0.8139428607,
+   "se_difficulty": 0.3691791169,
+   "true_discrimination": 1.1186681521,
+   "recovered_discrimination": 3.2979151823
+  },
+  {
+   "item_id": "itm-0225",
+   "true_difficulty": 0.7643348954,
+   "recovered_difficulty": 0.5141633387,
+   "se_difficulty": 0.6624034547,
+   "true_discrimination": 1.1939307297,
+   "recovered_discrimination": 1.345034368
+  },
+  {
+   "item_id": "itm-0226",
+   "true_difficulty": 0.036850099,
+   "recovered_difficulty": -6.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.0455700975,
+   "recovered_discrimination": 0.0788893811
+  },
+  {
+   "item_id": "itm-0227",
+   "true_difficulty": 0.4744797289,
+   "recovered_difficulty": 0.0,
+   "se_difficulty": 0.8058509099,
+   "true_discrimination": 0.9353817047,
+   "recovered_discrimination": 0.9578035616
+  },
+  {
+   "item_id": "itm-0228",
+   "true_difficulty": 2.8636222609,
+   "recovered_difficulty": 0.76878973,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.2419397245,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0229",
+   "true_difficulty": -0.2051494965,
+   "recovered_difficulty": 0.0,
+   "se_difficulty": 0.5545034377,
+   "true_discrimination": 1.6239970899,
+   "recovered_discrimination": 1.5447253413
+  },
+  {
+   "item_id": "itm-0230",
+   "true_difficulty": 1.7509212193,
+   "recovered_difficulty": 0.8139428607,
+   "se_difficulty": 0.3691791169,
+   "true_discrimination": 1.0849744202,
+   "recovered_discrimination": 3.2979151823
+  },
+  {
+   "item_id": "itm-0231",
+   "true_difficulty": -0.9352934145,
+   "recovered_difficulty": 1.414798509,
+   "se_difficulty": 3.5023190617,
+   "true_discrimination": 1.1164365516,
+   "recovered_discrimination": 0.37168186
+  },
+  {
+   "item_id": "itm-0232",
+   "true_difficulty": 0.0407725667,
+   "recovered_difficulty": -0.0,
+   "se_difficulty": 2.0609772406,
+   "true_discrimination": 0.7663541083,
+   "recovered_discrimination": 0.3475783061
+  },
+  {
+   "item_id": "itm-0233",
+   "true_difficulty": 0.8983909069,
+   "recovered_difficulty": 1.2648820155,
+   "se_difficulty": 1.2194030078,
+   "true_discrimination": 1.3011446297,
+   "recovered_discrimination": 1.046787764
+  },
+  {
+   "item_id": "itm-0234",
+   "true_difficulty": -1.0127774831,
+   "recovered_difficulty": -1.2648820125,
+   "se_difficulty": 1.2194030026,
+   "true_discrimination": 1.355796036,
+   "recovered_discrimination": 1.0467877722
+  },
+  {
+   "item_id": "itm-0235",
+   "true_difficulty": -0.1142301187,
+   "recovered_difficulty": -0.4321535572,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.2880861183,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0236",
+   "true_difficulty": -0.0832391616,
+   "recovered_difficulty": 0.76878973,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.130518006,
+   "recovered_discrimination": 6.0
+  },
+  {
+   "item_id": "itm-0237",
+   "true_difficulty": -1.1368626683,
+   "recovered_difficulty": -0.7295484535,
+   "se_difficulty": 1.1652198383,
+   "true_discrimination": 1.3198525896,
+   "recovered_discrimination": 0.7909666423
+  },
+  {
+   "item_id": "itm-0238",
+   "true_difficulty": -0.9392786023,
+   "recovered_difficulty": -0.0,
+   "se_difficulty": 999.0,
+   "true_discrimination": 1.1582591988,
+   "recovered_discrimination": 0.05
+  },
+  {
+   "item_id": "itm-0239",
+   "true_difficulty": 1.1984955244,
+   "recovered_difficulty": 0.5141633387,
+   "se_difficulty": 0.6624034547,
+   "true_discrimination": 1.0187807284,
+   "recovered_discrimination": 1.345034368
+  }
+ ],
+ "contamination": [
+  {
+   "item_id": "itm-0075",
+   "canary_hit": true,
+   "max_ngram_overlap": 1.0,
+   "suspicious": true,
+   "reason": "suspicious: canary PGAP-CANARY-b66dcbc3-c54f-8961-afce-3470fcd2dfe4 found verbatim in corpus document 0; max 5-gram overlap 1.000 exceeds threshold 0.350 at corpus document 0"
+  },
+  {
+   "item_id": "itm-0093",
+   "canary_hit": true,
+   "max_ngram_overlap": 1.0,
+   "suspicious": true,
+   "reason": "suspicious: canary PGAP-CANARY-3d94edd6-d236-eb45-6347-853946e25f7d found verbatim in corpus document 1; max 5-gram overlap 1.000 exceeds threshold 0.350 at corpus document 1"
+  },
+  {
+   "item_id": "itm-0094",
+   "canary_hit": true,
+   "max_ngram_overlap": 1.0,
+   "suspicious": true,
+   "reason": "suspicious: canary PGAP-CANARY-ea82c99f-abc5-ea30-642f-ee9ca76fcc67 found verbatim in corpus document 2; max 5-gram overlap 1.000 exceeds threshold 0.350 at corpus document 2"
+  }
+ ],
+ "n_contaminated": 3,
+ "fleet": [
+  {
+   "model_id": "syn-mini",
+   "ability": -1.5,
+   "verbosity": 0.9
+  },
+  {
+   "model_id": "syn-small",
+   "ability": -0.9,
+   "verbosity": -0.6
+  },
+  {
+   "model_id": "syn-terse",
+   "ability": -0.6,
+   "verbosity": -1.2
+  },
+  {
+   "model_id": "syn-base",
+   "ability": -0.3,
+   "verbosity": 0.1
+  },
+  {
+   "model_id": "syn-plus",
+   "ability": 0.3,
+   "verbosity": -0.4
+  },
+  {
+   "model_id": "syn-verbose",
+   "ability": 0.6,
+   "verbosity": 1.4
+  },
+  {
+   "model_id": "syn-pro",
+   "ability": 0.9,
+   "verbosity": 0.5
+  },
+  {
+   "model_id": "syn-max",
+   "ability": 1.5,
+   "verbosity": -0.7
+  }
+ ]
+}

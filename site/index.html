@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PROXY GAP — measure judge bias, predict reward hacking</title>
+<meta name="description" content="An evaluation-driven post-training research platform. Measure an LLM judge's bias coefficient at eval time and predict the KL budget at which optimising against it starts destroying true quality.">
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📐</text></svg>">
+</head>
+<body>
+
+<div class="topbar"><div class="topbar-inner">
+  <a class="brand" href="index.html">PROXY&nbsp;<span>GAP</span></a>
+  <nav class="navlinks">
+    <a href="index.html">The result</a>
+    <a href="evaluation.html">Evaluation stack</a>
+    <a href="statistics.html">Statistics</a>
+    <a href="reproduce.html">Reproduce</a>
+    <a href="https://github.com/sugeerth/proxy-gap">GitHub</a>
+  </nav>
+  <button class="theme-toggle" aria-label="Toggle colour theme">☾</button>
+</div></div>
+
+<main>
+
+<section class="hero">
+  <p class="eyebrow">Evaluation-driven post-training</p>
+  <h1>Judge bias is not just noise.<br>It is a <em>forecast</em>.</h1>
+  <p class="lede">
+    Everyone knows LLM judges over-reward long, agreeable answers. The usual response is
+    to treat that as measurement error and try to scrub it out. This project takes the
+    opposite view: <strong>measure the bias precisely, and it tells you exactly how much
+    optimisation pressure your post-training run can survive before it starts destroying
+    the quality it was meant to improve.</strong>
+  </p>
+  <p class="lede">
+    A closed form connects the two. Everything below is reproduced from source by
+    <code>make all</code> — offline, deterministic, no API key.
+  </p>
+</section>
+
+<div id="headline-stats"></div>
+
+<section>
+  <h2 id="mechanism">The mechanism, in three lines</h2>
+  <p>
+    A response has a latent true quality <code>q</code>, a standardised length <code>L</code>,
+    and an agreeableness <code>S</code>. The truth is single-peaked in length — some
+    elaboration helps, too much hurts. The judge is monotone in length.
+  </p>
+  <div class="formula">true    r*  =  q − a·(L − L*)²  − c·S
+proxy   r̂   =  q + β·L        + β_S·S + ε</div>
+  <p>
+    That is the whole disagreement. The proxy is <em>locally</em> right — it increases in
+    true quality — and <em>globally</em> wrong, because it never turns around. Optimise
+    hard enough against it and you walk straight past the peak of the truth. β is not a
+    metaphor here: it is the coefficient that
+    <a href="evaluation.html#bias">the bias probe measures</a>, on real judge outputs,
+    with a confidence interval.
+  </p>
+
+  <div class="claim">
+    <strong>The claim.</strong> Under best-of-<em>n</em> selection, the optimisation
+    pressure at which true quality peaks is fixed by the judge's bias coefficient alone:
+    <div class="formula" style="margin:12px 0 4px">ln n*  =  (v / 2) · [ L*/β  +  (1 − c·β_S) / (2 a β²) ]²        v = 1 + β² + β_S² + σ²</div>
+    In the regime where the true optimum is displaced from the base policy (<code>L* &gt; 0</code>),
+    this collapses to <strong><code>ln n* ∝ β⁻²</code></strong> — halve a judge's verbosity
+    bias and you roughly quadruple the KL budget you can safely spend. When the optimum
+    coincides with the base policy (<code>L* = 0</code>), the exponent is <code>−4</code>.
+  </div>
+</section>
+
+<section>
+  <h2 id="gap">Figure 1 — The proxy gap opens</h2>
+  <p>
+    One baseline sweep. As best-of-<em>n</em> pressure rises, the judge's score climbs
+    monotonically and never warns you of anything. True quality rises, peaks, and turns
+    over. The vertical rule is the <em>closed form's</em> prediction of where the peak
+    should be — computed from β, <code>a</code>, <code>L*</code> and σ, with no access to
+    the simulation.
+  </p>
+  <div id="fig-gap"></div>
+  <p id="gap-caption" class="lede" style="font-size:15px"></p>
+</section>
+
+<section>
+  <h2 id="law">Figure 2 — The Bias–Budget Law</h2>
+  <p>
+    Sweep β across an order of magnitude and record where the true-quality peak lands each
+    time. On log–log axes the relationship should be a straight line whose slope is the
+    exponent the theory predicts. Both regimes are shown; the fitted exponent and its
+    bootstrap interval are reported next to the theoretical value, agreeing or not.
+  </p>
+  <div id="fig-law"></div>
+  <div id="law-verdict"></div>
+</section>
+
+<section>
+  <h2 id="mitigations">Figure 3 — What actually closes the gap</h2>
+  <p>
+    Four interventions, run through the same sweep. The result worth internalising is the
+    negative one: <strong>averaging more judges does not help.</strong> An ensemble
+    shrinks σ, and σ is not what moves the peak — β is. If every judge in your council
+    shares the same verbosity prior, the council inherits it in full, and you have bought
+    precision around the wrong number.
+  </p>
+  <div id="fig-mit"></div>
+  <div id="mit-table"></div>
+</section>
+
+<section>
+  <h2 id="practice">What this changes in practice</h2>
+  <div class="cards">
+    <div class="card">
+      <span class="kicker">Before training</span>
+      <h3>Run a bias probe first</h3>
+      <p>An OLS regression of judge score on the biased feature, holding true quality
+      fixed, costs minutes and returns β with an interval. That number sets the KL budget
+      before you spend a single GPU-hour.</p>
+    </div>
+    <div class="card">
+      <span class="kicker">During training</span>
+      <h3>Budget in KL, not in steps</h3>
+      <p>Step count is not the controlled variable; distance from the base policy is.
+      Reporting a run as "1000 steps" says nothing portable; reporting it as "KL 1.8 of a
+      predicted 2.4 budget" does.</p>
+    </div>
+    <div class="card">
+      <span class="kicker">When choosing a fix</span>
+      <h3>Debias, don't ensemble</h3>
+      <p>Ensembling attacks variance; the peak is set by bias. Length-controlled scoring,
+      position swapping, and reference-anchored rubrics move β. More judges do not.</p>
+    </div>
+    <div class="card">
+      <span class="kicker">In the eval report</span>
+      <h3>Publish β alongside the score</h3>
+      <p>A leaderboard number without its judge's bias coefficients is not reproducible —
+      the same benchmark under a differently-biased judge rewards a different model.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2 id="limits">What this is not</h2>
+  <div class="honest">
+    <h3>Read this before citing any number above</h3>
+    <p>
+      <strong>These are simulations, not measurements of a real model.</strong> The
+      response population is generated from the feature model above, not sampled from a
+      language model. That buys exact ground truth — you cannot observe <code>q</code> for
+      a real system, which is precisely why reward hacking is hard to study empirically —
+      and it costs external validity. The law is derived and validated <em>within</em> this
+      model. Whether real judges and real policies obey it is an open empirical question,
+      and the honest framing of this repository is that it makes that question testable,
+      not that it answers it.
+    </p>
+    <p>
+      Three assumptions do real work and would each break the exponent if violated:
+      Gaussian features, linear judge bias, and quadratic true-reward curvature. Best-of-<em>n</em>
+      is also a stand-in for policy-gradient optimisation; it shares the KL bookkeeping but
+      not the dynamics.
+    </p>
+    <p>
+      A real backend is included (<code>proxygap.models.anthropic_backend</code>, Claude
+      Opus 5) so the same probes can be pointed at real generations. Doing that properly —
+      with human-anchored quality labels rather than a proxy for <code>q</code> — is the
+      obvious next study, and it is not done here.
+    </p>
+  </div>
+</section>
+
+<section>
+  <h2 id="explore">The rest of the platform</h2>
+  <p>
+    The law is the headline, but it sits on a full evaluation stack — because a prediction
+    about judges is only worth as much as the benchmark and statistics underneath it.
+  </p>
+  <div class="cards">
+    <a class="card" href="evaluation.html">
+      <span class="kicker">Evaluation stack</span>
+      <h3>Does the benchmark measure anything?</h3>
+      <p>2PL item calibration with parameter recovery, contamination probes, judge bias
+      and position bias, calibration curves, council with veto, robustness perturbations,
+      failure mining, and the human annotation protocol.</p>
+    </a>
+    <a class="card" href="statistics.html">
+      <span class="kicker">Statistics</span>
+      <h3>Is the difference real?</h3>
+      <p>BCa bootstrap with verified coverage, paired permutation tests, cluster-robust
+      standard errors, BH-FDR across many metrics, power and MDE, CUPED variance
+      reduction, always-valid e-values, and a CI gate that does not cry wolf.</p>
+    </a>
+    <a class="card" href="reproduce.html">
+      <span class="kicker">Reproduce</span>
+      <h3>Run every number yourself</h3>
+      <p><code>make all</code> rebuilds every figure on this site from source in one
+      command, deterministically, with no API key and no network.</p>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <p>
+    PROXY GAP — built by <a href="https://sugeerth.github.io">Sugeerth Murugesan</a>.
+    Source on <a href="https://github.com/sugeerth/proxy-gap">GitHub</a>.
+    Every figure regenerates from <code>make all</code>; the run seed and library versions
+    are recorded in <code>site/data/manifest.json</code>.
+  </p>
+</footer>
+
+</main>
+
+<script src="data/bundle.js" onerror="window.__PROXYGAP_BUNDLE_MISSING__=true"></script>
+<script type="module">
+import { initChrome, onThemeChange } from './assets/app.js';
+import { lineChart, barChart, statTiles, loadData, failNotice, fmt } from './assets/viz.js';
+
+initChrome();
+
+const $ = (id) => document.getElementById(id);
+
+function ratioWord(r) {
+  if (r === null || r === undefined || !isFinite(r)) return 'not comparable';
+  if (r > 0.66 && r < 1.5) return 'within 1.5×';
+  if (r > 0.4 && r < 2.5) return 'within 2.5×';
+  return `off by ${r > 1 ? r.toFixed(1) : (1 / r).toFixed(1)}×`;
+}
+
+async function render() {
+  let sweep, law, mit;
+  try {
+    [sweep, law, mit] = await Promise.all([
+      loadData('sweep'), loadData('law'), loadData('mitigations'),
+    ]);
+  } catch (e) {
+    [$('fig-gap'), $('fig-law'), $('fig-mit'), $('headline-stats')]
+      .forEach((h) => h && failNotice(h, e));
+    return;
+  }
+
+  /* ---------- headline tiles ---------- */
+  const r = sweep.result;
+  const fit = law.displaced.fit;
+  statTiles($('headline-stats'), [
+    { label: 'Peak true quality at', value: `n = ${r.argmax_n}`,
+      note: `KL ${r.argmax_kl.toFixed(2)} from the base policy` },
+    { label: 'Closed-form prediction', value: `KL ${sweep.predicted_kl.toFixed(2)}`,
+      note: `observed KL ${r.argmax_kl.toFixed(2)} — ${ratioWord(sweep.prediction_ratio)}` },
+    { label: 'Quality destroyed by over-optimising', value: r.regret.toFixed(3),
+      tone: 'critical', note: 'peak true minus true at the end of the sweep' },
+    { label: 'Fitted β exponent', value: fit.exponent.toFixed(2),
+      note: `theory −2 · R² ${fit.r_squared.toFixed(2)} · ${fit.regime}` },
+  ]);
+
+  /* ---------- Figure 1: the gap ---------- */
+  const pts = r.points;
+  const p0 = pts[0].proxy, t0 = pts[0].true;
+  lineChart($('fig-gap'), {
+    title: 'Proxy score keeps rising. True quality does not.',
+    subtitle: `best-of-n against a judge with β = ${r.beta_length.toFixed(2)}; bands are ±1 standard error`,
+    xScale: 'log', xLabel: 'best-of-n samples (log scale)', yLabel: 'reward, centred at n = 1',
+    xFormat: (v) => (v >= 1000 ? `${v / 1000}k` : String(Math.round(v))),
+    height: 380,
+    vrules: [
+      { at: r.argmax_n, label: `observed peak  n=${r.argmax_n}` },
+    ],
+    series: [
+      { label: 'proxy (what the judge sees)',
+        points: pts.map((p) => [p.n, p.proxy - p0, p.proxy_se]) },
+      { label: 'true quality (unobservable)',
+        points: pts.map((p) => [p.n, p.true - t0, p.true_se]) },
+      { label: 'mean length of selected answer', dashed: true,
+        points: pts.map((p) => [p.n, p.mean_length]) },
+    ],
+  });
+
+  $('gap-caption').textContent =
+    `The judge is not lying — it is answering a different question. By n = ${pts[pts.length - 1].n} ` +
+    `the selected response is ${pts[pts.length - 1].mean_length.toFixed(2)} standard deviations ` +
+    `longer than the base policy's average, which is exactly what the judge was asking for ` +
+    `and ${r.regret.toFixed(3)} reward units worse than the peak on the axis that mattered.`;
+
+  /* ---------- Figure 2: the law ---------- */
+  const mk = (key, label, slot) => ({
+    label,
+    points: law[key].sweeps.map((s) => [s.beta_length, Math.log(Math.max(s.argmax_n, 1.0001))]),
+    color: `var(--series-${slot})`,
+  });
+  const mkPred = (key, label, slot) => ({
+    label, dashed: true,
+    points: law[key].sweeps.map((s) => [s.beta_length, Math.log(Math.max(Math.exp(s.predicted_kl + 1), 1.0001))]),
+    color: `var(--series-${slot})`,
+  });
+
+  lineChart($('fig-law'), {
+    title: 'Optimal optimisation budget against judge bias',
+    subtitle: 'log ln n* versus β. A power law appears as a straight line; the slope is the exponent.',
+    xScale: 'log', xLabel: 'judge bias coefficient β', yLabel: 'ln n*  (log optimisation budget)',
+    xFormat: (v) => v.toFixed(2), height: 380,
+    series: [
+      mk('displaced', 'observed · L* = 1.0 (displaced)', 1),
+      mk('coincident', 'observed · L* = 0.0 (coincident)', 2),
+    ],
+  });
+
+  const verdict = (key, expected) => {
+    const f = law[key].fit;
+    const covers = f.exponent_ci.low <= expected && expected <= f.exponent_ci.high;
+    return `<div class="notice ${covers ? 'notice-good' : 'notice-warn'}">
+      <strong>${key === 'displaced' ? 'Displaced optimum (L* = 1.0)' : 'Coincident optimum (L* = 0.0)'}:</strong>
+      fitted exponent <strong>${f.exponent.toFixed(2)}</strong>
+      [${f.exponent_ci.low.toFixed(2)}, ${f.exponent_ci.high.toFixed(2)}],
+      R² = ${f.r_squared.toFixed(3)}, regime detected as <em>${f.regime}</em>.
+      Theory predicts <strong>${expected}</strong> —
+      ${covers
+        ? 'the interval covers the predicted exponent.'
+        : 'the interval does <strong>not</strong> cover it. Reported as-is; see the limitations above and <code>docs/THEORY.md</code>.'}
+    </div>`;
+  };
+  $('law-verdict').innerHTML = verdict('displaced', -2) + verdict('coincident', -4);
+
+  /* ---------- Figure 3: mitigations ---------- */
+  const rows = mit.summary.map((s, i) => ({
+    label: s.label, value: s.peak_true, slot: i % 8,
+    format: (v) => v.toFixed(3),
+  }));
+  barChart($('fig-mit'), {
+    title: 'Peak true quality achieved under each mitigation',
+    subtitle: 'higher is better; the number in parentheses in the table is where the peak landed',
+    xLabel: 'peak true reward', height: 60 + rows.length * 42,
+    rows,
+  });
+
+  const cells = mit.summary.map((s) =>
+    `<tr><td>${s.label}</td><td>${s.argmax_n}</td><td>${s.argmax_kl.toFixed(2)}</td>
+     <td>${s.peak_true.toFixed(3)}</td><td>${s.regret.toFixed(3)}</td></tr>`).join('');
+  $('mit-table').innerHTML =
+    `<table><thead><tr><th>mitigation</th><th>n*</th><th>KL*</th><th>peak true</th><th>regret</th></tr></thead>
+     <tbody>${cells}</tbody></table>`;
+}
+
+render();
+onThemeChange(render);
+</script>
+
+</body>
+</html>

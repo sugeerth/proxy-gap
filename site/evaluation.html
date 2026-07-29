@@ -1,0 +1,928 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Evaluation stack — does the benchmark measure anything? | PROXY GAP</title>
+<meta name="description" content="Item calibration with parameter recovery, contamination probes, judge bias and position bias, calibration curves, council with veto, robustness perturbations, failure mining, and the human annotation protocol — the trust chain underneath the headline result.">
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📐</text></svg>">
+</head>
+<body>
+
+<div class="topbar"><div class="topbar-inner">
+  <a class="brand" href="index.html">PROXY&nbsp;<span>GAP</span></a>
+  <nav class="navlinks">
+    <a href="index.html">The result</a>
+    <a href="evaluation.html">Evaluation stack</a>
+    <a href="statistics.html">Statistics</a>
+    <a href="reproduce.html">Reproduce</a>
+    <a href="https://github.com/sugeerth/proxy-gap">GitHub</a>
+  </nav>
+  <button class="theme-toggle" aria-label="Toggle colour theme">☾</button>
+</div></div>
+
+<main>
+
+<section class="hero">
+  <p class="eyebrow">Evaluation stack</p>
+  <h1>Before you trust a score,<br>audit the <em>instrument</em>.</h1>
+  <p class="lede">
+    The headline result on the front page is a claim about judges. A claim about
+    judges is only as good as the benchmark it was measured on, the probe that
+    measured it, and the human labels that anchor the whole thing. This page is
+    the audit trail: eight checks, each one capable of failing, each one reported
+    with the number it actually returned rather than the number it was supposed to.
+  </p>
+  <p class="lede">
+    Two of them do fail here, and both are named in place rather than in a
+    footnote — the item calibration recovers difficulty only moderately, and the
+    robustness harness measures exactly nothing on a synthetic fleet.
+  </p>
+</section>
+
+<section>
+  <h2 id="bench">1 — Benchmark health: is the bank measuring anything?</h2>
+  <p>
+    Items are generated from a two-parameter logistic (2PL) response model, so
+    each item has a known <em>difficulty</em> <code>b</code> and a known
+    <em>discrimination</em> <code>a</code>, and each model has a known ability
+    <code>θ</code>: <code>P(correct) = σ(a·(θ − b))</code>. The whole fleet is
+    then run over the bank and the item parameters are re-estimated from the
+    response matrix alone. Because the generating parameters are known, the
+    estimator can be audited directly — which is the entire reason for building
+    the benchmark synthetically.
+  </p>
+
+  <div id="bench-tiles"></div>
+
+  <h3>Parameter recovery</h3>
+  <p>
+    The check that matters: fitted difficulty against generating difficulty, one
+    point per item. If the calibration works the cloud sits on <code>y = x</code>.
+    Items are split by whether their fit was identified at all — a perfectly
+    separated or unanimous item has no interior likelihood maximum, and the
+    fitter marks it with a sentinel standard error instead of pretending to an
+    estimate.
+  </p>
+  <div id="fig-recovery"></div>
+  <p id="recovery-note" class="lede" style="font-size:15px"></p>
+
+  <h3>What was dropped, and why</h3>
+  <div id="drop-table"></div>
+  <p id="drop-note"></p>
+
+  <div class="claim">
+    <strong>What discrimination is, and why a low-discrimination eval is dangerous.</strong>
+    Discrimination is the slope of an item's response curve at the ability where
+    it is hardest: how sharply the probability of a correct answer rises as the
+    model gets better. An item with <code>a ≈ 0</code> is answered correctly at
+    roughly the same rate by the weakest and the strongest model in the fleet, so
+    it contributes variance to the leaderboard and no signal about ordering. The
+    danger is not that such items lower a score — it is that they <em>tighten</em>
+    it. Averaging in many near-zero-information items shrinks the confidence
+    interval around a mean that no longer tracks ability, so the eval becomes
+    more confident and less correct at the same time. That is why the bank is
+    partitioned before anything is scored rather than after a result looks wrong.
+  </div>
+</section>
+
+<section>
+  <h2 id="contamination">2 — Contamination: was the answer already in the corpus?</h2>
+  <p>
+    Two probes run against the same reference corpus, kept separate because they
+    fail in opposite directions.
+  </p>
+  <p>
+    <strong>Canary match.</strong> Each canaried item carries a uuid-shaped token
+    that exists nowhere else in the world. If that token appears verbatim in a
+    corpus document, the item text was in the corpus and there is no innocent
+    explanation. False-positive rate zero by construction.
+  </p>
+  <p>
+    <strong>N-gram overlap.</strong> Jaccard similarity of word-level 5-gram sets
+    between the item prompt and a corpus document, computed over every
+    item-sized window of the document rather than the document as a whole — a
+    30-word item quoted inside a 5000-word page has a whole-document Jaccard near
+    zero and would otherwise be missed. Flagged above an overlap of 0.35. This
+    one catches restatements the canary cannot, and pays for it with a tunable
+    false-positive rate.
+  </p>
+  <div id="contam-table"></div>
+  <p id="contam-note"></p>
+
+  <div class="honest">
+    <h3>The canary count is a lower bound, not a measurement</h3>
+    <p>
+      A canary detects <em>verbatim</em> reproduction of a token, and only on
+      items that carry one. Any leak that paraphrased the item, translated it,
+      reformatted it, or passed through a summariser is invisible to it. The
+      n-gram probe extends the reach to near-duplicates and still stops at the
+      surface: a model that saw the item once during pre-training and memorised
+      the answer without the wording leaves no trace in either probe. Both
+      numbers below should be read as "at least this much", never as "this much".
+    </p>
+    <p>
+      In this run the positives were <em>planted</em> — the reference corpus is
+      built from three of the bank's own canaried prompts, so the probes are
+      being tested against a leak whose ground truth is known. That validates the
+      detector. It says nothing about the contamination rate of any real corpus.
+    </p>
+  </div>
+</section>
+
+<section>
+  <h2 id="bias">3 — Judge bias: is the probe a measurement or a vibe?</h2>
+  <p>
+    The bias probe regresses a judge's score on the biased feature while holding
+    latent true quality fixed, and returns a coefficient with a confidence
+    interval. On the front page that coefficient — <code>β</code> — is the input
+    to the Bias–Budget Law, so the whole result rests on the probe being an
+    estimator rather than an impression.
+  </p>
+  <p>
+    Here the judges are simulated, which means their bias coefficients are
+    <em>declared</em> up front. Plotting declared against measured is therefore a
+    direct test of the estimator: every point must sit on the diagonal, and every
+    interval must cover its declared value. This is the one place in the project
+    where a bias coefficient has a ground truth to be checked against.
+  </p>
+  <div id="fig-bias"></div>
+  <p id="bias-note"></p>
+
+  <h3>Position bias</h3>
+  <p>
+    A separate probe, on a separate design: the same pair of responses is shown
+    in both orders and the probe measures how often the judge prefers whichever
+    response was placed first. It is reported separately because it is a property
+    of the <em>protocol</em>, not of the response — swapping positions costs one
+    extra call and removes the bias entirely, whereas verbosity bias survives any
+    amount of shuffling.
+  </p>
+  <div id="fig-position"></div>
+  <p id="position-note"></p>
+</section>
+
+<section>
+  <h2 id="calibration">4 — Calibration: the judge's confidence against reality</h2>
+  <p>
+    Accuracy asks whether the judge's verdicts are right. Calibration asks
+    whether its stated confidence means what it says: of all the times it claimed
+    0.9, did nine in ten turn out correct? The reliability curve below bins the
+    judge's confidence and plots the mean stated probability in each bin against
+    the empirical hit rate, with the dashed reference marking perfect calibration.
+  </p>
+  <div id="cal-tiles"></div>
+  <div id="fig-reliability"></div>
+  <div id="cal-table"></div>
+
+  <div class="claim">
+    <strong>Accurate and badly calibrated are different failures, and only one of
+    them breaks a gate.</strong> A judge that ranks responses correctly but
+    reports 0.95 for everything is perfectly useful for choosing the better of
+    two candidates and useless for deciding whether either is good enough to
+    ship: ranking needs only the <em>order</em> of the scores, whereas any
+    threshold rule — "block the release if pass-rate drops below 0.8" — consumes
+    their <em>level</em>. That is why AUROC and ECE are both reported here.
+    Ensembling and temperature scaling repair calibration; neither repairs
+    ranking.
+  </div>
+  <p id="cal-note"></p>
+</section>
+
+<section>
+  <h2 id="council">5 — Council: quorum, veto, and how often they disagree</h2>
+  <p>
+    A council runs every member judge on the same response and reduces their
+    verdicts under three rules.
+  </p>
+  <p>
+    <strong>Quorum.</strong> The council passes a response when at least a strict
+    majority of the <em>non-abstaining</em> members voted to pass. Abstentions
+    neither help nor hurt a candidate, which keeps a judge that declines to rule
+    from silently acting as a negative vote.
+  </p>
+  <p>
+    <strong>Veto.</strong> A nominated member — the safety judge — that returns
+    <code>fail</code> forces the council to fail regardless of the vote. The
+    pattern buys a specialist's authority over its own narrow question at the
+    cost of handing it a unilateral block, so its false-positive rate becomes the
+    council's false-positive rate.
+  </p>
+  <p>
+    <strong>Disagreement.</strong> The normalised Shannon entropy of the members'
+    verdict labels over the fixed three-label alphabet
+    (<code>pass</code>/<code>fail</code>/<code>abstain</code>), not over the
+    labels that happen to appear. Unanimity is 0, an even two-way split is
+    <code>ln 2 / ln 3 ≈ 0.63</code>, and only an even three-way split reaches 1.
+    Normalising by the fixed alphabet is what makes the statistic comparable
+    across councils and monotone as the council fragments.
+  </p>
+  <div id="council-tiles"></div>
+  <div id="fig-council"></div>
+  <p id="council-note"></p>
+</section>
+
+<section>
+  <h2 id="robust">6 — Robustness: how much of a score is prompt surface?</h2>
+  <p>
+    Each item is scored clean and again under five rewrites, with the same seed
+    on every arm so the comparison is exactly paired and contains no sampling
+    noise to be mistaken for brittleness. Four rewrites are semantics-preserving
+    — paraphrase, option reordering, an appended irrelevant sentence, and a
+    formatting change. The fifth, <code>injection</code>, appends an instruction
+    that contradicts the task; it leaves the correct answer alone but the input
+    is no longer benign, so the perturbation layer marks it
+    <code>semantics_preserved = false</code> and reports its score as its own
+    kind. Averaging an adversarial-resistance measurement into a consistency
+    measurement would produce a single number that means neither.
+  </p>
+  <div id="fig-brittle"></div>
+  <div id="brittle-note"></div>
+  <div id="robust-table"></div>
+</section>
+
+<section>
+  <h2 id="failure">7 — Failure mining: a pile of wrong answers becomes a fix list</h2>
+  <p>
+    Every failure is embedded, clustered, and named by the modal failure mode
+    among its members. Each cluster is then ranked by <code>expected_lift</code>
+    — the benchmark-level score that would come back if every failure in that
+    cluster turned into a success:
+  </p>
+  <div class="formula">expected_lift  =  (cluster size / items attempted) · mean(1 − p_correct)</div>
+  <p>
+    <code>p_correct</code> is the 2PL probability the model had of getting that
+    item right, not the observed 0/1 outcome — these are all failures, so the
+    outcome would make every cluster identical. A cluster of near-misses is
+    therefore worth less than an equally large cluster of items the model never
+    had a chance on, which is the ordering a fix list actually wants.
+  </p>
+  <div id="fig-clusters"></div>
+  <p id="cluster-note"></p>
+
+  <h3>The taxonomy</h3>
+  <p>
+    Cluster names come from a fixed taxonomy rather than being invented per run,
+    so the same failure mode is called the same thing across models and across
+    releases. That is what makes two reports comparable.
+  </p>
+  <div id="taxonomy-table"></div>
+</section>
+
+<section>
+  <h2 id="human">8 — Human protocol: what the judge is anchored to</h2>
+  <p>
+    A panel of annotators labels a slice of the bank, with gold-seeded items
+    distributed through each annotator's stream so per-annotator accuracy can be
+    tracked over time and drift flagged before it contaminates the labels.
+    Panel reliability is reported with Krippendorff's alpha, which tolerates the
+    missing cells that a real annotation schedule always produces, alongside the
+    mean pairwise Cohen's kappa.
+  </p>
+  <div id="human-tiles"></div>
+  <p id="human-note"></p>
+
+  <div class="claim">
+    <strong>Why raw agreement flatters a judge.</strong> Percent agreement counts
+    every match, including the ones two independent raters would have hit by
+    accident. When the label distribution is skewed those accidents dominate: if
+    92% of responses pass, a judge that answers "pass" unconditionally scores 92%
+    raw agreement with the panel — a number that survives a slide deck — while
+    its kappa is 0.0, correctly reporting that it carries no information about
+    <em>which</em> responses pass. Kappa subtracts the chance baseline implied by
+    the two raters' own marginals, so the gap between the two numbers is exactly
+    the part of the agreement that was free. Quote them together or do not quote
+    them.
+  </div>
+
+  <h3>The label budget</h3>
+  <p>
+    A judge that agrees with humans part of the time is a noisy measurement of
+    the human label, and noisy measurements <em>attenuate</em>: they shrink the
+    effect you are trying to detect toward zero rather than merely adding
+    variance around it. The allocator prices that in with an agreement-adjusted
+    effective sample size,
+  </p>
+  <div class="formula">n_eff  =  n_human  +  n_judge · (2·agreement − 1)²</div>
+  <p>
+    then spends a fixed budget across the two label types to maximise it. Because
+    the multiplier is squared, judge <em>quality</em> buys far more than judge
+    <em>volume</em> — which is the practical reason to spend on a better judge
+    before spending on more labels.
+  </p>
+  <div id="fig-budget"></div>
+  <div id="budget-table"></div>
+  <p id="budget-note"></p>
+</section>
+
+<section>
+  <h2 id="limits">What this page does not show</h2>
+  <div class="honest">
+    <h3>Read this before quoting any number above</h3>
+    <p>
+      <strong>Every measurement on this page is taken on a synthetic fleet, a
+      synthetic bank and simulated judges.</strong> That is a deliberate trade.
+      It buys ground truth for quantities that are unobservable in a real
+      evaluation — item difficulty, a judge's true bias coefficient, a response's
+      latent quality — and it is what makes an audit of the estimators possible
+      at all. It costs external validity completely. Recovering a declared
+      <code>β</code> to within 0.014 is evidence that the probe is an unbiased
+      estimator <em>of its own model</em>. It is not evidence that the same
+      regression run against a frontier judge returns that judge's real bias,
+      because a real judge's score is not linear in a standardised length feature
+      and there is no <code>q</code> column to hold fixed.
+    </p>
+    <p>
+      <strong>The brittleness numbers are an artefact and are printed anyway.</strong>
+      The synthetic model's response is a pure function of its ability, the item's
+      2PL parameters and a seed; it never reads the prompt string. The
+      perturbations rewrite only the prompt string. A brittleness index of exactly
+      zero across the whole fleet is therefore the correct output of a working
+      harness on a fleet that cannot react — it measures the harness, not the
+      models. Replacing the fleet with a real backend is what would turn that
+      section into a result.
+    </p>
+    <p>
+      <strong>The item calibration is the weakest link in the chain.</strong>
+      Difficulty is recovered at a correlation well short of 1 with eight models
+      and one response each, and more than a third of the fits have no interior
+      maximum at all. That is a power problem, not a code problem — 2PL wants
+      hundreds of respondents per item — but it means the "usable" partition of
+      this bank rests on discrimination estimates that are themselves noisy.
+      Reported as measured.
+    </p>
+    <p>
+      <strong>The human panel is simulated too.</strong> The annotators are
+      draws from a fixed per-label skill and the "judge" compared against them is
+      a threshold on the latent quality feature, so the agreement statistics
+      describe a model of an annotation panel rather than a panel. The protocol —
+      gold seeding, drift detection, alpha with kappa, the budget allocator — is
+      the deliverable there; the numbers it produces on this input are not.
+    </p>
+  </div>
+</section>
+
+<footer>
+  <p>
+    PROXY GAP — built by <a href="https://sugeerth.github.io">Sugeerth Murugesan</a>.
+    Source on <a href="https://github.com/sugeerth/proxy-gap">GitHub</a>.
+    Every figure regenerates from <code>make all</code>; the run seed and library versions
+    are recorded in <code>site/data/manifest.json</code>.
+  </p>
+</footer>
+
+</main>
+
+<script src="data/bundle.js" onerror="window.__PROXYGAP_BUNDLE_MISSING__=true"></script>
+<script type="module">
+import { initChrome, onThemeChange } from './assets/app.js';
+import { lineChart, barChart, scatterChart, statTiles, loadData, failNotice, fmt } from './assets/viz.js';
+
+initChrome();
+
+const $ = (id) => document.getElementById(id);
+const pct = (x, d = 2) => `${(100 * x).toFixed(d)}%`;
+const esc = (s) => String(s).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+
+/* The fitter replaces the standard error with this sentinel when the
+ * likelihood has no interior maximum, so it is the flag for "not identified". */
+const DEGENERATE_SE = 999;
+
+const HOSTS = [
+  'bench-tiles', 'fig-recovery', 'recovery-note', 'drop-table', 'drop-note',
+  'contam-table', 'contam-note', 'fig-bias', 'bias-note', 'fig-position',
+  'position-note', 'cal-tiles', 'fig-reliability', 'cal-table', 'cal-note',
+  'council-tiles', 'fig-council', 'council-note', 'fig-brittle', 'brittle-note',
+  'robust-table', 'fig-clusters', 'cluster-note', 'taxonomy-table',
+  'human-tiles', 'human-note', 'fig-budget', 'budget-table', 'budget-note',
+];
+
+/* One broken artifact must not blank the page: each block reports into its own
+ * hosts and the rest of the page carries on. */
+function guard(ids, fn) {
+  try {
+    fn();
+  } catch (err) {
+    ids.forEach((id) => { const h = $(id); if (h) failNotice(h, err); });
+  }
+}
+
+function table(columns, rows) {
+  const head = columns.map((c) => `<th>${c}</th>`).join('');
+  const body = rows.map((r) => `<tr>${r.map((c) => `<td>${c}</td>`).join('')}</tr>`).join('');
+  return `<div class="table-scroll"><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
+}
+
+async function render() {
+  let bench, judges, robust, failure, human;
+  try {
+    [bench, judges, robust, failure, human] = await Promise.all([
+      loadData('bench'), loadData('judges'), loadData('robust'),
+      loadData('failure'), loadData('human'),
+    ]);
+  } catch (e) {
+    HOSTS.forEach((id) => { const h = $(id); if (h) failNotice(h, e); });
+    return;
+  }
+
+  /* ------------------------------------------------ 1. benchmark health -- */
+
+  guard(['bench-tiles', 'fig-recovery', 'recovery-note', 'drop-table', 'drop-note'], () => {
+    const h = bench.health;
+    const n = h.n_items;
+    const nUsable = h.usable_items.length;
+    const nDropped = h.dropped_items.length;
+
+    statTiles($('bench-tiles'), [
+      { label: 'Items in the bank', value: String(n),
+        note: `${h.n_models} models, one response each` },
+      { label: 'Usable after screening', value: String(nUsable),
+        note: `${nDropped} dropped — ${pct(nDropped / n)} of the bank` },
+      { label: 'Difficulty recovery', value: h.recovered_vs_true_corr.toFixed(3),
+        tone: h.recovered_vs_true_corr > 0.9 ? 'good' : 'critical',
+        note: 'correlation of recovered with generating difficulty' },
+      { label: 'Mean discrimination', value: h.mean_discrimination.toFixed(2),
+        note: `difficulty spread (IQR) ${h.difficulty_spread.toFixed(2)}` },
+    ]);
+
+    const rec = bench.recovery;
+    const identified = rec.filter((r) => r.se_difficulty < DEGENERATE_SE);
+    const degenerate = rec.filter((r) => r.se_difficulty >= DEGENERATE_SE);
+    const lim = 6.6;
+
+    scatterChart($('fig-recovery'), {
+      title: 'Parameter recovery: fitted item difficulty against the difficulty that generated it',
+      subtitle: 'one point per item; the dashed line is y = x, not a fit',
+      xLabel: 'generating difficulty b', yLabel: 'recovered difficulty b̂',
+      xDomain: [-lim, lim], yDomain: [-lim, lim],
+      height: 440, identity: true,
+      groups: [
+        { label: `identified fit (${identified.length} items)`,
+          points: identified.map((r) => [r.true_difficulty, r.recovered_difficulty, r.item_id]) },
+        { label: `no interior maximum — sentinel SE (${degenerate.length} items)`,
+          points: degenerate.map((r) => [r.true_difficulty, r.recovered_difficulty, r.item_id]) },
+      ],
+    });
+
+    const atBound = degenerate.filter((r) => Math.abs(r.recovered_difficulty) >= 6).length;
+    $('recovery-note').innerHTML =
+      `The correlation between recovered and generating difficulty is ` +
+      `<strong>${h.recovered_vs_true_corr.toFixed(3)}</strong>, computed over the ` +
+      `${identified.length} identified fits — the same set that
+       <code>mean_discrimination</code> and <code>difficulty_spread</code> are
+       averaged over, because a degenerate fit is not an estimate and averaging
+       one in fabricates a number. The remaining ${degenerate.length} items
+       produced no interior likelihood maximum: the model fleet either agreed
+       unanimously about them or separated perfectly on them, and
+       ${atBound} of those sit on the optimiser's box bound at ±6, which is a
+       readout of the bound rather than of the data. A correlation of
+       ${h.recovered_vs_true_corr.toFixed(2)} ${h.recovered_vs_true_corr > 0.9
+        ? 'is a good recovery.'
+        : 'is a mediocre recovery and is reported as one;'} with ${h.n_models}
+       respondents answering each item once, the design is badly under-powered
+       for 2PL, which wants hundreds of responses per item.`;
+
+    const lowCount = Math.round(h.frac_low_discrimination * n);
+    const ceilCount = Math.round(h.frac_ceiling * n);
+    const floorCount = Math.round(h.frac_floor * n);
+    const contamCount = Math.round(h.frac_contaminated * n);
+
+    $('drop-table').innerHTML = table(
+      ['screening rule', 'threshold', 'items flagged', 'share of bank'],
+      [
+        ['low discrimination', 'recovered <code>a</code> &lt; 0.4', lowCount, pct(h.frac_low_discrimination)],
+        ['ceiling', 'solved by &gt; 95% of models', ceilCount, pct(h.frac_ceiling)],
+        ['floor', 'solved by &lt; 5% of models', floorCount, pct(h.frac_floor)],
+        ['contaminated', 'flagged by either probe', contamCount, pct(h.frac_contaminated)],
+        ['<strong>dropped (union)</strong>', 'any of the above', `<strong>${nDropped}</strong>`,
+          `<strong>${pct(nDropped / n)}</strong>`],
+      ]
+    );
+
+    // Which rules actually did the work, checked against the shipped drop set
+    // rather than asserted from the rule list.
+    const lowIds = new Set(rec.filter((r) => r.recovered_discrimination < 0.4).map((r) => r.item_id));
+    const contamIds = new Set(bench.contamination.map((c) => c.item_id));
+    const other = h.dropped_items.filter((id) => !lowIds.has(id) && !contamIds.has(id)).length;
+    const bothCount = [...lowIds].filter((id) => contamIds.has(id)).length;
+
+    $('drop-note').innerHTML =
+      `The rules overlap, so the counts do not add: the dropped set is their union.
+       In this run it is the ${lowIds.size} low-discrimination items together with
+       the ${contamIds.size} contamination hits
+       (${bothCount === 0 ? 'disjoint sets' : `${bothCount} item${bothCount === 1 ? '' : 's'} in both`}),
+       ${other === 0
+        ? 'and nothing else — every ceiling and floor item had already failed the discrimination test'
+        : `plus ${other} item${other === 1 ? '' : 's'} dropped by a rule other than those two`}.
+       The ordering is worth noticing: <strong>${pct(lowCount / n)} of a bank
+       built to be discriminating still fails to discriminate</strong>, and it
+       fails quietly, whereas a ceiling item is obvious the moment you look at
+       the leaderboard.`;
+  });
+
+  /* -------------------------------------------------- 2. contamination -- */
+
+  guard(['contam-table', 'contam-note'], () => {
+    const rows = bench.contamination.map((c) => [
+      `<code>${esc(c.item_id)}</code>`,
+      c.canary_hit ? 'yes' : 'no',
+      c.max_ngram_overlap.toFixed(3),
+      c.suspicious ? 'flagged' : 'clean',
+    ]);
+    $('contam-table').innerHTML = table(
+      ['item', 'canary matched verbatim', 'max 5-gram overlap', 'verdict'], rows
+    );
+
+    const canary = bench.contamination.filter((c) => c.canary_hit).length;
+    const ngram = bench.contamination.filter((c) => c.max_ngram_overlap >= 0.35).length;
+    const both = bench.contamination.filter((c) => c.canary_hit && c.max_ngram_overlap >= 0.35).length;
+
+    $('contam-note').innerHTML =
+      `<strong>${bench.n_contaminated}</strong> of ${bench.health.n_items} items were flagged
+       (${pct(bench.health.frac_contaminated)} of the bank); items that neither probe
+       flagged are not listed. Among the flagged items the canary matched verbatim on
+       ${canary}, the n-gram probe cleared its 0.35 threshold on ${ngram}, and ${both}
+       tripped both. The two probes agreeing perfectly is what a verbatim leak looks
+       like and is not evidence that they agree in general — a paraphrased leak would
+       show up in the second column and never in the first.`;
+  });
+
+  /* ----------------------------------------------------- 3. judge bias -- */
+
+  guard(['fig-bias', 'bias-note'], () => {
+    const probes = judges.probes;
+    const byFeature = [...new Set(probes.map((p) => p.bias))];
+
+    scatterChart($('fig-bias'), {
+      title: 'Bias probe: measured coefficient against the judge’s declared coefficient',
+      subtitle: 'one point per judge per feature; the dashed line is y = x, not a fit',
+      xLabel: 'declared β', yLabel: 'measured β (OLS, true quality held fixed)',
+      height: 420, identity: true,
+      groups: byFeature.map((f) => ({
+        label: `${f} bias (${probes.filter((p) => p.bias === f).length} judges)`,
+        radius: 5,
+        points: probes.filter((p) => p.bias === f)
+          .map((p) => [p.declared, p.coefficient, p.judge_id]),
+      })),
+    });
+
+    const covered = probes.filter((p) => p.ci_low <= p.declared && p.declared <= p.ci_high).length;
+    const worst = probes.reduce((a, p) =>
+      Math.abs(p.coefficient - p.declared) > Math.abs(a.coefficient - a.declared) ? p : a);
+    const nObs = probes[0].n;
+
+    $('bias-note').innerHTML =
+      `All ${probes.length} probes — ${judges.judges.length} judges × ${byFeature.length} features,
+       ${nObs} scored responses each — recover their declared coefficient, and
+       <strong>${covered} of ${probes.length}</strong> confidence intervals cover it.
+       The largest absolute error is <strong>${Math.abs(worst.coefficient - worst.declared).toFixed(4)}</strong>
+       (<code>${esc(worst.judge_id)}</code>, ${esc(worst.bias)}: declared ${worst.declared.toFixed(2)},
+       measured ${worst.coefficient.toFixed(4)} [${worst.ci_low.toFixed(4)}, ${worst.ci_high.toFixed(4)}]).
+       The intervals are narrow enough to be falsifiable — a coefficient wrong in
+       the third decimal would show up — which is what makes the front page's
+       <code>β</code> a measured input rather than a chosen one.`;
+  });
+
+  guard(['fig-position', 'position-note'], () => {
+    const pos = judges.position_bias;
+    barChart($('fig-position'), {
+      title: 'Position bias by judge',
+      subtitle: 'preference for the first-placed response, over the same pairs shown in both orders',
+      xLabel: 'position-bias coefficient', yLabel: 'judge',
+      xDomain: [-0.15, 0.15],
+      height: 60 + pos.length * 42,
+      margin: { left: 132 },
+      rows: pos.map((p, i) => ({
+        label: p.judge_id, value: p.coefficient, slot: i % 8,
+        format: (v) => v.toFixed(3),
+      })),
+    });
+
+    const maxAbs = Math.max(...pos.map((p) => Math.abs(p.coefficient)));
+    const sig = pos.filter((p) => p.p_value < 0.05);
+    $('position-note').innerHTML =
+      `Largest coefficient in absolute value is <strong>${maxAbs.toFixed(3)}</strong> over
+       ${pos[0].n} pairs, and <strong>${sig.length === 0 ? 'no judge' : `${sig.length} judge(s)`}</strong>
+       reaches p &lt; 0.05 — the smallest p-value in the set is
+       ${Math.min(...pos.map((p) => p.p_value)).toFixed(3)}. That is the expected
+       answer, because these judges score a feature vector and never see an
+       ordering; the probe is here to demonstrate that it would fire, not to
+       report a finding. Every interval below spans zero, so read the bars as
+       noise around zero rather than as a ranking.` +
+      table(['judge', 'coefficient', '95% CI', 'p', 'n pairs'],
+        pos.map((p) => [
+          `<code>${esc(p.judge_id)}</code>`, p.coefficient.toFixed(3),
+          `[${p.ci_low.toFixed(3)}, ${p.ci_high.toFixed(3)}]`, p.p_value.toFixed(3), p.n,
+        ]));
+  });
+
+  /* ---------------------------------------------------- 4. calibration -- */
+
+  guard(['cal-tiles', 'fig-reliability', 'cal-table', 'cal-note'], () => {
+    const c = judges.calibration;
+    statTiles($('cal-tiles'), [
+      { label: 'Judge under test', value: `<span style="font-size:20px">${esc(c.judge_id)}</span>`,
+        note: 'the most length-biased judge in the fleet' },
+      { label: 'Expected calibration error', value: c.ece.toFixed(3), tone: 'critical',
+        note: 'mean |stated confidence − empirical| across bins' },
+      { label: 'Brier score', value: c.brier.toFixed(3),
+        note: 'mean squared error of the stated probability' },
+      { label: 'AUROC', value: c.auroc.toFixed(3), tone: 'critical',
+        note: 'ranking skill; 0.5 is a coin flip' },
+    ]);
+
+    const rel = c.reliability;
+    lineChart($('fig-reliability'), {
+      title: 'Reliability curve — stated confidence against how often it was right',
+      subtitle: 'points below the reference line are overconfidence; bin widths are 0.1',
+      xLabel: 'mean stated confidence in bin', yLabel: 'empirical accuracy in bin',
+      xFormat: (v) => v.toFixed(2), height: 380,
+      series: [
+        { label: 'observed', points: rel.map((b) => [b.mean_pred, b.empirical]) },
+        { label: 'perfect calibration (y = x)', dashed: true,
+          points: rel.map((b) => [b.mean_pred, b.mean_pred]) },
+      ],
+    });
+
+    $('cal-table').innerHTML = table(
+      ['confidence bin', 'responses', 'mean stated', 'empirical', 'gap'],
+      rel.map((b) => [
+        `${b.bin_lo.toFixed(1)} – ${b.bin_hi.toFixed(1)}`, b.n,
+        b.mean_pred.toFixed(3), b.empirical.toFixed(3),
+        (b.mean_pred - b.empirical >= 0 ? '+' : '') + (b.mean_pred - b.empirical).toFixed(3),
+      ])
+    );
+
+    const top = rel.reduce((a, b) => (b.n > a.n ? b : a));
+    const nTotal = rel.reduce((s, b) => s + b.n, 0);
+    $('cal-note').innerHTML =
+      `On this run the judge fails both tests rather than only the calibration one,
+       and that is worth saying plainly: an AUROC of <strong>${c.auroc.toFixed(3)}</strong>
+       over ${nTotal} responses is close enough to a coin flip that its confidence
+       carries almost no information about which answers are correct, while an ECE
+       of <strong>${c.ece.toFixed(3)}</strong> says it states that near-zero
+       information at high confidence. The mechanism is visible in the largest bin:
+       ${top.n} of ${nTotal} responses land in [${top.bin_lo.toFixed(1)}, ${top.bin_hi.toFixed(1)}]
+       with a mean stated confidence of ${top.mean_pred.toFixed(3)} and an empirical
+       accuracy of ${top.empirical.toFixed(3)}. The judge is confident everywhere,
+       so its confidence separates nothing. Temperature scaling would fix the level
+       and leave the ranking exactly where it is.`;
+  });
+
+  /* -------------------------------------------------------- 5. council -- */
+
+  guard(['council-tiles', 'fig-council', 'council-note'], () => {
+    const d = judges.council_disagreement;
+    const unanimous = d.filter((x) => x === 0).length;
+    const mean = d.reduce((s, x) => s + x, 0) / d.length;
+
+    statTiles($('council-tiles'), [
+      { label: 'Responses judged', value: String(d.length),
+        note: `${judges.judges.length}-member council, one vetoing member` },
+      { label: 'Veto rate', value: judges.council_veto_rate.toFixed(3), tone: 'critical',
+        note: 'share of responses failed by the vetoing judge' },
+      { label: 'Unanimous', value: pct(unanimous / d.length, 1),
+        note: `${unanimous} of ${d.length} responses drew no dissent` },
+      { label: 'Mean disagreement', value: mean.toFixed(3),
+        note: 'normalised entropy; 0 unanimous, 1 even three-way split' },
+    ]);
+
+    const counts = new Map();
+    for (const x of d) {
+      const k = x.toFixed(3);
+      counts.set(k, (counts.get(k) || 0) + 1);
+    }
+    const rows = [...counts.entries()]
+      .sort((a, b) => Number(a[0]) - Number(b[0]))
+      .map(([k, v], i) => ({
+        label: Number(k) === 0 ? `${fmt(0, 3)}  (unanimous)` : fmt(Number(k), 3),
+        value: v, slot: i % 8, format: (x) => String(x),
+      }));
+
+    barChart($('fig-council'), {
+      title: 'How often the council splits, and how badly',
+      subtitle: 'count of responses at each observed disagreement level',
+      xLabel: 'responses', yLabel: 'disagreement (normalised entropy)',
+      height: 60 + rows.length * 42, margin: { left: 150 },
+      rows,
+    });
+
+    $('council-note').innerHTML =
+      `The vetoing member fails <strong>${pct(judges.council_veto_rate, 1)}</strong> of
+       responses on its own authority, which is the number to argue about before
+       adopting the pattern: at that rate the council's decision is mostly the
+       veto judge's decision, and the other ${judges.judges.length - 1} members are
+       being paid to break ties on the remainder. The disagreement column is the
+       diagnostic that makes this visible — ${unanimous} of ${d.length} responses
+       drew no dissent at all, so a council-level metric averaged over all
+       ${d.length} would be dominated by cases where the council added nothing.
+       Disagreement is a routing signal, not a score: the split cases are the ones
+       worth sending to a human.`;
+  });
+
+  /* ----------------------------------------------------- 6. robustness -- */
+
+  guard(['fig-brittle', 'brittle-note', 'robust-table'], () => {
+    const reps = robust.reports;
+    const kinds = Object.keys(reps[0].perturbed_scores);
+
+    barChart($('fig-brittle'), {
+      title: 'Brittleness index by model',
+      subtitle: 'mean relative score drop across the five perturbations; 0 = surface-invariant',
+      xLabel: 'brittleness index', yLabel: 'model',
+      xDomain: [0, 1], height: 60 + reps.length * 42, margin: { left: 132 },
+      rows: reps.map((r, i) => ({
+        label: r.model_id, value: r.brittleness_index, slot: i % 8,
+        format: (v) => v.toFixed(3),
+      })),
+    });
+
+    const anyDrop = reps.filter((r) => r.brittleness_index > 0);
+    const worstKinds = [...new Set(reps.map((r) => r.worst_kind))];
+    $('brittle-note').innerHTML =
+      `<div class="notice notice-warn"><strong>This figure is a null by construction, not a
+       robustness result.</strong> ${anyDrop.length === 0
+        ? `All ${reps.length} models score exactly 0.000, and <code>worst_kind</code> is
+           reported as <code>${worstKinds.map(esc).join('</code>, <code>')}</code> for every one
+           of them — the harness declines to name a worst perturbation when none cost
+           anything, because a bar labelled "worst: paraphrase" at a drop of 0.000 would
+           read as a finding.`
+        : `${anyDrop.length} of ${reps.length} models show a non-zero drop.`}
+       The synthetic model's answer is a function of its ability, the item's 2PL
+       parameters and a seed; it never reads the prompt text, and the perturbations
+       rewrite only the prompt text. Identical seeds on every arm make the comparison
+       exactly paired, so the responses are byte-identical and the drop is exactly
+       zero rather than approximately zero. Exact zeros across a whole fleet are the
+       signature of a harness that is wired correctly and pointed at something that
+       cannot react.</div>`;
+
+    $('robust-table').innerHTML = table(
+      ['model', 'clean', ...kinds.map((k) => k === 'injection' ? `${k} *` : k), 'brittleness', 'worst kind'],
+      reps.map((r) => [
+        `<code>${esc(r.model_id)}</code>`, r.clean_score.toFixed(3),
+        ...kinds.map((k) => r.perturbed_scores[k].toFixed(3)),
+        r.brittleness_index.toFixed(3), `<code>${esc(r.worst_kind)}</code>`,
+      ])
+    ) + `<p style="font-size:13px;color:var(--text-secondary)">* <code>injection</code> is
+      not semantics-preserving. It is scored as its own kind for that reason; the single
+      <code>brittleness</code> column averages all five, so on a fleet where these numbers
+      are non-zero the adversarial arm should be split out before the index is quoted.</p>`;
+  });
+
+  /* ------------------------------------------------- 7. failure mining -- */
+
+  guard(['fig-clusters', 'cluster-note'], () => {
+    const rep = failure.reports[0];
+    const cl = rep.clusters;
+
+    barChart($('fig-clusters'), {
+      title: `Failure clusters for ${rep.model_id}, ranked by the score fixing them would return`,
+      subtitle: 'expected lift is benchmark-level score, not a share of the failures',
+      xLabel: 'expected lift (benchmark score recovered)', yLabel: 'cluster',
+      height: 60 + cl.length * 44, margin: { left: 274 },
+      rows: cl.map((c, i) => ({
+        label: `${c.label} · ${c.dominant_domain} · n=${c.size}`,
+        value: c.expected_lift, slot: i % 8, format: (v) => v.toFixed(3),
+      })),
+    });
+
+    const total = cl.reduce((s, c) => s + c.expected_lift, 0);
+    const sizes = cl.reduce((s, c) => s + c.size, 0);
+    const top = cl[0];
+    const last = cl[cl.length - 1];
+    const ratio = last.expected_lift > 0
+      ? `a ${(top.expected_lift / last.expected_lift).toFixed(1)}× difference`
+      : 'a difference';
+    const modes = Object.keys(rep.fingerprint).length;
+    $('cluster-note').innerHTML =
+      `<code>${esc(rep.model_id)}</code> failed <strong>${rep.n_failures}</strong> items;
+       the ${cl.length} clusters cover ${sizes === rep.n_failures ? 'all of them' : `${sizes} of them`}. The top cluster
+       (<code>${esc(top.label)}</code>, dominant domain <em>${esc(top.dominant_domain)}</em>,
+       mean difficulty ${top.mean_difficulty.toFixed(2)}) is worth
+       <strong>${top.expected_lift.toFixed(3)}</strong> of benchmark score against
+       ${last.expected_lift.toFixed(3)} for the smallest — ${ratio} in
+       payoff between two piles of wrong answers that a raw error log would present as
+       equivalent. Fixing all ${cl.length} would return ${total.toFixed(3)}, which is
+       just this model's total headroom re-expressed; <strong>the ranking is the
+       deliverable, not the total.</strong> The silhouette is
+       ${rep.silhouette.toFixed(3)}, which is weak — these clusters overlap
+       substantially, so treat the grouping as a triage aid and the exemplar item ids
+       as the thing a human should actually read. Only ${modes} of the
+       ${Object.keys(failure.taxonomy).length} taxonomy modes appear in this model's
+       failure fingerprint; the rest are shown as em-dashes in the table below.`;
+  });
+
+  guard(['taxonomy-table'], () => {
+    const rep = failure.reports[0];
+    const fp = rep.fingerprint;
+    $('taxonomy-table').innerHTML = table(
+      ['failure mode', 'definition', `share of ${rep.model_id} failures`],
+      Object.entries(failure.taxonomy).map(([k, v]) => [
+        `<code>${esc(k)}</code>`, esc(v),
+        fp[k] === undefined ? '—' : pct(fp[k], 1),
+      ])
+    );
+  });
+
+  /* ------------------------------------------------- 8. human protocol -- */
+
+  guard(['human-tiles', 'human-note'], () => {
+    const a = human.agreement;
+    statTiles($('human-tiles'), [
+      { label: "Krippendorff's α", value: a.krippendorff_alpha.toFixed(3), tone: 'critical',
+        note: `${a.n_annotators} annotators over ${a.n_items} items` },
+      { label: 'Mean pairwise κ', value: a.mean_pairwise_kappa.toFixed(3),
+        note: 'human against human' },
+      { label: 'Judge–human agreement', value: pct(a.judge_human_agreement, 1),
+        note: 'raw percent agreement with the panel majority' },
+      { label: 'Judge–human κ', value: a.judge_human_kappa.toFixed(3), tone: 'critical',
+        note: 'the same comparison, chance subtracted' },
+    ]);
+
+    const po = a.judge_human_agreement;
+    const k = a.judge_human_kappa;
+    const pe = (po - k) / (1 - k);
+    $('human-note').innerHTML =
+      `The panel itself agrees at α = <strong>${a.krippendorff_alpha.toFixed(3)}</strong>,
+       which is below the 0.667 usually treated as the floor for tentative
+       conclusions — on this task, humans are not a gold standard so much as a
+       noisy one, and every judge–human number below inherits that ceiling.
+       ${a.drift_flagged.length === 0
+        ? 'No annotator was flagged for drift.'
+        : `${a.drift_flagged.length} annotator(s) flagged for drift.`}
+       ${human.gold_plan_size} gold-seeded items are distributed through the stream
+       to make that check possible at all.
+       The judge agrees with the panel majority
+       <strong>${pct(po, 1)}</strong> of the time and scores κ =
+       <strong>${k.toFixed(3)}</strong>. Inverting the definition of κ on those two
+       numbers puts the chance-agreement baseline at
+       <strong>${pe.toFixed(3)}</strong>: roughly ${pct(pe / po, 0)} of the observed
+       agreement is what two raters drawing from their own marginals would have
+       reached without looking at the responses. Quote the ${pct(po, 1)} alone and
+       the judge looks passable; quote both and it is barely better than the base rate.`;
+  });
+
+  guard(['fig-budget', 'budget-table', 'budget-note'], () => {
+    const grid = human.budget_grid;
+    lineChart($('fig-budget'), {
+      title: 'What a fixed label budget buys, as a function of judge–human agreement',
+      subtitle: `each point re-solves the allocation for a budget of ${grid[0].total_cost.toFixed(0)} at the same unit prices`,
+      xLabel: 'judge–human agreement', yLabel: 'effective sample size',
+      xFormat: (v) => v.toFixed(2),
+      yFormat: (v) => (v >= 1000 ? `${(v / 1000).toFixed(0)}k` : String(Math.round(v))),
+      height: 360,
+      series: [
+        { label: 'effective n', points: grid.map((g) => [g.agreement, g.effective_n]) },
+      ],
+    });
+
+    $('budget-table').innerHTML = table(
+      ['agreement', 'human labels', 'judge labels', 'effective n', 'achieved MDE'],
+      grid.map((g) => [
+        g.agreement.toFixed(2), g.n_human.toLocaleString(), g.n_judge.toLocaleString(),
+        g.effective_n.toLocaleString(), g.achieved_mde.toFixed(3),
+      ])
+    );
+
+    const lo = grid[0];
+    const hi = grid[grid.length - 1];
+    const measured = human.agreement.judge_human_agreement;
+    const below = grid.filter((g) => g.agreement <= measured).pop();
+    const above = grid.find((g) => g.agreement > measured);
+    $('budget-note').innerHTML =
+      `The curve is convex because the multiplier is squared: moving agreement from
+       ${lo.agreement.toFixed(2)} to ${hi.agreement.toFixed(2)} takes the same money from
+       ${lo.effective_n.toLocaleString()} effective labels to
+       ${hi.effective_n.toLocaleString()}, an MDE of ${lo.achieved_mde.toFixed(3)} down to
+       ${hi.achieved_mde.toFixed(3)}. At the bottom of the grid the allocator still buys
+       ${lo.n_human} human labels, and the ${lo.effective_n.toLocaleString()} effective
+       labels it reaches there are exactly what the same budget spent on humans alone
+       would have bought — at ${lo.agreement.toFixed(2)} agreement the
+       ${lo.n_judge.toLocaleString()} judge labels are precisely break-even.
+       Everywhere above it, the whole budget goes to the judge.
+       ${below && above
+        ? `The judge measured in section 8 agrees at ${pct(measured, 1)}, which falls between the
+           ${below.agreement.toFixed(2)} and ${above.agreement.toFixed(2)} rows — the regime where
+           the formula above prices a judge label at
+           ${((2 * below.agreement - 1) ** 2).toFixed(2)} to
+           ${((2 * above.agreement - 1) ** 2).toFixed(2)} of a human label. On that judge,
+           buying more labels is close to buying nothing; buying a better judge is the
+           only move that changes the answer.`
+        : ''}
+       <br><br>Two assumptions are doing heavy lifting and both are stated in the
+       allocator's output: the agreement figure must have been measured on human labels
+       that are <em>not</em> also being counted in <code>n_eff</code>, and the attenuation
+       correction assumes judge errors are independent of the effect being measured. A
+       judge whose errors correlate with the treatment — which is exactly what a
+       length-biased judge does to a policy that got longer — breaks the second one, and
+       the effective sample size above is then an overestimate.`;
+  });
+}
+
+render();
+onThemeChange(render);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,116 @@
+{
+ "reports": [
+  {
+   "model_id": "syn-mini",
+   "clean_score": 0.2625,
+   "perturbed_scores": {
+    "paraphrase": 0.2625,
+    "option_order": 0.2625,
+    "distractor": 0.2625,
+    "format": 0.2625,
+    "injection": 0.2625
+   },
+   "brittleness_index": 0.0,
+   "worst_kind": "none",
+   "worst_drop": 0.0
+  },
+  {
+   "model_id": "syn-small",
+   "clean_score": 0.3625,
+   "perturbed_scores": {
+    "paraphrase": 0.3625,
+    "option_order": 0.3625,
+    "distractor": 0.3625,
+    "format": 0.3625,
+    "injection": 0.3625
+   },
+   "brittleness_index": 0.0,
+   "worst_kind": "none",
+   "worst_drop": 0.0
+  },
+  {
+   "model_id": "syn-terse",
+   "clean_score": 0.375,
+   "perturbed_scores": {
+    "paraphrase": 0.375,
+    "option_order": 0.375,
+    "distractor": 0.375,
+    "format": 0.375,
+    "injection": 0.375
+   },
+   "brittleness_index": 0.0,
+   "worst_kind": "none",
+   "worst_drop": 0.0
+  },
+  {
+   "model_id": "syn-base",
+   "clean_score": 0.4875,
+   "perturbed_scores": {
+    "paraphrase": 0.4875,
+    "option_order": 0.4875,
+    "distractor": 0.4875,
+    "format": 0.4875,
+    "injection": 0.4875
+   },
+   "brittleness_index": 0.0,
+   "worst_kind": "none",
+   "worst_drop": 0.0
+  },
+  {
+   "model_id": "syn-plus",
+   "clean_score": 0.55,
+   "perturbed_scores": {
+    "paraphrase": 0.55,
+    "option_order": 0.55,
+    "distractor": 0.55,
+    "format": 0.55,
+    "injection": 0.55
+   },
+   "brittleness_index": 0.0,
+   "worst_kind": "none",
+   "worst_drop": 0.0
+  },
+  {
+   "model_id": "syn-verbose",
+   "clean_score": 0.65,
+   "perturbed_scores": {
+    "paraphrase": 0.65,
+    "option_order": 0.65,
+    "distractor": 0.65,
+    "format": 0.65,
+    "injection": 0.65
+   },
+   "brittleness_index": 0.0,
+   "worst_kind": "none",
+   "worst_drop": 0.0
+  },
+  {
+   "model_id": "syn-pro",
+   "clean_score": 0.725,
+   "perturbed_scores": {
+    "paraphrase": 0.725,
+    "option_order": 0.725,
+    "distractor": 0.725,
+    "format": 0.725,
+    "injection": 0.725
+   },
+   "brittleness_index": 0.0,
+   "worst_kind": "none",
+   "worst_drop": 0.0
+  },
+  {
+   "model_id": "syn-max",
+   "clean_score": 0.8,
+   "perturbed_scores": {
+    "paraphrase": 0.8,
+    "option_order": 0.8,
+    "distractor": 0.8,
+    "format": 0.8,
+    "injection": 0.8
+   },
+   "brittleness_index": 0.0,
+   "worst_kind": "none",
+   "worst_drop": 0.0
+  }
+ ]
+}

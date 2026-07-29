@@ -1,0 +1,38 @@
+{
+ "run_seed": 20260729,
+ "python": "3.12.4",
+ "numpy": "1.26.4",
+ "platform": "macOS-26.5.1-arm64-arm-64bit",
+ "artifacts": {
+  "bench": {
+   "ok": true
+  },
+  "judges": {
+   "ok": true
+  },
+  "sweep": {
+   "ok": true
+  },
+  "law": {
+   "ok": true
+  },
+  "mitigations": {
+   "ok": true
+  },
+  "stats": {
+   "ok": true
+  },
+  "robust": {
+   "ok": true
+  },
+  "failure": {
+   "ok": true
+  },
+  "human": {
+   "ok": true
+  },
+  "gate": {
+   "ok": true
+  }
+ }
+}

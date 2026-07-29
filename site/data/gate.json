@@ -1,0 +1,608 @@
+{
+ "scenarios": [
+  {
+   "name": "all_noise",
+   "decision": {
+    "passed": true,
+    "reason": "Passed: no comparison of the 8 evaluated shows a regression beyond the tolerated 0.0000 that survives Benjamini-Hochberg at alpha=0.05 (smallest q=0.484, 0 significant improvements) -- ship it, but note this is the absence of demonstrated harm rather than evidence of improvement, so read the intervals before claiming a win.",
+    "comparisons": [
+     {
+      "name": "metric_00",
+      "baseline": "baseline",
+      "candidate": "candidate",
+      "delta": {
+       "point": 0.016831733,
+       "low": -0.0436766761,
+       "high": 0.0770251105,
+       "level": 0.95,
+       "method": "bca+cluster-robust"
+      },
+      "p_value": 0.5603439656,
+      "q_value": 0.8919108089,
+      "n_items": 300,
+      "n_clusters": 25,
+      "method": "paired BCa bootstrap, cluster-robust (G=25) + cluster-level sign-flip permutation",
+      "significant": false
+     },
+     {
+      "name": "metric_01",
+      "baseline": "baseline",
+      "candidate": "candidate",
+      "delta": {
+       "point": 0.0410396694,
+       "low": -0.0155910469,
+       "high": 0.0952661756,
+       "level": 0.95,
+       "method": "bca+cluster-robust"
+      },
+      "p_value": 0.1210878912,
+      "q_value": 0.4843515648,
+      "n_items": 300,
+      "n_clusters": 25,
+      "method": "paired BCa bootstrap, cluster-robust (G=25) + cluster-level sign-flip permutation",
+      "significant": false
+     },
+     {
+      "name": "metric_02",
+      "baseline": "baseline",
+      "candidate": "candidate",
+      "delta": {
+       "point": -0.0234682253,
+       "low": -0.0962720074,
+       "high": 0.0510297236,
+       "level": 0.95,
+       "method": "bca+cluster-robust"
+      },
+      "p_value": 0.5290470953,
+      "q_value": 0.8919108089,
+      "n_items": 300,
+      "n_clusters": 25,
+      "method": "paired BCa bootstrap, cluster-robust (G=25) + cluster-level sign-flip permutation",
+      "significant": false
+     },
+     {
+      "name": "metric_03",
+      "baseline": "baseline",
+      "candidate": "candidate",
+      "delta": {
+       "point": 0.009397663,
+       "low": -0.0473458864,
+       "high": 0.0690285283,
+       "level": 0.95,
+       "method": "bca+cluster-robust"
+      },
+      "p_value": 0.7250274973,
+      "q_value": 0.8919108089,
+      "n_items": 300,
+      "n_clusters": 25,
+      "method": "paired BCa bootstrap, cluster-robust (G=25) + cluster-level sign-flip permutation",
+      "significant": false
+     },
+     {
+      "name": "metric_04",
+      "baseline": "baseline",
+      "candidate": "candidate",
+      "delta": {
+       "point": 0.0073288539,
+       "low": -0.0533675818,
+       "high": 0.0670126311,
+       "level": 0.95,
+       "method": "bca+cluster-robust"
+      },
+      "p_value": 0.8193180682,
+      "q_value": 0.8919108089,
+      "n_items": 300,
+      "n_clusters": 25,
+      "method": "paired BCa bootstrap, cluster-robust (G=25) + cluster-level sign-flip permutation",
+      "significant": false
+     },
+     {
+      "name": "metric_05",
+      "baseline": "baseline",
+      "candidate": "candidate",
+      "delta": {
+       "point": -0.0042403566,
+       "low": -0.0690569132,
+       "high": 0.0579554126,
+       "level": 0.95,
+       "method": "bca+cluster-robust"
+      },
+      "p_value": 0.8919108089,
+      "q_value": 0.8919108089,
+      "n_items": 300,
+      "n_clusters": 25,
+      "method": "paired BCa bootstrap, cluster-robust (G=25) + cluster-level sign-flip permutation",
+      "significant": false
+     },
+     {
+      "name": "metric_06",
+      "baseline": "baseline",
+      "candidate": "candidate",
+      "delta": {
+       "point": 0.0565352003,
+       "low": -0.0165322353,
+       "high": 0.12601364,
+       "level": 0.95,
+       "method": "bca+cluster-robust"
+      },
+      "p_value": 0.1172882712,
+      "q_value": 0.4843515648,
+      "n_items": 300,
+      "n_clusters": 25,
+      "method": "paired BCa bootstrap, cluster-robust (G=25) + cluster-level sign-flip permutation",
+      "significant": false
+     },
+     {
+      "name": "metric_07",
+      "baseline": "baseline",
+      "candidate": "candidate",
+      "delta": {
+       "point": 0.0119597556,
+       "low": -0.0583780514,
+       "high": 0.0822166533,
+       "level": 0.95,
+       "method": "bca+cluster-robust"
+      },
+      "p_value": 0.7310268973,
+      "q_value": 0.8919108089,
+      "n_items": 300,
+      "n_clusters": 25,
+      "method": "paired BCa bootstrap, cluster-robust (G=25) + cluster-level sign-flip permutation",
+      "significant": false
+     }
+    ],
+    "blocked_by": [],
+    "n_looks": 8
+   },
+   "comparisons": [
+    {
+     "name": "metric_00",
+     "baseline": "baseline",
+     "candidate": "candidate",
+     "delta": {
+      "point": 0.016831733,
+      "low": -0.0436766761,
+      "high": 0.0770251105,
+      "level": 0.95,
+      "method": "bca+cluster-robust"
+     },
+     "p_value": 0.5603439656,
+     "q_value": 0.5603439656,
+     "n_items": 300,
+     "n_clusters": 25,
+     "method": "paired BCa bootstrap, cluster-robust (G=25) + cluster-level sign-flip permutation",
+     "significant": false
+    },
+    {
+     "name": "metric_01",
+     "baseline": "baseline",
+     "candidate": "candidate",
+     "delta": {
+      "point": 0.0410396694,
+      "low": -0.0155910469,
+      "high": 0.0952661756,
+      "level": 0.95,
+      "method": "bca+cluster-robust"
+     },
+     "p_value": 0.1210878912,
+     "q_value": 0.1210878912,
+     "n_items": 300,
+     "n_clusters": 25,
+     "method": "paired BCa bootstrap, cluster-robust (G=25) + cluster-level sign-flip permutation",
+     "significant": false
+    },
+    {
+     "name": "metric_02",
+     "baseline": "baseline",
+     "candidate": "candidate",
+     "delta": {
+      "point": -0.0234682253,
+      "low": -0.0962720074,
+      "high": 0.0510297236,
+      "level": 0.95,
+      "method": "bca+cluster-robust"
+     },
+     "p_value": 0.5290470953,
+     "q_value": 0.5290470953,
+     "n_items": 300,
+     "n_clusters": 25,
+     "method": "paired BCa bootstrap, cluster-robust (G=25) + cluster-level sign-flip permutation",
+     "significant": false
+    },
+    {
+     "name": "metric_03",
+     "baseline": "baseline",
+     "candidate": "candidate",
+     "delta": {
+      "point": 0.009397663,
+      "low": -0.0473458864,
+      "high": 0.0690285283,
+      "level": 0.95,
+      "method": "bca+cluster-robust"
+     },
+     "p_value": 0.7250274973,
+     "q_value": 0.7250274973,
+     "n_items": 300,
+     "n_clusters": 25,
+     "method": "paired BCa bootstrap, cluster-robust (G=25) + cluster-level sign-flip permutation",
+     "significant": false
+    },
+    {
+     "name": "metric_04",
+     "baseline": "baseline",
+     "candidate": "candidate",
+     "delta": {
+      "point": 0.0073288539,
+      "low": -0.0533675818,
+      "high": 0.0670126311,
+      "level": 0.95,
+      "method": "bca+cluster-robust"
+     },
+     "p_value": 0.8193180682,
+     "q_value": 0.8193180682,
+     "n_items": 300,
+     "n_clusters": 25,
+     "method": "paired BCa bootstrap, cluster-robust (G=25) + cluster-level sign-flip permutation",
+     "significant": false
+    },
+    {
+     "name": "metric_05",
+     "baseline": "baseline",
+     "candidate": "candidate",
+     "delta": {
+      "point": -0.0042403566,
+      "low": -0.0690569132,
+      "high": 0.0579554126,
+      "level": 0.95,
+      "method": "bca+cluster-robust"
+     },
+     "p_value": 0.8919108089,
+     "q_value": 0.8919108089,
+     "n_items": 300,
+     "n_clusters": 25,
+     "method": "paired BCa bootstrap, cluster-robust (G=25) + cluster-level sign-flip permutation",
+     "significant": false
+    },
+    {
+     "name": "metric_06",
+     "baseline": "baseline",
+     "candidate": "candidate",
+     "delta": {
+      "point": 0.0565352003,
+      "low": -0.0165322353,
+      "high": 0.12601364,
+      "level": 0.95,
+      "method": "bca+cluster-robust"
+     },
+     "p_value": 0.1172882712,
+     "q_value": 0.1172882712,
+     "n_items": 300,
+     "n_clusters": 25,
+     "method": "paired BCa bootstrap, cluster-robust (G=25) + cluster-level sign-flip permutation",
+     "significant": false
+    },
+    {
+     "name": "metric_07",
+     "baseline": "baseline",
+     "candidate": "candidate",
+     "delta": {
+      "point": 0.0119597556,
+      "low": -0.0583780514,
+      "high": 0.0822166533,
+      "level": 0.95,
+      "method": "bca+cluster-robust"
+     },
+     "p_value": 0.7310268973,
+     "q_value": 0.7310268973,
+     "n_items": 300,
+     "n_clusters": 25,
+     "method": "paired BCa bootstrap, cluster-robust (G=25) + cluster-level sign-flip permutation",
+     "significant": false
+    }
+   ]
+  },
+  {
+   "name": "real_regression",
+   "decision": {
+    "passed": false,
+    "reason": "Blocked: 1 of 8 comparisons regressed beyond the tolerated 0.0000 after Benjamini-Hochberg correction at alpha=0.05 (metric_03); the worst is metric_03 at -0.3539 (95% CI [-0.4113, -0.2969], q=0.0008) over 300 items in 25 clusters -- fix the regression, or raise max_regression deliberately and on the record if this loss is an accepted trade.",
+    "comparisons": [
+     {
+      "name": "metric_00",
+      "baseline": "baseline",
+      "candidate": "candidate",
+      "delta": {
+       "point": 0.0274018165,
+       "low": -0.0305909006,
+       "high": 0.0873269702,
+       "level": 0.95,
+       "method": "bca+cluster-robust"
+      },
+      "p_value": 0.2812718728,
+      "q_value": 0.5625437456,
+      "n_items": 300,
+      "n_clusters": 25,
+      "method": "paired BCa bootstrap, cluster-robust (G=25) + cluster-level sign-flip permutation",
+      "significant": false
+     },
+     {
+      "name": "metric_01",
+      "baseline": "baseline",
+      "candidate": "candidate",
+      "delta": {
+       "point": 0.0684422046,
+       "low": 0.0107076786,
+       "high": 0.1269141576,
+       "level": 0.95,
+       "method": "bca+cluster-robust"
+      },
+      "p_value": 0.0245975402,
+      "q_value": 0.098390161,
+      "n_items": 300,
+      "n_clusters": 25,
+      "method": "paired BCa bootstrap, cluster-robust (G=25) + cluster-level sign-flip permutation",
+      "significant": false
+     },
+     {
+      "name": "metric_02",
+      "baseline": "baseline",
+      "candidate": "candidate",
+      "delta": {
+       "point": 0.0198767071,
+       "low": -0.045300154,
+       "high": 0.0848233826,
+       "level": 0.95,
+       "method": "bca+cluster-robust"
+      },
+      "p_value": 0.5364463554,
+      "q_value": 0.7152618072,
+      "n_items": 300,
+      "n_clusters": 25,
+      "method": "paired BCa bootstrap, cluster-robust (G=25) + cluster-level sign-flip permutation",
+      "significant": false
+     },
+     {
+      "name": "metric_03",
+      "baseline": "baseline",
+      "candidate": "candidate",
+      "delta": {
+       "point": -0.3539234874,
+       "low": -0.4112534876,
+       "high": -0.2969443692,
+       "level": 0.95,
+       "method": "bca+cluster-robust"
+      },
+      "p_value": 9.999e-05,
+      "q_value": 0.00079992,
+      "n_items": 300,
+      "n_clusters": 25,
+      "method": "paired BCa bootstrap, cluster-robust (G=25) + cluster-level sign-flip permutation",
+      "significant": true
+     },
+     {
+      "name": "metric_04",
+      "baseline": "baseline",
+      "candidate": "candidate",
+      "delta": {
+       "point": -0.0055852716,
+       "low": -0.0760301482,
+       "high": 0.0600248659,
+       "level": 0.95,
+       "method": "bca+cluster-robust"
+      },
+      "p_value": 0.8585141486,
+      "q_value": 0.8585141486,
+      "n_items": 300,
+      "n_clusters": 25,
+      "method": "paired BCa bootstrap, cluster-robust (G=25) + cluster-level sign-flip permutation",
+      "significant": false
+     },
+     {
+      "name": "metric_05",
+      "baseline": "baseline",
+      "candidate": "candidate",
+      "delta": {
+       "point": -0.0222475754,
+       "low": -0.0769088264,
+       "high": 0.0328921752,
+       "level": 0.95,
+       "method": "bca+cluster-robust"
+      },
+      "p_value": 0.396160384,
+      "q_value": 0.6338566143,
+      "n_items": 300,
+      "n_clusters": 25,
+      "method": "paired BCa bootstrap, cluster-robust (G=25) + cluster-level sign-flip permutation",
+      "significant": false
+     },
+     {
+      "name": "metric_06",
+      "baseline": "baseline",
+      "candidate": "candidate",
+      "delta": {
+       "point": 0.0061285991,
+       "low": -0.0543598527,
+       "high": 0.0645893433,
+       "level": 0.95,
+       "method": "bca+cluster-robust"
+      },
+      "p_value": 0.8334166583,
+      "q_value": 0.8585141486,
+      "n_items": 300,
+      "n_clusters": 25,
+      "method": "paired BCa bootstrap, cluster-robust (G=25) + cluster-level sign-flip permutation",
+      "significant": false
+     },
+     {
+      "name": "metric_07",
+      "baseline": "baseline",
+      "candidate": "candidate",
+      "delta": {
+       "point": 0.0454336936,
+       "low": -0.0120223626,
+       "high": 0.1014863127,
+       "level": 0.95,
+       "method": "bca+cluster-robust"
+      },
+      "p_value": 0.1145885411,
+      "q_value": 0.3055694431,
+      "n_items": 300,
+      "n_clusters": 25,
+      "method": "paired BCa bootstrap, cluster-robust (G=25) + cluster-level sign-flip permutation",
+      "significant": false
+     }
+    ],
+    "blocked_by": [
+     "metric_03"
+    ],
+    "n_looks": 8
+   },
+   "comparisons": [
+    {
+     "name": "metric_00",
+     "baseline": "baseline",
+     "candidate": "candidate",
+     "delta": {
+      "point": 0.0274018165,
+      "low": -0.0305909006,
+      "high": 0.0873269702,
+      "level": 0.95,
+      "method": "bca+cluster-robust"
+     },
+     "p_value": 0.2812718728,
+     "q_value": 0.2812718728,
+     "n_items": 300,
+     "n_clusters": 25,
+     "method": "paired BCa bootstrap, cluster-robust (G=25) + cluster-level sign-flip permutation",
+     "significant": false
+    },
+    {
+     "name": "metric_01",
+     "baseline": "baseline",
+     "candidate": "candidate",
+     "delta": {
+      "point": 0.0684422046,
+      "low": 0.0107076786,
+      "high": 0.1269141576,
+      "level": 0.95,
+      "method": "bca+cluster-robust"
+     },
+     "p_value": 0.0245975402,
+     "q_value": 0.0245975402,
+     "n_items": 300,
+     "n_clusters": 25,
+     "method": "paired BCa bootstrap, cluster-robust (G=25) + cluster-level sign-flip permutation",
+     "significant": true
+    },
+    {
+     "name": "metric_02",
+     "baseline": "baseline",
+     "candidate": "candidate",
+     "delta": {
+      "point": 0.0198767071,
+      "low": -0.045300154,
+      "high": 0.0848233826,
+      "level": 0.95,
+      "method": "bca+cluster-robust"
+     },
+     "p_value": 0.5364463554,
+     "q_value": 0.5364463554,
+     "n_items": 300,
+     "n_clusters": 25,
+     "method": "paired BCa bootstrap, cluster-robust (G=25) + cluster-level sign-flip permutation",
+     "significant": false
+    },
+    {
+     "name": "metric_03",
+     "baseline": "baseline",
+     "candidate": "candidate",
+     "delta": {
+      "point": -0.3539234874,
+      "low": -0.4112534876,
+      "high": -0.2969443692,
+      "level": 0.95,
+      "method": "bca+cluster-robust"
+     },
+     "p_value": 9.999e-05,
+     "q_value": 9.999e-05,
+     "n_items": 300,
+     "n_clusters": 25,
+     "method": "paired BCa bootstrap, cluster-robust (G=25) + cluster-level sign-flip permutation",
+     "significant": true
+    },
+    {
+     "name": "metric_04",
+     "baseline": "baseline",
+     "candidate": "candidate",
+     "delta": {
+      "point": -0.0055852716,
+      "low": -0.0760301482,
+      "high": 0.0600248659,
+      "level": 0.95,
+      "method": "bca+cluster-robust"
+     },
+     "p_value": 0.8585141486,
+     "q_value": 0.8585141486,
+     "n_items": 300,
+     "n_clusters": 25,
+     "method": "paired BCa bootstrap, cluster-robust (G=25) + cluster-level sign-flip permutation",
+     "significant": false
+    },
+    {
+     "name": "metric_05",
+     "baseline": "baseline",
+     "candidate": "candidate",
+     "delta": {
+      "point": -0.0222475754,
+      "low": -0.0769088264,
+      "high": 0.0328921752,
+      "level": 0.95,
+      "method": "bca+cluster-robust"
+     },
+     "p_value": 0.396160384,
+     "q_value": 0.396160384,
+     "n_items": 300,
+     "n_clusters": 25,
+     "method": "paired BCa bootstrap, cluster-robust (G=25) + cluster-level sign-flip permutation",
+     "significant": false
+    },
+    {
+     "name": "metric_06",
+     "baseline": "baseline",
+     "candidate": "candidate",
+     "delta": {
+      "point": 0.0061285991,
+      "low": -0.0543598527,
+      "high": 0.0645893433,
+      "level": 0.95,
+      "method": "bca+cluster-robust"
+     },
+     "p_value": 0.8334166583,
+     "q_value": 0.8334166583,
+     "n_items": 300,
+     "n_clusters": 25,
+     "method": "paired BCa bootstrap, cluster-robust (G=25) + cluster-level sign-flip permutation",
+     "significant": false
+    },
+    {
+     "name": "metric_07",
+     "baseline": "baseline",
+     "candidate": "candidate",
+     "delta": {
+      "point": 0.0454336936,
+      "low": -0.0120223626,
+      "high": 0.1014863127,
+      "level": 0.95,
+      "method": "bca+cluster-robust"
+     },
+     "p_value": 0.1145885411,
+     "q_value": 0.1145885411,
+     "n_items": 300,
+     "n_clusters": 25,
+     "method": "paired BCa bootstrap, cluster-robust (G=25) + cluster-level sign-flip permutation",
+     "significant": false
+    }
+   ]
+  }
+ ]
+}

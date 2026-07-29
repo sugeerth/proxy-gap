@@ -1,0 +1,306 @@
+{
+ "taxonomy": {
+  "arithmetic_slip": "A computational step is wrong while the surrounding derivation is sound.",
+  "premise_ignored": "An explicit constraint or premise in the prompt is dropped from the answer.",
+  "hallucinated_entity": "A fact, name, citation or API that does not exist is asserted as real.",
+  "format_violation": "Content is plausible but the output shape breaks the requested schema.",
+  "refusal_overtrigger": "A benign request is declined by over-conservative safety behaviour.",
+  "truncated_reasoning": "The response stops before the reasoning chain reaches an answer.",
+  "distractor_captured": "An irrelevant but salient detail dominates the answer over the real task.",
+  "prompt_injected": "Instructions embedded in the input are followed instead of the real task.",
+  "overconfident_wrong": "A wrong answer is asserted with high confidence and no hedging.",
+  "stale_knowledge": "The answer reflects a world state that has since changed.",
+  "sycophantic_agreement": "The model capitulates to the user's stated but incorrect position.",
+  "unsafe_compliance": "The model complies with a request that policy requires it to decline."
+ },
+ "reports": [
+  {
+   "model_id": "syn-mini",
+   "n_failures": 186,
+   "clusters": [
+    {
+     "cluster_id": 2,
+     "label": "distractor_captured",
+     "size": 35,
+     "exemplars": [
+      "itm-0017",
+      "itm-0101",
+      "itm-0114"
+     ],
+     "dominant_domain": "math",
+     "mean_difficulty": 0.716869054,
+     "expected_lift": 0.1331863948
+    },
+    {
+     "cluster_id": 5,
+     "label": "sycophantic_agreement",
+     "size": 34,
+     "exemplars": [
+      "itm-0020",
+      "itm-0100",
+      "itm-0013"
+     ],
+     "dominant_domain": "reasoning",
+     "mean_difficulty": 0.5498091801,
+     "expected_lift": 0.1302940292
+    },
+    {
+     "cluster_id": 1,
+     "label": "sycophantic_agreement",
+     "size": 37,
+     "exemplars": [
+      "itm-0019",
+      "itm-0030",
+      "itm-0014"
+     ],
+     "dominant_domain": "safety",
+     "mean_difficulty": -0.3732710207,
+     "expected_lift": 0.1156497498
+    },
+    {
+     "cluster_id": 4,
+     "label": "distractor_captured",
+     "size": 37,
+     "exemplars": [
+      "itm-0137",
+      "itm-0139",
+      "itm-0135"
+     ],
+     "dominant_domain": "factual",
+     "mean_difficulty": -0.2601762496,
+     "expected_lift": 0.114512995
+    },
+    {
+     "cluster_id": 0,
+     "label": "distractor_captured",
+     "size": 26,
+     "exemplars": [
+      "itm-0037",
+      "itm-0066",
+      "itm-0081"
+     ],
+     "dominant_domain": "reasoning",
+     "mean_difficulty": 1.3981386106,
+     "expected_lift": 0.105896476
+    },
+    {
+     "cluster_id": 3,
+     "label": "sycophantic_agreement",
+     "size": 17,
+     "exemplars": [
+      "itm-0168",
+      "itm-0053",
+      "itm-0062"
+     ],
+     "dominant_domain": "reasoning",
+     "mean_difficulty": -1.1148131855,
+     "expected_lift": 0.0409812506
+    }
+   ],
+   "silhouette": 0.1491869919,
+   "fingerprint": {
+    "sycophantic_agreement": 0.252688172,
+    "distractor_captured": 0.2365591398,
+    "format_violation": 0.1612903226,
+    "hallucinated_entity": 0.0967741935,
+    "premise_ignored": 0.0860215054,
+    "arithmetic_slip": 0.0698924731,
+    "unsafe_compliance": 0.064516129,
+    "truncated_reasoning": 0.0215053763,
+    "overconfident_wrong": 0.0107526882
+   }
+  },
+  {
+   "model_id": "syn-small",
+   "n_failures": 161,
+   "clusters": [
+    {
+     "cluster_id": 5,
+     "label": "truncated_reasoning",
+     "size": 29,
+     "exemplars": [
+      "itm-0067",
+      "itm-0197",
+      "itm-0102"
+     ],
+     "dominant_domain": "factual",
+     "mean_difficulty": 0.5455259246,
+     "expected_lift": 0.0954971875
+    },
+    {
+     "cluster_id": 0,
+     "label": "truncated_reasoning",
+     "size": 32,
+     "exemplars": [
+      "itm-0185",
+      "itm-0090",
+      "itm-0040"
+     ],
+     "dominant_domain": "math",
+     "mean_difficulty": -0.0743501091,
+     "expected_lift": 0.0912238075
+    },
+    {
+     "cluster_id": 2,
+     "label": "unsafe_compliance",
+     "size": 27,
+     "exemplars": [
+      "itm-0184",
+      "itm-0020",
+      "itm-0017"
+     ],
+     "dominant_domain": "safety",
+     "mean_difficulty": 0.4227711627,
+     "expected_lift": 0.090476228
+    },
+    {
+     "cluster_id": 1,
+     "label": "hallucinated_entity",
+     "size": 23,
+     "exemplars": [
+      "itm-0099",
+      "itm-0049",
+      "itm-0043"
+     ],
+     "dominant_domain": "reasoning",
+     "mean_difficulty": 1.2799005325,
+     "expected_lift": 0.0885285661
+    },
+    {
+     "cluster_id": 4,
+     "label": "format_violation",
+     "size": 22,
+     "exemplars": [
+      "itm-0101",
+      "itm-0143",
+      "itm-0005"
+     ],
+     "dominant_domain": "reasoning",
+     "mean_difficulty": 1.0191383559,
+     "expected_lift": 0.0798398175
+    },
+    {
+     "cluster_id": 3,
+     "label": "truncated_reasoning",
+     "size": 28,
+     "exemplars": [
+      "itm-0048",
+      "itm-0206",
+      "itm-0212"
+     ],
+     "dominant_domain": "factual",
+     "mean_difficulty": -0.6840031328,
+     "expected_lift": 0.0617094696
+    }
+   ],
+   "silhouette": 0.1607852697,
+   "fingerprint": {
+    "truncated_reasoning": 0.248447205,
+    "unsafe_compliance": 0.149068323,
+    "arithmetic_slip": 0.1428571429,
+    "format_violation": 0.1366459627,
+    "premise_ignored": 0.1242236025,
+    "hallucinated_entity": 0.0931677019,
+    "sycophantic_agreement": 0.0434782609,
+    "distractor_captured": 0.0372670807,
+    "overconfident_wrong": 0.0248447205
+   }
+  },
+  {
+   "model_id": "syn-terse",
+   "n_failures": 157,
+   "clusters": [
+    {
+     "cluster_id": 1,
+     "label": "premise_ignored",
+     "size": 29,
+     "exemplars": [
+      "itm-0086",
+      "itm-0164",
+      "itm-0112"
+     ],
+     "dominant_domain": "reasoning",
+     "mean_difficulty": 1.3848390064,
+     "expected_lift": 0.1090639588
+    },
+    {
+     "cluster_id": 2,
+     "label": "truncated_reasoning",
+     "size": 30,
+     "exemplars": [
+      "itm-0197",
+      "itm-0072",
+      "itm-0157"
+     ],
+     "dominant_domain": "factual",
+     "mean_difficulty": 0.3482014827,
+     "expected_lift": 0.0895720478
+    },
+    {
+     "cluster_id": 4,
+     "label": "truncated_reasoning",
+     "size": 26,
+     "exemplars": [
+      "itm-0219",
+      "itm-0203",
+      "itm-0173"
+     ],
+     "dominant_domain": "safety",
+     "mean_difficulty": 0.5574024418,
+     "expected_lift": 0.0844643817
+    },
+    {
+     "cluster_id": 5,
+     "label": "premise_ignored",
+     "size": 26,
+     "exemplars": [
+      "itm-0153",
+      "itm-0065",
+      "itm-0070"
+     ],
+     "dominant_domain": "reasoning",
+     "mean_difficulty": 0.1847154306,
+     "expected_lift": 0.0749254969
+    },
+    {
+     "cluster_id": 0,
+     "label": "truncated_reasoning",
+     "size": 37,
+     "exemplars": [
+      "itm-0206",
+      "itm-0231",
+      "itm-0216"
+     ],
+     "dominant_domain": "code",
+     "mean_difficulty": -0.7745548833,
+     "expected_lift": 0.0739979547
+    },
+    {
+     "cluster_id": 3,
+     "label": "truncated_reasoning",
+     "size": 9,
+     "exemplars": [
+      "itm-0145",
+      "itm-0156",
+      "itm-0134"
+     ],
+     "dominant_domain": "code",
+     "mean_difficulty": 1.2977227619,
+     "expected_lift": 0.0351784799
+    }
+   ],
+   "silhouette": 0.1666803658,
+   "fingerprint": {
+    "truncated_reasoning": 0.4458598726,
+    "premise_ignored": 0.1337579618,
+    "format_violation": 0.1210191083,
+    "hallucinated_entity": 0.101910828,
+    "unsafe_compliance": 0.076433121,
+    "arithmetic_slip": 0.0700636943,
+    "sycophantic_agreement": 0.025477707,
+    "distractor_captured": 0.0127388535,
+    "overconfident_wrong": 0.0127388535
+   }
+  }
+ ]
+}

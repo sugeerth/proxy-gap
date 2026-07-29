@@ -1,0 +1,862 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Statistics: is the difference real? — PROXY GAP</title>
+<meta name="description" content="Power and MDE, always-valid e-values, BH-FDR across many metrics, CUPED variance reduction, cluster-robust standard errors, and a CI gate that blocks a real regression and passes pure noise.">
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📐</text></svg>">
+</head>
+<body>
+
+<div class="topbar"><div class="topbar-inner">
+  <a class="brand" href="index.html">PROXY&nbsp;<span>GAP</span></a>
+  <nav class="navlinks">
+    <a href="index.html">The result</a>
+    <a href="evaluation.html">Evaluation stack</a>
+    <a href="statistics.html">Statistics</a>
+    <a href="reproduce.html">Reproduce</a>
+    <a href="https://github.com/sugeerth/proxy-gap">GitHub</a>
+  </nav>
+  <button class="theme-toggle" aria-label="Toggle colour theme">☾</button>
+</div></div>
+
+<main>
+
+<section class="hero">
+  <p class="eyebrow">Statistics</p>
+  <h1>Is the difference<br><em>real?</em></h1>
+  <p class="lede">
+    Two failures shape applied evaluation, and they are the same failure seen from
+    opposite sides. <strong>A regression can be reported that is not there</strong>
+    — a dashboard watching twenty independent metrics at 5% raises at least one
+    alarm on a perfectly healthy candidate about two times in three.
+    <strong>A regression that is there can be missed</strong> — a 200-item-per-arm
+    eval cannot resolve an effect below about 0.28 per-item score standard
+    deviations at 80% power. Both of those are arithmetic about the procedures, not
+    measurements of anyone's eval suite.
+  </p>
+  <p class="lede">
+    Neither failure needs new methodology. Both are addressed by machinery that has
+    been standard for decades and is often not wired into eval pipelines. This page
+    runs that machinery on <strong>simulated</strong> data whose ground truth is
+    known, so its operating characteristics can be checked rather than asserted.
+  </p>
+</section>
+
+<div id="headline-stats"></div>
+
+<section>
+  <h2 id="power">1 — Power and the minimum detectable effect</h2>
+  <p>
+    The question a research scientist gets asked constantly is <em>"how many items do
+    I need to detect a one-point difference?"</em>, and as posed it has no answer. A
+    point of a benchmark score is not a unit of anything until you divide it by the
+    per-item score standard deviation, and the item count depends on the design as
+    much as on the effect. Name the effect in SD units and name the design, and the
+    arithmetic is closed-form and takes no simulation at all.
+  </p>
+  <div id="power-answer"></div>
+  <div id="power-stats"></div>
+  <div id="fig-power"></div>
+  <p>
+    The second panel is the same fact read the other way. Power is the probability
+    that a real difference of the target size is actually detected, and below the
+    conventional 0.80 target you are running a test that mostly fails silently — the
+    result comes back "not significant" and is filed as "no regression".
+  </p>
+  <div id="fig-power-2"></div>
+  <div id="power-design"></div>
+</section>
+
+<section>
+  <h2 id="sequential">2 — Sequential monitoring: peeking, legally</h2>
+  <p>
+    A fixed-<em>n</em> test is valid if you look at it once. Eval dashboards are
+    looked at continuously, and "run the t-test after each new item, ship when
+    <code>p &lt; 0.05</code>" is a peeking machine: the type-I error is whatever the
+    number of looks makes it, not the number printed on the test.
+  </p>
+  <p>
+    An <strong>e-value</strong> is the honest alternative. It is a test martingale —
+    a Bayes factor for "there is an effect" against "there is none" — so under the
+    null it has expectation 1 and Ville's inequality gives
+    <code>P(∃n : E<sub>n</sub> ≥ 1/α) ≤ α</code> <em>simultaneously over every
+    stopping rule</em>. You may peek after every single observation, stop when you
+    like, and continue after a non-rejection. Nothing has to be declared in advance,
+    including the sample size. A t-test permits none of that.
+  </p>
+  <p>
+    One convention first, because the sign is load-bearing. <code>Δ̂</code> below is
+    the running mean of the paired differences taken as <em>first arm minus
+    second</em>, and the effect stream is built in <code>report/export.py</code> by
+    adding a <code>+0.12</code> mean shift to the <em>second</em> arm. The negative
+    <code>Δ̂</code> reported here is therefore the effect, not a regression. §6
+    orients its deltas the other way round — candidate minus baseline — and labels
+    every column accordingly.
+  </p>
+  <div id="seq-stats"></div>
+  <div id="fig-seq"></div>
+  <div id="seq-verdict"></div>
+</section>
+
+<section>
+  <h2 id="multiplicity">3 — Multiplicity: the dashboard that generates alarms</h2>
+  <p>
+    Twenty metrics, three of which carry a real shift, seventeen of which are pure
+    noise. Each is tested with a paired permutation test. At <code>α = 0.05</code>
+    per metric the seventeen null metrics carry <strong>0.85 expected false
+    positives</strong>, and at least one arrives with probability
+    <code>1 − 0.95<sup>17</sup> = 58%</code>. Exactly one arrives here — which
+    <em>illustrates</em> that rate rather than estimating it.
+  </p>
+  <div id="mult-stats"></div>
+  <div id="fig-mult"></div>
+  <div id="mult-table"></div>
+  <div id="mult-verdict"></div>
+</section>
+
+<section>
+  <h2 id="cuped">4 — Variance reduction: power you already paid for</h2>
+  <p>
+    CUPED is the least exotic idea on this page and the highest-leverage. If you hold
+    a covariate <code>x</code> that is correlated with the outcome and untouched by
+    the treatment — the item's difficulty, the baseline model's score on that same
+    item, last week's value of the metric — then some of the variance in your outcome
+    is variance you already knew about, and you can subtract it:
+  </p>
+  <div class="formula">y_adj  =  y − θ·(x − mean x)        θ = Cov(y, x) / Var(x)</div>
+  <p>
+    The mean is unchanged exactly, so the estimand is unchanged; the variance falls by
+    the squared sample correlation. This is not a modelling assumption that could be
+    wrong — it is an algebraic identity about residuals. The cost is one extra column
+    in your results table.
+  </p>
+  <div id="cuped-stats"></div>
+  <div id="fig-cuped"></div>
+  <div id="cuped-note"></div>
+</section>
+
+<section>
+  <h2 id="clustering">5 — Clustering: why per-item intervals lie</h2>
+  <p>
+    Eval items are almost never independent at the row level. They arrive as
+    near-duplicate pairs, as twenty instantiations of one prompt template, as every
+    question generated from a single source document, as a whole batch labelled by one
+    annotator. Within a group the errors share a component, and the shared component
+    does not average away as you add rows from that same group.
+  </p>
+  <p>
+    Treating those rows as independent divides the standard error by
+    <code>√N</code> when the design only supports something closer to
+    <code>√G</code>. The interval comes out too narrow, the p-value too small, and the
+    eval "detects" an improvement that is really one document having a good day. The
+    error is <strong>anticonservative</strong> — it manufactures significance rather
+    than losing it — which is why it survives review: nobody questions a result that
+    came out the way they hoped.
+  </p>
+  <div id="cluster-stats"></div>
+  <div id="cluster-note"></div>
+  <p>
+    The fix is the Liang–Zeger sandwich with the CR1 small-sample correction
+    <code>G/(G−1)</code>, applied at the cluster level, with the permutation test
+    flipping signs per cluster rather than per item. It assumes nothing about the
+    within-cluster correlation structure, and it is consistent in the number of
+    clusters — <em>not</em> the number of rows. Adding items to an existing document
+    buys you almost nothing; adding documents buys you precision.
+  </p>
+</section>
+
+<section>
+  <h2 id="gate">6 — The CI gate</h2>
+  <p>
+    Everything above exists to serve one decision: does this candidate ship? A gate is
+    a decision procedure, not a report, and the property that decides whether it
+    survives contact with a real release train is not its sensitivity. It is its
+    false-alarm rate.
+  </p>
+
+  <div class="claim">
+    <strong>The design principle.</strong> A gate that cries wolf gets disabled within
+    a week, and a disabled gate protects nothing at all. If a suite watches
+    <em>m</em> independent metrics and tests each at its own <code>α</code>, the chance that at
+    least one fires on a perfectly healthy candidate is <code>1 − (1 − α)<sup>m</sup></code>
+    — at <code>m = 20</code>, roughly two releases in three. Controlling the error rate
+    <em>across</em> the family is therefore not statistical fastidiousness. It is the
+    only thing that buys the gate enough credibility to be allowed to block anything.
+  </div>
+
+  <p>
+    Blocking here requires two independent conditions to hold at once: the evidence
+    must survive Benjamini–Hochberg (<code>q ≤ α</code>) <em>and</em> the whole 95%
+    interval must sit below the tolerated regression. Significance alone does not
+    block, and a negative point estimate alone does not block. Two scenarios are run —
+    one where nothing changed, one where a single metric was really moved.
+  </p>
+
+  <div id="gate-stats"></div>
+  <div id="gate-scenarios"></div>
+</section>
+
+<section>
+  <h2 id="limits">What this page does not establish</h2>
+  <div class="honest">
+    <h3>Read this before quoting any number above</h3>
+    <p>
+      <strong>Every stream, metric and comparison here is simulated.</strong> The data
+      are drawn from the generators in <code>proxygap.report.export</code>, which is
+      what makes ground truth available — you know which three of the twenty metrics
+      really moved, and you know the null stream is really null. That is the point of
+      doing it this way, and it is also the limit: nothing here measures the operating
+      characteristics of a real eval suite on real model outputs.
+    </p>
+    <p>
+      <strong>These are single realisations, not rate estimates.</strong> The null
+      e-value stream's false alarm and the one spurious metric in §3 each illustrate a
+      rate; neither estimates one. A single run cannot distinguish a 5% procedure from
+      a 15% one. The repository's test suite is where the realised type-I rates are
+      measured over thousands of streams (<code>tests/test_sequential.py</code>); this
+      page shows one draw from the seed recorded in
+      <code>site/data/manifest.json</code>.
+    </p>
+    <p>
+      <strong>The designs are not interchangeable.</strong> §1 is two-sample
+      arithmetic; §2 and §6 are paired. Feeding an unpaired score SD into a paired
+      design overstates the items you need. Feeding a paired difference SD into the
+      two-sample formulas <em>overstates</em> the MDE by exactly <code>√2</code>: the
+      two-sample standard error is <code>sd·√(2/n)</code> where the paired one is
+      <code>sd_d/√n</code>, so the number that comes back is <code>√2</code> larger
+      than the effect the design can really resolve, and a paired eval reads as
+      blinder than it is. Both mistakes are common, both are conservative in the
+      direction that hides them, and neither is visible in the output.
+    </p>
+    <p>
+      <strong>Each method has a stated failure mode.</strong> The e-value's exactness
+      assumes i.i.d. differences and survives Student-<em>t</em>, binary and uniform
+      departures, but strongly skewed differences break it — a centred lognormal null
+      stream rejects far above its nominal level, and that case wants a
+      bounded-support empirical-Bernstein e-value instead. Benjamini–Hochberg controls
+      the false discovery rate, not the family-wise error rate; the two coincide under
+      the global null, which is the case a gate must survive, and diverge elsewhere.
+      Cluster-robust standard errors are consistent as the number of clusters grows,
+      and the gate here has 25 of them, which is not many.
+    </p>
+  </div>
+</section>
+
+<section>
+  <h2 id="explore">The rest of the platform</h2>
+  <div class="cards">
+    <a class="card" href="index.html">
+      <span class="kicker">The result</span>
+      <h3>Judge bias predicts the KL budget</h3>
+      <p>A closed form connecting a judge's measured verbosity bias to the
+      optimisation pressure at which true quality peaks, validated against a
+      Monte-Carlo sweep and reported with its disagreements.</p>
+    </a>
+    <a class="card" href="evaluation.html">
+      <span class="kicker">Evaluation stack</span>
+      <h3>Does the benchmark measure anything?</h3>
+      <p>2PL item calibration with parameter recovery, contamination probes, judge
+      bias and position bias, calibration curves, council with veto, robustness
+      perturbations, failure mining, and the human annotation protocol.</p>
+    </a>
+    <a class="card" href="reproduce.html">
+      <span class="kicker">Reproduce</span>
+      <h3>Run every number yourself</h3>
+      <p><code>make all</code> rebuilds every figure on this site from source in one
+      command, deterministically, with no API key and no network.</p>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <p>
+    PROXY GAP — built by <a href="https://sugeerth.github.io">Sugeerth Murugesan</a>.
+    Source on <a href="https://github.com/sugeerth/proxy-gap">GitHub</a>.
+    Every figure regenerates from <code>make all</code>; the run seed and library versions
+    are recorded in <code>site/data/manifest.json</code>.
+  </p>
+</footer>
+
+</main>
+
+<script src="data/bundle.js" onerror="window.__PROXYGAP_BUNDLE_MISSING__=true"></script>
+<script type="module">
+import { initChrome, onThemeChange } from './assets/app.js';
+import { lineChart, barChart, scatterChart, statTiles, loadData, failNotice, fmt } from './assets/viz.js';
+
+initChrome();
+
+const $ = (id) => document.getElementById(id);
+
+const pct = (v, d = 1) => `${(100 * v).toFixed(d)}%`;
+const pv = (v) => (v < 1e-3 ? v.toExponential(2) : v.toFixed(4));
+const sgn = (v, d = 4) => (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(d);
+/* Typographic minus (U+2212), so a negative delta does not read as a hyphen. */
+const nf = (v, d = 4) => (v < 0 ? '−' : '') + Math.abs(v).toFixed(d);
+const mark = (b) => (b ? '✓ yes' : '· no');
+const esc = (s) => String(s).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+
+/* e-values span twelve orders of magnitude, and lineChart's y scale is linear,
+ * so the transform is done here and declared in the axis label. */
+const LOG10 = (v) => Math.log10(Math.max(v, 1e-12));
+const ALPHA = 0.05;
+const EBOUND = 1 / ALPHA;
+
+const HOSTS = [
+  'headline-stats', 'power-answer', 'power-stats', 'fig-power', 'fig-power-2',
+  'power-design', 'seq-stats', 'fig-seq', 'seq-verdict', 'mult-stats', 'fig-mult',
+  'mult-table', 'mult-verdict', 'cuped-stats', 'fig-cuped', 'cuped-note',
+  'cluster-stats', 'cluster-note', 'gate-stats', 'gate-scenarios',
+];
+
+/* Run one section; a failure is contained to that section's hosts. */
+function section(ids, fn) {
+  try {
+    fn();
+  } catch (e) {
+    ids.forEach((id) => { const h = $(id); if (h) failNotice(h, e); });
+  }
+}
+
+async function render() {
+  let stats, gate;
+  try {
+    [stats, gate] = await Promise.all([loadData('stats'), loadData('gate')]);
+  } catch (e) {
+    HOSTS.forEach((id) => { const h = $(id); if (h) failNotice(h, e); });
+    return;
+  }
+
+  const pcurve = stats.power_curve;
+  const mult = stats.multiplicity;
+  const seEff = stats.sequential_effect;
+  const seNull = stats.sequential_null;
+  const scenarios = gate.scenarios;
+
+  const rawSig = mult.filter((m) => m.p <= ALPHA);
+  const bhSig = mult.filter((m) => m.q <= ALPHA);
+  const truly = mult.filter((m) => m.truly_affected);
+
+  /* ------------------------------------------------------ headline tiles -- */
+  section(['headline-stats'], () => {
+    const at200 = pcurve.find((p) => p.n_items === 200);
+    statTiles($('headline-stats'), [
+      {
+        label: 'Items per arm for a 0.15 SD effect',
+        value: String(stats.required_n_for_0_15),
+        note: 'two-sample, two-sided α = 0.05, 80% power',
+      },
+      {
+        label: 'What 200 items can actually see',
+        value: `${stats.mde_at_200.toFixed(2)} SD`,
+        tone: 'critical',
+        note: at200 ? `power against 0.15 SD is only ${pct(at200.power_at_target)}` : '',
+      },
+      {
+        label: 'Metrics called significant',
+        value: `${rawSig.length} → ${bhSig.length}`,
+        note: `raw p vs BH q across ${mult.length} metrics; ${truly.length} really moved`,
+      },
+      {
+        label: 'Variance removed by CUPED',
+        value: pct(stats.cuped_reduction),
+        tone: 'good',
+        note: 'from one pre-experiment covariate, no extra labels',
+      },
+    ]);
+  });
+
+  /* ----------------------------------------------- 1. power and the MDE --- */
+  section(['power-answer', 'power-stats', 'fig-power', 'fig-power-2', 'power-design'], () => {
+    const at200 = pcurve.find((p) => p.n_items === 200);
+    const first80 = pcurve.find((p) => p.power_at_target >= 0.80);
+
+    $('power-answer').innerHTML = `
+      <div class="notice">
+        <strong>The answer, for this design.</strong> To detect a difference of
+        <strong>0.15</strong> per-item score standard deviations at 80% power and a
+        two-sided α of 0.05, you need
+        <strong>${stats.required_n_for_0_15} items per arm</strong>. Run 200 instead and
+        the smallest effect you can resolve is
+        <strong>${stats.mde_at_200.toFixed(4)} SD</strong> — roughly
+        ${(stats.mde_at_200 / 0.15).toFixed(1)}× larger than the effect you were
+        asking about. The 0.15-SD regression is still there; the eval just has
+        ${at200 ? pct(at200.power_at_target) : '—'} chance of noticing it.
+      </div>`;
+
+    statTiles($('power-stats'), [
+      { label: 'Required n per arm (0.15 SD)', value: String(stats.required_n_for_0_15),
+        note: 'stats.required_n_for_0_15' },
+      { label: 'MDE at n = 200 per arm', value: stats.mde_at_200.toFixed(4),
+        note: 'in units of the per-item score SD' },
+      { label: 'Power at n = 200 vs 0.15 SD', value: at200 ? pct(at200.power_at_target) : '—',
+        tone: 'critical',
+        note: at200 ? `${pct(1 - at200.power_at_target)} of real 0.15-SD moves are missed` : '' },
+      { label: 'Smallest grid point clearing 80%', value: first80 ? `n = ${first80.n_items}` : 'none on grid',
+        tone: 'good',
+        note: first80 ? `power ${pct(first80.power_at_target)}, MDE ${first80.mde.toFixed(3)}` : '' },
+    ]);
+
+    lineChart($('fig-power'), {
+      title: 'Minimum detectable effect against eval size',
+      subtitle: 'MDE = (z₁₋α⁄₂ + zₚₒwₑᵣ) · sd · √(2/n). Halving the MDE costs four times the items.',
+      xScale: 'log',
+      xLabel: 'items per arm (log scale)',
+      yLabel: 'minimum detectable effect (score SD)',
+      xFormat: (v) => (v >= 1000 ? `${v / 1000}k` : String(Math.round(v))),
+      yFormat: (v) => v.toFixed(2),
+      height: 360,
+      vrules: [
+        { at: 200, label: `n = 200 → MDE ${stats.mde_at_200.toFixed(2)}` },
+        { at: stats.required_n_for_0_15, label: `n = ${stats.required_n_for_0_15} → 0.15` },
+      ],
+      series: [
+        { label: 'MDE at 80% power', points: pcurve.map((p) => [p.n_items, p.mde]) },
+      ],
+    });
+
+    barChart($('fig-power-2'), {
+      title: 'Power to detect a 0.15 SD difference',
+      subtitle: '0.80 is the conventional target; below it the test mostly fails quietly and gets read as "no regression"',
+      xLabel: 'power against a 0.15 SD effect',
+      yLabel: 'items per arm',
+      height: 60 + pcurve.length * 42,
+      rows: pcurve.map((p) => ({
+        label: `n = ${p.n_items}`,
+        value: p.power_at_target,
+        slot: p.power_at_target >= 0.80 ? 2 : 1,
+        format: (v) => v.toFixed(3),
+      })),
+    });
+
+    $('power-design').innerHTML = `
+      <div class="notice notice-warn">
+        <strong>The design the formula assumes.</strong> Two-sample difference of
+        means: two independent groups scored on <em>disjoint</em> item sets, equal
+        allocation, a common per-item score SD, two-sided test.
+        <code>n</code> is per arm, so ${stats.required_n_for_0_15} means
+        ${2 * stats.required_n_for_0_15} scored responses in total.
+        <strong>Most eval work is paired</strong> — both models answer the same
+        items — and pairing is strictly stronger: the standard error becomes
+        <code>sd_d/√n</code> in the SD of the <em>within-item differences</em>, so
+        <code>MDE_paired = MDE/√2</code> and the required n halves — to
+        ${Math.ceil(stats.required_n_for_0_15 / 2)} items <em>if</em> <code>sd_d</code>
+        equalled the score SD of 1.0 used above, and to fewer still once you
+        substitute the real <code>sd_d</code> in place of the raw score SD. That
+        substitution is the whole trick, and it is where pairing earns its keep: when item difficulty dominates
+        the variance, <code>sd_d</code> is far below the score SD, which is how a
+        300-item paired eval can beat an A/B test with 3,000 per arm. Clustered items
+        push the other way — multiply the requirement by the design effect
+        (§5) before quoting it.
+      </div>`;
+  });
+
+  /* ------------------------------------------ 2. sequential monitoring ---- */
+  section(['seq-stats', 'fig-seq', 'seq-verdict'], () => {
+    const peak = (rows) => rows.reduce((a, b) => (b.e_value > a.e_value ? b : a), rows[0]);
+    const pkEff = peak(seEff);
+    const pkNull = peak(seNull);
+    const lastEff = seEff[seEff.length - 1];
+    const lastNull = seNull[seNull.length - 1];
+    const ci = stats.bootstrap_interval;
+
+    const stopWord = (v) => (v === null || v === undefined ? 'never' : `n = ${v}`);
+
+    statTiles($('seq-stats'), [
+      { label: 'Effect stream stopped at', value: stopWord(stats.sequential_effect_stop),
+        tone: 'good',
+        note: `first crossing of e ≥ ${EBOUND}; the stream really has a non-zero mean difference` },
+      { label: 'Null stream stopped at', value: stopWord(stats.sequential_null_stop),
+        tone: stats.sequential_null_stop === null ? 'good' : 'critical',
+        note: stats.sequential_null_stop === null
+          ? 'never crossed the boundary — the correct behaviour under the null'
+          : 'it crossed. This is a false alarm; see the note below the chart.' },
+      { label: 'Peak e-value, effect stream', value: fmt(pkEff.e_value),
+        note: `on the recorded grid, at n = ${pkEff.n_seen}; final Δ̂ = ${nf(lastEff.delta_hat)}` },
+      { label: 'Peak e-value, null stream', value: pkNull.e_value.toFixed(1),
+        note: `on the recorded grid, at n = ${pkNull.n_seen}; decays to ${lastNull.e_value.toFixed(3)} by n = ${lastNull.n_seen}; final Δ̂ = ${nf(lastNull.delta_hat)}` },
+      { label: 'Fixed-sample BCa interval', value: `[${nf(ci.low, 3)}, ${nf(ci.high, 3)}]`,
+        note: `same effect stream, point ${nf(ci.point)}, ${pct(ci.level, 0)} level, method "${esc(ci.method)}"` },
+    ]);
+
+    const evSeries = (rows, label) => ({
+      label,
+      points: rows.map((r) => [r.n_seen, LOG10(r.e_value)]),
+    });
+
+    const xMin = Math.min(seEff[0].n_seen, seNull[0].n_seen);
+    const xMax = Math.max(lastEff.n_seen, lastNull.n_seen);
+    const stops = [stats.sequential_effect_stop, stats.sequential_null_stop]
+      .filter((v) => v !== null && v !== undefined);
+
+    lineChart($('fig-seq'), {
+      title: 'An always-valid e-value under a real effect and under the null',
+      subtitle: 'plotted every 4th observation; the reported stopping times come from the full stream, so they sit just left of the visible crossings',
+      xScale: 'log',
+      xLabel: 'observations seen (log scale)',
+      yLabel: 'log₁₀ e-value',
+      xFormat: (v) => String(Math.round(v)),
+      yFormat: (v) => (Math.abs(v) < 1e-9 ? '1' : `1e${Math.round(v)}`),
+      yTicks: 8,
+      height: 400,
+      markers: false,
+      bands: stops.length === 2
+        ? [{ from: Math.min(...stops), to: Math.max(...stops),
+             label: `first crossings: n = ${stats.sequential_effect_stop} (effect), n = ${stats.sequential_null_stop} (null)` }]
+        : [],
+      series: [
+        evSeries(seEff, 'effect stream'),
+        evSeries(seNull, 'null stream'),
+        {
+          label: `reject boundary  1/α = ${EBOUND}`,
+          dashed: true,
+          points: [[xMin, LOG10(EBOUND)], [xMax, LOG10(EBOUND)]],
+        },
+      ],
+    });
+
+    const nullFired = stats.sequential_null_stop !== null && stats.sequential_null_stop !== undefined;
+    $('seq-verdict').innerHTML = `
+      <div class="notice ${nullFired ? 'notice-warn' : 'notice-good'}">
+        <strong>What the two streams did.</strong> The effect stream crossed
+        <code>1/α = ${EBOUND}</code> at
+        <strong>n = ${stats.sequential_effect_stop}</strong> and then ran away,
+        reaching ${fmt(pkEff.e_value)} by n = ${lastEff.n_seen} — evidence
+        accumulating without bound, as it should when the alternative is true.
+        ${nullFired
+          ? `The null stream <strong>also crossed</strong>, at
+             <strong>n = ${stats.sequential_null_stop}</strong>, peaking at
+             ${pkNull.e_value.toFixed(1)} on the recorded grid before decaying back to
+             ${lastNull.e_value.toFixed(3)}. <strong>That is a type-I error, and it
+             is reported rather than reseeded.</strong> It is not a failure of the
+             method: Ville's inequality bounds the probability that a null stream
+             <em>ever</em> crosses at α = ${ALPHA}, and this is one run.
+             Observing a crossing in a single null stream is a
+             ${pct(ALPHA, 0)}-probability event by construction. Note the shape as
+             well as the crossing — a null e-value is a non-negative martingale,
+             so it wanders and returns; the guarantee is on the supremum, not on the
+             endpoint. Reading the endpoint (${lastNull.e_value.toFixed(3)}, decisive
+             evidence <em>for</em> the null) would have told you the truth here, but
+             that is hindsight, not a rule you are allowed to apply.`
+          : `The null stream never crossed the boundary at any of its
+             ${seNull.length} recorded looks. <strong>That is the correct
+             behaviour</strong>, not a weak result: an anytime-valid test is supposed
+             to sit below the boundary forever when there is nothing to find.`}
+      </div>
+      <div class="notice">
+        <strong>Why not just use the t-test?</strong> Because it is only valid at the
+        look you declared in advance. The e-value's guarantee holds simultaneously
+        over every stopping rule, so nothing needs declaring — not the sample
+        size, not the number of looks, not the decision to keep going after a
+        non-rejection. The e-value used here is the safe-t mixture SPRT with a
+        right-Haar prior on the scale, so it is exactly scale-invariant and needs no
+        plug-in variance estimate. Its exactness assumes i.i.d. differences; see the
+        limitations below for what breaks it.
+      </div>`;
+  });
+
+  /* ---------------------------------------------------- 3. multiplicity --- */
+  section(['mult-stats', 'fig-mult', 'mult-table', 'mult-verdict'], () => {
+    const rawFalse = rawSig.filter((m) => !m.truly_affected);
+    const bhFalse = bhSig.filter((m) => !m.truly_affected);
+    const bhMissed = truly.filter((m) => m.q > ALPHA);
+    const m = mult.length;
+    const anyFalse = 1 - Math.pow(1 - ALPHA, m - truly.length);
+    const pFloor = Math.min(...mult.map((x) => x.p));
+
+    statTiles($('mult-stats'), [
+      { label: 'Significant at raw p ≤ 0.05', value: String(rawSig.length),
+        tone: rawFalse.length ? 'critical' : undefined,
+        note: rawFalse.length
+          ? `${rawFalse.length} of them false: ${rawFalse.map((x) => esc(x.metric)).join(', ')}`
+          : 'no false positives in this draw' },
+      { label: 'Significant at BH q ≤ 0.05', value: String(bhSig.length),
+        tone: 'good',
+        note: `${bhFalse.length} false positives, ${bhMissed.length} true effects missed` },
+      { label: 'Metrics that really moved', value: `${truly.length} of ${m}`,
+        note: 'known by construction from the generator, never from the p-values' },
+      { label: 'P(≥1 false alarm, uncorrected)', value: pct(anyFalse, 0),
+        note: `1 − (1 − ${ALPHA})^${m - truly.length} over the null metrics — arithmetic, not a measurement` },
+    ]);
+
+    const grp = (want) => ({
+      label: want ? `really moved (${truly.length})` : `null metrics (${mult.length - truly.length})`,
+      radius: want ? 7 : 4.5,
+      points: mult.filter((x) => x.truly_affected === want)
+        .map((x) => [-LOG10(x.p), -LOG10(x.q), x.metric]),
+    });
+
+    scatterChart($('fig-mult'), {
+      title: 'Raw p against BH-adjusted q, all 20 metrics',
+      subtitle: `plotted as −log₁₀, so up and right is stronger evidence; every point sits below y = x because q ≥ p always. The ${truly.length} truly-affected metrics share identical p and q and plot on top of one another.`,
+      xLabel: '−log₁₀ raw p',
+      yLabel: '−log₁₀ BH q',
+      identity: true,
+      height: 400,
+      groups: [grp(true), grp(false)],
+    });
+
+    const rows = mult.map((x) => {
+      const disagree = (x.p <= ALPHA) !== (x.q <= ALPHA);
+      return `<tr${disagree ? ' style="color:var(--critical)"' : ''}>
+        <td>${esc(x.metric)}</td>
+        <td>${x.truly_affected ? '✓ yes' : '· no'}</td>
+        <td>${pv(x.p)}</td>
+        <td>${mark(x.p <= ALPHA)}</td>
+        <td>${pv(x.q)}</td>
+        <td>${mark(x.q <= ALPHA)}</td>
+        <td>${disagree ? 'BH overturns raw p' : ''}</td>
+      </tr>`;
+    }).join('');
+
+    $('mult-table').innerHTML = `
+      <table>
+        <thead><tr>
+          <th>metric</th><th>really moved</th><th>raw p</th><th>p ≤ .05</th>
+          <th>BH q</th><th>q ≤ .05</th><th>disagreement</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>`;
+
+    $('mult-verdict').innerHTML = `
+      <div class="notice ${bhFalse.length === 0 && bhMissed.length === 0 ? 'notice-good' : 'notice-warn'}">
+        <strong>What BH bought.</strong> Uncorrected, ${rawSig.length} metrics clear
+        <code>p ≤ ${ALPHA}</code>${rawFalse.length
+          ? `, and ${rawFalse.length} of them — ${rawFalse.map((x) => esc(x.metric)).join(', ')} — has no real effect at all.`
+          : '.'}
+        After Benjamini–Hochberg, ${bhSig.length} survive, and they are exactly
+        the ${truly.length} that really moved:
+        ${bhFalse.length} false positives and ${bhMissed.length} missed. On a
+        dashboard, the difference between those two columns is the difference between
+        a signal and an alarm generator.
+      </div>
+      <div class="notice">
+        <strong>One artefact worth naming.</strong> The three real effects all report
+        <code>p = ${pv(pFloor)}</code>, which is not a coincidence and not a
+        measurement of how strong they are: it is
+        <code>1/(n_perm + 1)</code>, the resolution floor of a permutation test with
+        ${Math.round(1 / pFloor) - 1} permutations. Zero of those permuted statistics
+        matched or exceeded the observed one, and the <code>+1</code> in the numerator
+        is the observed statistic counting itself.
+        The evidence is bounded below by the number of permutations
+        you paid for, so quoting these p-values as if they were continuous would be
+        reading precision the test cannot produce.
+      </div>`;
+  });
+
+  /* ------------------------------------------------ 4. CUPED ------------- */
+  section(['cuped-stats', 'fig-cuped', 'cuped-note'], () => {
+    const before = stats.cuped_sd_before;
+    const after = stats.cuped_sd_after;
+    const red = stats.cuped_reduction;
+
+    statTiles($('cuped-stats'), [
+      { label: 'Variance removed', value: pct(red), tone: 'good',
+        note: 'realised 1 − Var(y_adj)/Var(y), computed from the adjusted values' },
+      { label: 'Outcome SD before', value: before.toFixed(4), note: 'stats.cuped_sd_before' },
+      { label: 'Outcome SD after', value: after.toFixed(4),
+        note: `${pct(1 - after / before)} narrower on the SD scale` },
+      { label: 'Equivalent sample-size saving', value: pct(red),
+        tone: 'good',
+        note: 'SE ∝ sd/√n, so the same precision now costs '
+              + `${pct(1 - red)} of the items` },
+    ]);
+
+    barChart($('fig-cuped'), {
+      title: 'Outcome standard deviation, before and after the CUPED adjustment',
+      subtitle: `the mean is unchanged exactly — only the spread moves. ${pct(red)} of the variance was information you already held.`,
+      xLabel: 'standard deviation of the outcome',
+      yLabel: 'series',
+      height: 170,
+      rows: [
+        { label: 'raw outcome y', value: before, slot: 1, format: (v) => v.toFixed(4) },
+        { label: 'CUPED-adjusted y', value: after, slot: 2, format: (v) => v.toFixed(4) },
+      ],
+    });
+
+    $('cuped-note').innerHTML = `
+      <div class="notice">
+        <strong>Cross-check against theory.</strong> The reduction is the squared
+        sample correlation between outcome and covariate. This covariate was
+        constructed in <code>report/export.py</code> with a population correlation of
+        0.7, so the expected reduction is 0.49 and the realised value is
+        <strong>${red.toFixed(4)}</strong> — the ordinary sampling gap over 2,000
+        draws, not evidence of anything beyond the identity. What makes this worth
+        doing is the exchange rate: at ${pct(red)} variance removed, an eval that
+        needed ${stats.required_n_for_0_15} items per arm for a 0.15-SD effect now
+        needs about ${Math.ceil(stats.required_n_for_0_15 * (1 - red))}, for the price
+        of one column you already had. In an eval pipeline the strongest available
+        covariate is usually the baseline model's per-item score, which is the same
+        observation that makes paired designs dominate.
+      </div>`;
+  });
+
+  /* --------------------------------------------------- 5. clustering ----- */
+  section(['cluster-stats', 'cluster-note'], () => {
+    const c0 = scenarios[0].decision.comparisons[0];
+    const perCluster = c0.n_items / c0.n_clusters;
+    const worst = Math.sqrt(c0.n_items / c0.n_clusters);
+
+    statTiles($('cluster-stats'), [
+      { label: 'Items per comparison', value: String(c0.n_items), note: 'gate.json, every comparison' },
+      { label: 'Independent clusters', value: String(c0.n_clusters),
+        note: `${perCluster} items per cluster` },
+      { label: 'Worst-case interval inflation', value: `${worst.toFixed(2)}×`,
+        tone: 'critical',
+        note: `√(N/G) = √${perCluster}; reached only if within-cluster correlation is 1` },
+      { label: 'Interval method used', value: 'cluster-robust',
+        tone: 'good', note: `delta.method = "${esc(c0.delta.method)}"` },
+    ]);
+
+    $('cluster-note').innerHTML = `
+      <div class="notice notice-warn">
+        <strong>How large is the error, exactly?</strong> For equal clusters the
+        variance inflation is <code>1 + (m − 1)·ICC</code> with
+        <code>m = ${perCluster}</code> items per cluster, so the honest interval is
+        between <strong>1×</strong> and <strong>${worst.toFixed(2)}×</strong>
+        the naive per-item one, depending on the intra-cluster correlation. The
+        intra-cluster correlation of these simulated items is not itself reported in
+        the JSON, so the realised factor is not quoted here — only the bound, and
+        the fact that the gate pays it. The full comparison method recorded alongside
+        every delta is
+        <code>${esc(c0.method)}</code>.
+      </div>`;
+  });
+
+  /* --------------------------------------------------- 6. the CI gate ---- */
+  section(['gate-stats', 'gate-scenarios'], () => {
+    const byName = (list) => Object.fromEntries(list.map((c) => [c.name, c]));
+
+    const noise = scenarios.find((s) => s.name === 'all_noise') || scenarios[0];
+    const regress = scenarios.find((s) => s.name === 'real_regression') || scenarios[1];
+
+    const worstOf = (s) => s.decision.comparisons
+      .filter((c) => s.decision.blocked_by.includes(c.name))
+      .sort((a, b) => a.delta.point - b.delta.point)[0];
+    const worst = worstOf(regress);
+
+    /* Alarms that the raw analysis would have raised and BH removed. */
+    const suppressed = scenarios.flatMap((s) => {
+      const bh = byName(s.decision.comparisons);
+      return s.comparisons
+        .filter((c) => c.significant && !bh[c.name].significant)
+        .map((c) => ({ scenario: s.name, comp: c }));
+    });
+
+    statTiles($('gate-stats'), [
+      { label: 'Scenario: all_noise', value: noise.decision.passed ? 'PASS' : 'BLOCK',
+        tone: noise.decision.passed ? 'good' : 'critical',
+        note: `${noise.decision.n_looks} comparisons, ${noise.decision.blocked_by.length} blocking; `
+              + `smallest q = ${Math.min(...noise.decision.comparisons.map((c) => c.q_value)).toFixed(3)}` },
+      { label: 'Scenario: real_regression', value: regress.decision.passed ? 'PASS' : 'BLOCK',
+        tone: regress.decision.passed ? 'good' : 'critical',
+        note: regress.decision.blocked_by.length
+          ? `blocked by ${regress.decision.blocked_by.map(esc).join(', ')}`
+          : 'nothing blocked' },
+      { label: 'Worst regression caught', value: worst ? sgn(worst.delta.point, 3) : '—',
+        tone: 'critical',
+        note: worst
+          ? `95% CI [${nf(worst.delta.low, 3)}, ${nf(worst.delta.high, 3)}], q = ${pv(worst.q_value)}`
+          : '' },
+      { label: 'Raw-p alarms removed by BH', value: String(suppressed.length),
+        tone: 'good',
+        note: suppressed.length
+          ? suppressed.map((s) => `${esc(s.comp.name)} in ${esc(s.scenario)}`).join('; ')
+          : 'the two analyses agreed on every comparison' },
+    ]);
+
+    const scenarioBlock = (s) => {
+      const bh = byName(s.decision.comparisons);
+      const passed = s.decision.passed;
+      const rows = s.comparisons.map((raw) => {
+        const c = bh[raw.name];
+        const blocks = s.decision.blocked_by.includes(c.name);
+        const flipped = raw.significant !== c.significant;
+        const style = blocks ? ' style="color:var(--critical)"' : '';
+        return `<tr${style}>
+          <td>${esc(c.name)}${blocks ? ' ◀ blocked' : ''}</td>
+          <td>${sgn(c.delta.point)}</td>
+          <td>[${nf(c.delta.low)}, ${nf(c.delta.high)}]</td>
+          <td>${pv(raw.p_value)}</td>
+          <td>${mark(raw.significant)}</td>
+          <td>${pv(c.q_value)}</td>
+          <td>${mark(c.significant)}</td>
+          <td>${blocks ? 'blocks the release' : flipped ? 'raw-p only — BH overturns it' : ''}</td>
+        </tr>`;
+      }).join('');
+
+      return `
+        <h3 id="gate-${esc(s.name)}"><code>${esc(s.name)}</code>
+          <span class="pill" style="color:var(--${passed ? 'success-text' : 'critical'})">
+            ${passed ? 'PASS' : 'BLOCK'}
+          </span>
+        </h3>
+        <div class="notice ${passed ? 'notice-good' : 'notice-bad'}">
+          ${esc(s.decision.reason)}
+        </div>
+        <div class="table-scroll">
+        <table>
+          <thead><tr>
+            <th>metric</th>
+            <th>Δ (cand − base)</th>
+            <th>95% CI, cluster-robust</th>
+            <th>raw p</th>
+            <th>CI excludes 0</th>
+            <th>BH q</th>
+            <th>sig. after BH</th>
+            <th>verdict</th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+        </div>`;
+    };
+
+    const supNote = suppressed.length
+      ? `<div class="notice notice-warn">
+           <strong>The alarm BH removed.</strong>
+           ${suppressed.map((s) => {
+             const c = s.comp;
+             const dir = c.delta.point > 0 ? 'improvement' : 'regression';
+             return `In <code>${esc(s.scenario)}</code>, <code>${esc(c.name)}</code> reaches
+               raw <code>p = ${pv(c.p_value)}</code> with a 95% interval of
+               [${nf(c.delta.low)}, ${nf(c.delta.high)}] that excludes zero,
+               and BH puts it at <code>q = ${pv(byName(scenarios.find((x) => x.name === s.scenario).decision.comparisons)[c.name].q_value)}</code>.`;
+           }).join(' ')}
+           Be precise about what that costs and saves: the point estimate there is
+           ${suppressed[0].comp.delta.point > 0 ? 'positive' : 'negative'}, so the
+           suppressed claim was a spurious
+           <strong>${suppressed[0].comp.delta.point > 0 ? 'win' : 'regression'}</strong>,
+           not a spurious block. Blocking needs the whole interval below the tolerated
+           regression as well as <code>q ≤ ${ALPHA}</code>, and an improvement can
+           never satisfy the first condition. Uncorrected, this metric goes in the
+           release notes as a measured gain that is not there.
+         </div>`
+      : '';
+
+    $('gate-scenarios').innerHTML =
+      scenarioBlock(noise) + scenarioBlock(regress) + supNote + `
+      <div class="notice notice-good">
+        <strong>Both requirements did work here.</strong> The blocking comparison
+        ${worst ? `<code>${esc(worst.name)}</code>` : ''} satisfies both conditions at
+        once: <code>q = ${worst ? pv(worst.q_value) : '—'} ≤ ${ALPHA}</code>,
+        and its entire interval
+        ${worst ? `[${nf(worst.delta.low, 3)}, ${nf(worst.delta.high, 3)}]` : ''}
+        sits below the tolerated regression, so the harm is established rather than
+        merely estimated. In the noise scenario nothing satisfies either condition and
+        the gate passes — but read the reason string carefully: it says the
+        candidate showed no <em>demonstrated harm</em>, which is not the same claim as
+        an improvement, and the intervals there are wide enough to hide effects
+        comfortably larger than anything worth shipping for.
+      </div>`;
+  });
+}
+
+render();
+onThemeChange(render);
+</script>
+
+</body>
+</html>
